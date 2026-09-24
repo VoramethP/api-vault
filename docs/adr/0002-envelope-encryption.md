@@ -21,6 +21,12 @@ DB รั่ว (dump, backup, RLS พลาด) อย่างเดียว�
 - **ตาราง Vault ไม่มี RLS policy เลย** — policy ที่ดูแค่ role `authenticated` จะปล่อย session aal1 ผ่าน Data API
 - **audit append-only ด้วย trigger** ไม่ใช่แค่ไม่มี policy — server ต่อด้วย role ที่ข้าม RLS
 
+## ตัดสินเพิ่ม 2026-09-24 (v0.4.0) — Pull
+- Pull ใช้ re-auth แบบเดียวกับ Reveal: **เจ้าของอนุมัติบนเว็บด้วย TOTP สดทุกครั้ง** (device flow) · token ของ CLI ระบุเครื่องเท่านั้น
+  — token หลุดอย่างเดียวได้แค่ยื่นคำขอที่เจ้าของจะเห็นชื่อเครื่องก่อนอนุมัติ
+- ห้ามใช้รหัส TOTP ซ้ำย้ายไปที่ตาราง `totp_uses` (PK) ใช้ร่วมกันทั้ง Reveal และอนุมัติ Pull
+- ไม่เก็บ refresh token ของ Supabase บนเครื่อง — ความลับบนดิสก์มีแค่ token ที่ดึง Key เองไม่ได้
+
 ## ผลที่ตามมา
 - ต้องมีเทส crypto round-trip + เทสว่า tamper แล้ว decrypt ล้ม
 - master key หาย = Key ทั้งหมดอ่านไม่ได้ → ต้องมีสำเนา master key นอก Vercel (เจ้าของเก็บเอง)

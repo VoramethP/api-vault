@@ -7,7 +7,7 @@ export interface RevealDeps {
   amr: Amr
   nowS: number
   load: () => Promise<{ label: string, decrypt: () => string } | null>
-  /** ต้องล้ม (throw) ถ้า TOTP ครั้งนี้เคยใช้ Reveal ไปแล้ว — unique index ใน DB เป็นคนบังคับ */
+  /** ต้องล้ม (throw) ถ้า TOTP ครั้งนี้เคยใช้ Reveal ไปแล้ว — PK ของ totp_uses เป็นคนบังคับ */
   audit: (entry: { keyLabel: string, totpAt: Date }) => Promise<void>
 }
 

@@ -3,6 +3,7 @@ import { bigint, boolean, customType, index, integer, jsonb, pgEnum, pgPolicy, p
 import { authenticatedRole } from 'drizzle-orm/supabase'
 import { AUTH, CORS, SOURCE } from '../../shared/entry'
 import { AUDIT_ACTION, AUDIT_VIA } from '../../shared/vault'
+import { PULL_STATUS } from '../../shared/cli'
 
 export const entryAuth = pgEnum('entry_auth', AUTH)
 export const entryCors = pgEnum('entry_cors', CORS)
@@ -85,9 +86,42 @@ export const auditLog = pgTable('audit_log', {
   via: auditVia('via').notNull(),
   at: timestamp('at', { withTimezone: true }).notNull().defaultNow(),
   userAgent: text('user_agent'),
-  // เวลาที่ยืนยัน TOTP ที่ใช้ Reveal ครั้งนี้ — หนึ่งรหัสต่อหนึ่ง Reveal (index ด้านล่างบังคับ)
+  // เวลาที่ยืนยัน TOTP ที่อนุญาต Reveal/Pull ครั้งนี้ — การห้ามใช้ซ้ำอยู่ที่ totp_uses
+  totpAt: timestamp('totp_at', { withTimezone: true }),
+}, t => [index('audit_log_at_idx').on(t.at)]).enableRLS()
+
+// หนึ่งรหัส TOTP อนุญาตได้ครั้งเดียว ไม่ว่าจะเป็น Reveal บนเว็บหรืออนุมัติ Pull — PK บังคับที่ DB กัน race
+export const totpUses = pgTable('totp_uses', {
+  totpAt: timestamp('totp_at', { withTimezone: true }).primaryKey(),
+  usedAt: timestamp('used_at', { withTimezone: true }).notNull().defaultNow(),
+}).enableRLS()
+
+// ---------- CLI (v0.4.0) ----------
+// token บอกแค่ว่า "เครื่องไหนขอ" — ถือ token อย่างเดียวดึง Key ไม่ได้ ทุก Pull ต้องอนุมัติบนเว็บด้วย TOTP
+export const cliTokens = pgTable('cli_tokens', {
+  id: bigint('id', { mode: 'number' }).primaryKey().generatedAlwaysAsIdentity(),
+  name: text('name').notNull(),
+  // sha256 ของ token — token สุ่ม 32 ไบต์ entropy สูงพอ ไม่ต้องใช้ hash แบบช้า · ตัวจริงแสดงครั้งเดียวตอนสร้าง
+  tokenHash: text('token_hash').notNull().unique(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+  lastUsedAt: timestamp('last_used_at', { withTimezone: true }),
+  revokedAt: timestamp('revoked_at', { withTimezone: true }),
+}).enableRLS()
+
+export const pullStatus = pgEnum('pull_status', PULL_STATUS)
+
+export const pullRequests = pgTable('pull_requests', {
+  id: bigint('id', { mode: 'number' }).primaryKey().generatedAlwaysAsIdentity(),
+  tokenId: bigint('token_id', { mode: 'number' }).notNull().references(() => cliTokens.id, { onDelete: 'cascade' }),
+  projectId: bigint('project_id', { mode: 'number' }).notNull().references(() => projects.id, { onDelete: 'cascade' }),
+  userCode: text('user_code').notNull(),
+  status: pullStatus('status').notNull().default('pending'),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+  decidedAt: timestamp('decided_at', { withTimezone: true }),
   totpAt: timestamp('totp_at', { withTimezone: true }),
 }, t => [
-  index('audit_log_at_idx').on(t.at),
-  uniqueIndex('audit_log_totp_at_key').on(t.totpAt).where(sql`${t.action} = 'reveal'`),
+  // รหัสที่ผู้ใช้พิมพ์ต้องชี้ไปคำขอเดียวในบรรดาที่ยังรออยู่
+  uniqueIndex('pull_requests_pending_code_key').on(t.userCode).where(sql`${t.status} = 'pending'`),
 ]).enableRLS()

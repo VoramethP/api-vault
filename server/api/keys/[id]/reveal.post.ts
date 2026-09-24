@@ -16,15 +16,11 @@ export default defineEventHandler(async (event) => {
       const [row] = await db.select().from(keys).where(eq(keys.id, id))
       return row ? { label: row.label, decrypt: () => open(row, master) } : null
     },
-    audit: async ({ keyLabel, totpAt }) => {
-      try {
-        await writeAudit(db, event, { keyId: id, keyLabel, action: 'reveal', totpAt })
-      }
-      catch (e) {
-        if (isUniqueViolation(e, 'audit_log_totp_at_key')) throw createError({ statusCode: 409, statusMessage: 'รหัส TOTP นี้ใช้ Reveal ไปแล้ว ใส่รหัสใหม่' })
-        throw e
-      }
-    },
+    // กินรหัส + audit ต้องสำเร็จพร้อมกัน ไม่งั้นรหัสถูกเผาทิ้งโดยไม่มีบันทึก หรือมีบันทึกโดยรหัสยังใช้ซ้ำได้
+    audit: ({ keyLabel, totpAt }) => db.transaction(async (tx) => {
+      await consumeTotp(tx, totpAt)
+      await writeAudit(tx, event, { keyId: id, keyLabel, action: 'reveal', totpAt })
+    }),
   }))
   if (!result.ok) throw createError({ statusCode: result.status, statusMessage: result.message })
   return { value: result.value }

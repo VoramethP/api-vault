@@ -1,5 +1,5 @@
 import type { H3Event } from 'h3'
-import { auditLog } from '../db/schema'
+import { auditLog, totpUses } from '../db/schema'
 import { loadMasterKey } from '../vault/crypto'
 import type { AuditAction, AuditVia } from '../../shared/vault'
 
@@ -29,4 +29,15 @@ export async function writeAudit(db: Db | Tx, event: H3Event, row: {
 export function isUniqueViolation(e: unknown, constraint?: string): boolean {
   const err = (e as { cause?: { code?: string, constraint_name?: string } })?.cause ?? (e as { code?: string, constraint_name?: string })
   return err?.code === '23505' && (!constraint || err.constraint_name === constraint)
+}
+
+/** กินรหัส TOTP หนึ่งครั้ง — ใช้ใน transaction เดียวกับงานที่รหัสนั้นอนุญาต · ใช้ซ้ำ = 409 */
+export async function consumeTotp(tx: Db | Tx, totpAt: Date) {
+  try {
+    await tx.insert(totpUses).values({ totpAt })
+  }
+  catch (e) {
+    if (isUniqueViolation(e)) throw createError({ statusCode: 409, statusMessage: 'รหัส TOTP นี้ใช้ไปแล้ว ใส่รหัสใหม่' })
+    throw e
+  }
 }

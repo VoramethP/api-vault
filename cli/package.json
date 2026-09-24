@@ -1,0 +1,11 @@
+{
+  "name": "api-vault-cli",
+  "version": "0.4.0",
+  "description": "vault pull — ดึง Key จาก api-vault ลง .env (ต้องอนุมัติบนเว็บด้วย TOTP ทุกครั้ง)",
+  "type": "module",
+  "private": true,
+  "bin": { "vault": "vault.mjs" },
+  "files": ["vault.mjs", "lib.mjs"],
+  "engines": { "node": ">=20" },
+  "license": "MIT"
+}

@@ -6,7 +6,7 @@ const url = process.env.MIGRATION_DATABASE_URL ?? process.env.DATABASE_URL
 if (!url) throw new Error('MIGRATION_DATABASE_URL / DATABASE_URL is not set')
 const sql = postgres(url, { prepare: false, max: 1 })
 const failures: string[] = []
-const VAULT_TABLES = ['keys', 'projects', 'project_keys', 'audit_log']
+const VAULT_TABLES = ['keys', 'projects', 'project_keys', 'audit_log', 'totp_uses', 'cli_tokens', 'pull_requests']
 
 try {
   const noRls = await sql<{ relname: string }[]>`

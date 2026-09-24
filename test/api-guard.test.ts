@@ -14,12 +14,12 @@ function walk(dir: string): string[] {
 }
 
 describe('server/api', () => {
-  it('every route calls requireOwner(event) first', () => {
+  it('every route calls requireOwner(event) or requireCliToken(event) first', () => {
     const files = walk('server/api').filter(f => f.endsWith('.ts') && !PUBLIC_API.includes(f))
     expect(files.length).toBeGreaterThan(0)
     for (const f of files) {
       const body = readFileSync(f, 'utf8')
-      expect(body, f).toMatch(/defineEventHandler\(async \(event\)[^{]*\{\s*(const [^=]+= )?await requireOwner\(event\)/)
+      expect(body, f).toMatch(/defineEventHandler\(async \(event\)[^{]*\{\s*(const [^=]+= )?await require(Owner|CliToken)\(event\)/)
     }
   })
 
@@ -27,5 +27,16 @@ describe('server/api', () => {
     const config = readFileSync('nuxt.config.ts', 'utf8')
     const exclude = config.match(/exclude:\s*\[([^\]]*)\]/)![1]!.match(/'[^']+'/g)!.map(s => s.slice(1, -1))
     expect(['/login', '/confirm', ...exclude].sort()).toEqual([...PUBLIC_PATHS].sort())
+  })
+})
+
+describe('server/api/cli', () => {
+  // CLI ไม่มี session ของ Supabase จึงใช้ token — แต่ต้องใช้กับ /api/cli/* เท่านั้น ห้ามรั่วไป route ของเว็บ
+  it('only /api/cli/* uses requireCliToken, and those never use requireOwner', () => {
+    for (const f of walk('server/api').filter(f => f.endsWith('.ts'))) {
+      const body = readFileSync(f, 'utf8')
+      const isCli = f.split(/[\\/]/).slice(0, 3).join('/') === 'server/api/cli'
+      expect(body.includes('requireCliToken('), f).toBe(isCli)
+    }
   })
 })

@@ -9,9 +9,9 @@
 สเปก: `docs/spec.md` · ภาพ: `docs/design/api-vault.drawio`
 
 ## ตอนนี้อยู่ตรงไหน
-- ✅ **v0.1.0** (tag) บน Supabase จริง: 1,871 Entry · `db:verify` ผ่าน · ค้น ~0.5 วิ ผ่าน :6543
-- ✅ **v0.2.0** (tag) ล็อกอิน + บังคับ TOTP ทดสอบจริงผ่าน: ไม่ล็อกอิน 401 · aal1 403 · aal2 200
+- ✅ v0.1.0 Catalogue 1,871 Entry · v0.2.0 ล็อกอิน + บังคับ TOTP (401/403/200)
 - ✅ **v0.3.0** (tag) Vault + audit: `/vault` · Reveal = TOTP ใหม่ทุกครั้ง · Project/env_var · audit append-only
+- ✅ **v0.4.0** (tag) CLI `vault pull` (device flow: อนุมัติบนเว็บด้วย TOTP ทุกครั้ง) · token 30 วัน · `npm i -g ./cli`
 - ✅ GitHub public: `VoramethP/api-vault` · ✅ Vercel prod: https://api-vault-two.vercel.app (`sin1`, ล็อกอินจริงผ่าน)
 - 🔴 TypeSafe ปิดรับสมัคร → Jev รอ (ADR-0003)
 
@@ -21,7 +21,7 @@ Key ไม่ออกไปหา Ranker/บริการภายนอก �
 `getDb()`/`withDb()` ต่อ request · ห้าม service_role · RLS ทุกตาราง · drizzle-kit generate+migrate เท่านั้น
 
 ## งานถัดไป
-1. **v0.4.0 CLI** (spec §7) — ยืนยันรูปแบบ token กับผู้ใช้ก่อนเริ่ม · Pull ใช้ `server/vault/reveal.ts` ลำดับเดียวกัน
+1. **v0.5.0 เดโม** (spec §8, ADR-0004) — prerender ผลค้นไทย 5–8 ข้อ · build ต้องไม่มี secret
 
 ## กับดักที่เคยเจอ
 - **TypeScript 7 ใช้กับ `vue-tsc` ไม่ได้** → pin `typescript@5`
@@ -34,6 +34,7 @@ Key ไม่ออกไปหา Ranker/บริการภายนอก �
 - env บน Vercel: 6 ตัว (SUPABASE_URL/KEY, DATABASE_URL, OWNER_EMAIL, VAULT_MASTER_KEY(_VERSION)) · Vercel ผูก GitHub แล้ว: **`git push` main = deploy production เอง** ห้าม `vercel deploy` ซ้ำ
   (ครั้งที่ deploy จาก CLI ใช้ build cache แล้ว `/about` ที่ prerender ออกมาเป็นของเก่า v0.1.0 — ต้อง `vercel promote` ตัวที่ build จาก git) · หลัง deploy เช็ก `/about`
 - ตาราง Vault: RLS **ไม่มี policy** + REVOKE (ห้ามเพิ่ม policy `true` แบบ entries — aal1 จะอ่านได้) · audit_log แก้/ลบไม่ได้แม้ postgres
+- `/api/cli/*` ใช้ `requireCliToken` แทน `requireOwner` (เทสบังคับทั้งสองทาง) · TOTP ใช้ซ้ำกันด้วย `totp_uses`
 - zsh ไม่แยกคำในตัวแปร (`$P "sql"` พัง) — ใช้ function
 - ทำ TOTP หาย → ลบ factor ใน dashboard › Users แล้ว enroll ใหม่
 - `OWNER_EMAIL` ว่าง = `/api/*` ตอบ 500 (ตั้งใจให้ล้มดัง ๆ) · แก้ `.env` แล้วต้อง restart dev

@@ -115,6 +115,7 @@ server/ranker/  Ranker interface + keyword ranker (ADR-0003)
 server/utils/   db.ts (getDb / withDb) · auth.ts (requireOwner — บรรทัดแรกของทุก handler) — Nitro auto-import
 server/db/      schema.ts (Drizzle) + migrations/ (generate เท่านั้น)
 shared/         Zod schema ที่ใช้สองฝั่ง · auth-flow (PUBLIC_PATHS, nextStep, decideAccess) · importer ของ public-apis · parser ของ CHANGELOG
+cli/            `vault` CLI (Node ไม่มี dependency) — login / pull · ส่วนที่เทสได้อยู่ใน lib.mjs
 scripts/        import-entries.ts · db-verify.ts (รันด้วย tsx)
 test/           Vitest
 spike/          สคริปต์วัด Jev ไม่ใช่ส่วนของแอป — data/apis.json คือแหล่งนำเข้า 1,873 รายการ

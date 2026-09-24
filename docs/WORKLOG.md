@@ -175,6 +175,31 @@ migrate + `db:verify` ผ่าน และจับได้เมื่อถ
 · ตัวจาก CLI ขึ้นทีหลังเลยได้ alias ไป แต่ `/about` ที่ prerender กลับเป็น v0.1.0 (หน้า SSR ได้ 0.3.0 ถูก, build ในเครื่องได้ 0.3.0)
 — สาเหตุน่าจะเป็น build cache ที่ restore มา ยังไม่ยืนยัน · แก้โดย `vercel promote` ตัวที่ build จาก git · ต่อไป deploy ด้วย `git push` อย่างเดียว
 
+## [2026-09-24] v0.4.0 CLI
+
+**ผู้ใช้ตัดสิน:** Pull = อนุมัติบนเว็บด้วย TOTP ทุกครั้ง · token 30 วัน · CLI เป็นโฟลเดอร์ `cli/` ใน repo
+
+**ทำอะไร:** ตาราง `cli_tokens` `pull_requests` `totp_uses` (migration 0003 generate + 0004 custom: REVOKE + ย้าย totp_at เดิมเข้า totp_uses)
+· ลบ unique index `audit_log_totp_at_key` · `requireCliToken()` สำหรับ `/api/cli/*` · API `/api/cli-tokens` `/api/cli/whoami`
+`/api/cli/pull-requests` `/api/pull-requests/[code]` · หน้า `/vault/cli` `/vault/approve` · `cli/vault.mjs` + `cli/lib.mjs`
+
+**ทำไมถึงเลือกแบบนี้:**
+- **device flow** แทน token อย่างเดียว: ADR-0002 บอกว่า Pull ต้อง re-auth และผู้ใช้เลือก TOTP ทุกครั้งให้ Reveal แล้ว
+  · ไม่ให้ CLI ถือ session ของ Supabase เพราะ refresh token บนดิสก์ร้ายแรงกว่า token ที่ดึงเองไม่ได้
+- **`totp_uses` แทน unique index บน audit_log:** อนุมัติ Pull หนึ่งครั้งเขียน audit หลายแถว (หนึ่งแถวต่อ Key) ด้วย totp_at เดียวกัน
+  และรหัสเดียวต้องใช้ข้าม Reveal/Pull ไม่ได้
+- approved → consumed ด้วย `UPDATE … WHERE status='approved' RETURNING` ในคำสั่งเดียว — poll พร้อมกันสองครั้งได้ค่าแค่ครั้งเดียว
+- CLI ไม่ใช่ TypeScript/ไม่มี build — ติดตั้งจากโฟลเดอร์ได้ทันที · ส่วนที่ไม่แตะเครือข่ายอยู่ใน `lib.mjs` ให้เทสได้
+- เทสใหม่: `/api/cli/*` เท่านั้นที่ใช้ `requireCliToken` และไม่มี route ของเว็บใช้ token ได้
+
+**ผลทดสอบ:** เทส 56 ข้อ · Postgres ในเครื่อง + Supabase: migrate + `db:verify` ผ่าน (ตาราง CLI ปิดจาก Data API) · CLI จริงกับ dev:
+`.env` ไม่อยู่ใน .gitignore → ปฏิเสธ · โปรเจกต์ไม่มี → 404 · **ผู้ใช้อนุมัติด้วย TOTP → .env ได้ค่าถูก (อ่านได้ทั้ง dotenv และ `source`),
+`PORT=3000` เดิมยังอยู่, chmod 600, audit `pull`/`cli` ครบ** · ตัดสินซ้ำ → 409 · ปฏิเสธ → denied · เพิกถอน token → 401
+· token ทดสอบสร้างใน shell (เขียน hash ลง DB ตรง) ไม่ผ่านแชต · ลบข้อมูลทดสอบแล้ว (token ถูกเพิกถอน แถวยังอยู่)
+
+**สิ่งที่ต้องระวังต่อไป:** หน้า `/vault/approve` หลังล็อกอินใหม่จะเสีย `?code=` (โมดูล redirect ไม่เก็บ query) — พิมพ์รหัสเองได้
+· CLI ถ้าพลาด poll ตอน consumed จะเห็น "สถานะไม่คาดคิด" (ค่าไม่ถูกส่งซ้ำ ต้อง pull ใหม่)
+
 ---
 
 ## งานถัดไป

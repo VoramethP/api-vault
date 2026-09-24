@@ -135,16 +135,24 @@ RLS ทุกตาราง **ไม่มี policy** + REVOKE จาก `anon
 - master key: `VAULT_MASTER_KEY` (base64 32 ไบต์) ใน Vercel env · `VAULT_MASTER_KEY_VERSION` สำหรับหมุน
 - list Key แสดง label + Entry + **4 ตัวท้าย** (เจ้าของเลือก 2026-09-24) — เก็บแยกเป็น plaintext เฉพาะ Key ≥ 16 ตัว
 
-## 7. CLI (v0.4.0) 🟡
+## 7. CLI (v0.4.0)
 
 ```bash
-vault login                 # วาง token ที่สร้างจากหน้าเว็บ (หลัง AAL2) เก็บที่ ~/.config/api-vault/token (chmod 600)
-vault pull <project>        # เขียน/อัปเดต .env ในโฟลเดอร์ปัจจุบัน
+npm i -g ./cli                         # จาก repo นี้ ไม่มี dependency ไม่ publish ขึ้น npm
+vault login [--url <url>]              # วาง token จาก /vault/cli → ~/.config/api-vault/config.json (chmod 600)
+vault pull <project> [--file .env]     # ขอ → อนุมัติบนเว็บด้วย TOTP → เขียน/อัปเดต .env
+vault whoami · vault logout
 ```
 
-- token: สร้างบนเว็บ · เก็บเป็น hash ใน DB · หมดอายุ · ขอบเขต pull เท่านั้น · เพิกถอนได้
-- `pull` ปฏิเสธถ้า `.env` ไม่อยู่ใน `.gitignore` ของ repo ปัจจุบัน · แก้เฉพาะบรรทัดของ env_var ที่ดึง ไม่ลบบรรทัดอื่น
-- ทุก pull = แถว `audit_log` (`via: cli`)
+- **token บอกแค่ว่าเครื่องไหนขอ — ถือ token อย่างเดียวดึง Key ไม่ได้** (เจ้าของเลือก 2026-09-24)
+  · สร้างบนเว็บหลัง aal2 · DB เก็บ sha256 · อายุ **30 วัน** · เพิกถอนได้ · ใช้ได้กับ `/api/cli/*` เท่านั้น
+- **Pull = device flow:** CLI ยื่นคำขอ → ได้รหัส 8 ตัว (`ABCD-2345`) + ลิงก์ `/vault/approve?code=` → เจ้าของเห็นเครื่อง/โปรเจกต์/ตัวแปร
+  → ใส่ TOTP สด (กติกาเดียวกับ Reveal, กินรหัสใน `totp_uses`) → CLI ถามทุก 2 วิ ได้ค่า**ครั้งเดียว** (approved → consumed)
+  · คำขอหมดอายุใน 10 นาที · ปฏิเสธได้โดยไม่ต้องใช้ TOTP
+- ลำดับตอนส่งค่า: ถอดรหัส → `audit_log` (`pull`, `cli`) ทุก Key → commit → คืนค่า
+- `pull` ปฏิเสธถ้า `.env` ถูก git track หรือไม่อยู่ใน `.gitignore` (นอก git repo ผ่าน) · แก้เฉพาะบรรทัดของ env_var ที่ดึง
+  ไม่ลบบรรทัดอื่น · ไฟล์ chmod 600 · เขียนแบบ tmp + rename
+- ค่าที่ปลอดภัยเขียนตรง ๆ · นอกนั้นใส่ `'…'` · ค่าที่มี `'` หรือขึ้นบรรทัดใหม่ = ปฏิเสธ (อ่านกลับให้ตรงทั้ง dotenv และ shell ไม่ได้)
 
 ## 8. เดโม (v0.5.0)
 
@@ -175,6 +183,5 @@ vault pull <project>        # เขียน/อัปเดต .env ในโ�
 
 ## 11. คำถามที่ยังเปิด
 
-- 🟡 token ของ CLI (§7) — ยืนยันก่อน v0.4.0
 - 🟡 Tag เก็บใน `jsonb` หรือแยกคอลัมน์ — ตัดสินตอน v1.0.0 เมื่อเห็นผลจริงของ Jev
 - `~/types/database.types.ts` gen จาก Supabase CLI หรือ type ของ Drizzle

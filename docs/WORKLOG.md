@@ -171,6 +171,10 @@ migrate + `db:verify` ผ่าน และจับได้เมื่อถ
 **สิ่งที่ต้องระวังต่อไป:** master key หาย = Key ทั้งหมดอ่านไม่ได้ — ผู้ใช้ต้องเก็บสำเนาเอง · หมุน master key ยังไม่มีสคริปต์
 (`open()` ปฏิเสธ version ไม่ตรง) · Pull (v0.4.0) ต้องใช้ `reveal` ลำดับเดียวกัน via `cli`
 
+**deploy v0.3.0:** push แล้ว Vercel build จาก git เอง (ผูก repo ตอน `vercel link`) พร้อมกับที่ผมสั่ง `vercel deploy --prod`
+· ตัวจาก CLI ขึ้นทีหลังเลยได้ alias ไป แต่ `/about` ที่ prerender กลับเป็น v0.1.0 (หน้า SSR ได้ 0.3.0 ถูก, build ในเครื่องได้ 0.3.0)
+— สาเหตุน่าจะเป็น build cache ที่ restore มา ยังไม่ยืนยัน · แก้โดย `vercel promote` ตัวที่ build จาก git · ต่อไป deploy ด้วย `git push` อย่างเดียว
+
 ---
 
 ## งานถัดไป

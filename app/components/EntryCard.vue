@@ -2,7 +2,28 @@
 import type { SearchHit } from '~~/shared/entry'
 
 const props = defineProps<{ hit: SearchHit }>()
+const emit = defineEmits<{ deleted: [] }>()
 const e = computed(() => props.hit.entry)
+
+const toast = useToast()
+const deleteOpen = ref(false)
+const deleting = ref(false)
+async function confirmDelete() {
+  deleting.value = true
+  try {
+    await $fetch(`/api/entries/${e.value.id}`, { method: 'DELETE' })
+    deleteOpen.value = false
+    toast.add({ title: `ลบ ${e.value.name} แล้ว`, color: 'success' })
+    emit('deleted')
+  }
+  catch (err) {
+    // มี Key ผูกอยู่ = 409 พร้อมบอกว่าต้องลบ Key ก่อน
+    toast.add({ title: 'ลบไม่สำเร็จ', description: errorMessage(err), color: 'error' })
+  }
+  finally {
+    deleting.value = false
+  }
+}
 
 const AUTH_LABEL: Record<SearchHit['entry']['auth'], string> = {
   none: 'ไม่ต้องใช้ key',
@@ -35,17 +56,32 @@ const AUTH_LABEL: Record<SearchHit['entry']['auth'], string> = {
       <UBadge :label="AUTH_LABEL[e.auth]" variant="outline" :color="e.auth === 'none' ? 'success' : 'neutral'" size="sm" />
       <UBadge v-if="!e.https" label="ไม่มี HTTPS" variant="outline" color="warning" size="sm" />
       <UBadge v-if="e.cors === 'yes'" label="CORS" variant="outline" color="neutral" size="sm" />
-      <UButton
-        v-if="e.auth !== 'none'"
-        :to="{ path: '/vault', query: { entry: e.id, name: e.name } }"
-        icon="i-lucide-key-round"
-        size="xs"
-        variant="ghost"
-        color="neutral"
-        class="ms-auto"
-      >
-        เพิ่ม Key
-      </UButton>
+      <UBadge v-if="e.source === 'manual'" label="เพิ่มเอง" variant="subtle" color="primary" size="sm" />
+      <div class="ms-auto flex gap-1">
+        <UButton
+          v-if="e.auth !== 'none'"
+          :to="{ path: '/vault', query: { entry: e.id, name: e.name } }"
+          icon="i-lucide-key-round"
+          size="xs"
+          variant="ghost"
+          color="neutral"
+        >
+          เพิ่ม Key
+        </UButton>
+        <template v-if="e.source === 'manual'">
+          <UButton :to="`/entries/${e.id}`" icon="i-lucide-pencil" size="xs" variant="ghost" color="neutral" :aria-label="`แก้ ${e.name}`" />
+          <UButton icon="i-lucide-trash-2" size="xs" variant="ghost" color="error" :aria-label="`ลบ ${e.name}`" @click="deleteOpen = true" />
+        </template>
+      </div>
     </div>
+    <VaultConfirmModal
+      v-if="e.source === 'manual'"
+      v-model:open="deleteOpen"
+      :title="`ลบ ${e.name}?`"
+      description="Entry นี้จะหายจาก Catalogue ถาวร · ถ้ามี Key ผูกอยู่จะลบไม่ได้"
+      confirm-label="ลบถาวร"
+      :loading="deleting"
+      @confirm="confirmDelete"
+    />
   </UCard>
 </template>

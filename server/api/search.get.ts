@@ -14,7 +14,7 @@ export default defineEventHandler(async (event): Promise<SearchResponse> => {
     if (query.cors) where.push(eq(entries.cors, query.cors))
     return db.select({
       id: entries.id, name: entries.name, url: entries.url, description: entries.description,
-      categories: entries.categories, auth: entries.auth, https: entries.https, cors: entries.cors,
+      categories: entries.categories, auth: entries.auth, https: entries.https, cors: entries.cors, source: entries.source,
     }).from(entries).where(and(...where)).orderBy(asc(entries.name))
   })
 

@@ -19,7 +19,7 @@ function setQuery(patch: Record<string, string | undefined>) {
 }
 
 const { data: categories } = await useFetch('/api/categories', { default: () => [] })
-const { data, status, error } = await useFetch<SearchResponse>('/api/search', {
+const { data, status, error, refresh } = await useFetch<SearchResponse>('/api/search', {
   query: computed(() => ({ q: route.query.q, ...filters.value, limit: 30 })),
 })
 
@@ -63,15 +63,18 @@ const cors = bind('cors')
     </aside>
 
     <section class="flex flex-col gap-4 min-w-0">
-      <form @submit.prevent="setQuery({ q: q.trim() || undefined })">
+      <form class="flex gap-2" @submit.prevent="setQuery({ q: q.trim() || undefined })">
         <UInput
           v-model="q"
           icon="i-lucide-search"
           size="lg"
-          class="w-full"
+          class="flex-1 min-w-0"
           placeholder="ค้นได้ทั้งไทยและอังกฤษ เช่น อัตราแลกเปลี่ยนแบบไม่ต้องใช้ key, พยากรณ์อากาศ, cat pictures"
           aria-label="ค้นหา API"
         />
+        <UButton to="/entries/new" icon="i-lucide-plus" size="lg" color="neutral" variant="outline" aria-label="เพิ่ม Entry">
+          <span class="hidden sm:inline">เพิ่ม Entry</span>
+        </UButton>
       </form>
 
       <UAlert v-if="error" color="error" variant="subtle" title="ค้นไม่สำเร็จ" :description="error.statusMessage || error.message" />
@@ -96,7 +99,7 @@ const cors = bind('cors')
             · ความมั่นใจ {{ Math.round((data.confidence ?? 0) * 100) }} % · Ranker: {{ data.ranker }}
           </template>
         </p>
-        <EntryCard v-for="hit in data.hits" :key="hit.entry.id" :hit="hit" />
+        <EntryCard v-for="hit in data.hits" :key="hit.entry.id" :hit="hit" @deleted="refresh()" />
       </template>
     </section>
   </UContainer>

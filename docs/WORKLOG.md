@@ -313,6 +313,20 @@ spec เดิมผูก v1.0.0 กับ Jev (≥ 15/20 + Tag อัตโน
 - เขียน `docs/adr/0007-v1-without-jev.md` · ADR-0003 ชี้ไปที่ 0007 · spec §1/§3/§4.5 (ใหม่)/§9/§10/§11 แก้ตาม
 - ยืนยันด้วย: ผู้ใช้เก็บสำเนา `VAULT_MASTER_KEY` นอกเครื่องแล้ว
 
+## [2026-09-24] v1.0.0 — เพิ่ม Entry เอง
+
+- route: `POST /api/entries` · `GET/PATCH/DELETE /api/entries/:id` · กฎอยู่ใน `server/entries/rules.ts` (เทสได้ไม่ต้องมี DB)
+  · เช็กซ้ำด้วย `assertNoDuplicate` (`server/utils/entries.ts`) ก่อน insert/update แล้วจับ 23505 อีกชั้นกันชนกัน
+- ลบ: เช็กจำนวน Key ก่อน (409 บอกจำนวน) แทนที่จะปล่อยให้ FK `restrict` ตอบ error ของ DB
+- `SearchHit.entry` มี `source` เพิ่ม — UI ใช้ตัดสินว่าโชว์ปุ่มแก้/ลบไหม (Ranker ไม่ใช้ field นี้)
+- `shared/entry.ts`: `manualEntryInput` (ไม่มี `source` ให้ผู้ใช้เลือก · คำอธิบายห้ามมีอักษรไทย ต้องมีคำอังกฤษ) · ข้อความ error ของ `entryInput` เป็นไทย
+- หน้า `/entries/new` · `/entries/:id` (Entry จาก public-apis เปิดแล้วเจอข้อความว่าแก้ไม่ได้) · `EntryForm.vue` ใช้ `UForm` + schema เดียวกับ server
+- แยก logic วัด Ranker ไป `server/ranker/eval.ts` → `scripts/eval-ranker.ts` และ `test/ranker-regression.test.ts` ใช้ร่วมกัน
+- ตรวจบน dev (DB จริง): สร้าง → ค้นเจออันดับ 1 · ซ้ำ 409 (#id) · แก้/ลบ public-apis 403 · แก้ชื่อ+URL ชน public-apis 409 · คำอธิบายไทย 400
+  · แก้ได้ · ลบผ่าน modal แล้วรายการรีเฟรช (Entry ทดสอบ #1872 ถูกลบแล้ว จำนวนกลับเป็น 1,871)
+  · ไม่ได้ทดสอบ "มี Key = ลบไม่ได้" บน DB จริง (ต้องสร้าง Key → audit ที่ลบไม่ได้) — มีเทสของกฎ + FK `restrict` กันชั้นล่าง
+- `npm run check` 87 เทส · build + scan-build ผ่าน · ไม่มี migration
+
 ## งานถัดไป
 
 ดู `HOTCACHE.md` › งานถัดไป

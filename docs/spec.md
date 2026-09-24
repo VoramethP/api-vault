@@ -33,7 +33,7 @@
 
 | เวอร์ชัน | ได้อะไร | เกณฑ์ผ่าน |
 |---|---|---|
-| **v0.1.0** | Catalogue + ค้นอังกฤษ | §4 ครบ · นำเข้า 1,873 แถวต้นทาง = 1,871 Entry · ค้น "weather" ได้ Open-Meteo ใน top-5 · `/about` แสดงเวอร์ชัน |
+| **v0.1.0** | Catalogue + ค้นอังกฤษ | §4 ครบ · นำเข้า 1,873 แถวต้นทาง = 1,871 Entry · ค้น "weather" ได้ top-5 เป็นหมวด Weather ทั้งหมด · คำไทย = `no_match` · `/about` แสดงเวอร์ชัน |
 | **v0.2.0** | Auth + TOTP | ทุกหน้ายกเว้น `/demo` `/about` ต้องล็อกอิน + AAL2 · ทุก server route เช็ก `getUser()` · อีเมลอื่นเข้าไม่ได้ |
 | **v0.3.0** | Vault + audit | §6 ครบ · เทส crypto round-trip + tamper · Reveal ต้อง re-auth และมีแถวใน audit |
 | **v0.4.0** | CLI `vault pull` | §7 ครบ · pull ลง `.env` แล้วไฟล์ไม่ถูก track โดย git · pull ถูกบันทึกใน audit |
@@ -88,8 +88,11 @@ type RankResult =
 
 - **ห้ามส่ง Key หรือข้อมูลใน Vault เข้า Ranker** — `EntryForRanking` มีแค่ id, name, description, categories, auth, https, cors
 - เลือก Ranker ด้วย env `RANKER` (ค่าเริ่ม `keyword`)
-- **keyword ranker:** แตกคำค้นเป็นคำ (ตัวพิมพ์เล็ก) · ชื่อตรงทั้งคำ ×3 · อยู่ในหมวด ×2 · อยู่ในคำอธิบาย ×1 ·
-  normalize เป็น 0–1 · ไม่มีคำไหนตรงเลย = `no_match` · `confidence` = สัดส่วนคำค้นที่เจออย่างน้อยหนึ่งที่
+- **keyword ranker:** แตกคำค้นเป็นคำ (ตัวพิมพ์เล็ก ตัด stopword) · ตรงชื่อ ×3 · ตรงหมวด ×2 · ตรงคำอธิบาย ×1
+  (คำละที่สูงสุดที่เดียว; "ตรง" = เท่ากัน, +s/+es, หรือขึ้นต้นด้วยคำค้นถ้าคำค้นยาว ≥ 4) · normalize 0–1 · เสมอกันเรียงตามชื่อ ·
+  ไม่มีคำไหนตรงเลย = `no_match` · `confidence` = สัดส่วนคำค้นที่เจออย่างน้อยหนึ่งที่
+  · ⚠️ ข้อจำกัดที่รู้แล้ว: API ที่ชื่อมีคำค้นชนะ API ที่ดีกว่าแต่ตรงแค่หมวด (ค้น "weather" → Open-Meteo ไม่ติด top-5
+  เพราะมี ~20 ตัวที่ชื่อมี "Weather") — นี่คือเหตุผลที่ต้องมี Jev
 - **jev ranker** (v1.0.0): 2 request — Choice เลือกหมวด top-K → Choice เลือก Entry ในหมวดเหล่านั้น (≤ 255 ตัว) + Nouls "no match"
   ตาม `spike/run.mjs`
 

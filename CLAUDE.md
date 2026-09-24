@@ -84,6 +84,8 @@ npm run check        # typecheck + test — ต้องผ่านก่อน
 npm run build
 npm run db:generate  # drizzle-kit generate — สร้างไฟล์ migration จาก server/db/schema.ts
 npm run db:migrate   # drizzle-kit migrate — ใช้ MIGRATION_DATABASE_URL (session pooler :5432)
+npm run db:import    # นำเข้า spike/data/apis.json → entries (รันซ้ำได้)
+npm run db:verify    # ตรวจ RLS ในฐานะ anon/authenticated — รันหลัง migrate ทุกครั้ง
 node --env-file=.env spike/run.mjs   # spike Jev (ต้องมี TYPESAFE_API_KEY)
 ```
 
@@ -107,10 +109,13 @@ node --env-file=.env spike/run.mjs   # spike Jev (ต้องมี TYPESAFE_AP
 ## โครงสร้าง
 
 ```
-app/            client — app.vue, pages/, assets/css/main.css
-server/utils/   db.ts (getDb) — Nitro auto-import
+app/            client — pages/ (index ค้นหา, about), components/, layouts/
+server/api/     search.get.ts · categories.get.ts
+server/ranker/  Ranker interface + keyword ranker (ADR-0003)
+server/utils/   db.ts (getDb / withDb) — Nitro auto-import
 server/db/      schema.ts (Drizzle) + migrations/ (generate เท่านั้น)
-shared/         Zod schema ที่ใช้สองฝั่ง
+shared/         Zod schema ที่ใช้สองฝั่ง · importer ของ public-apis · parser ของ CHANGELOG
+scripts/        import-entries.ts · db-verify.ts (รันด้วย tsx)
 test/           Vitest
 spike/          สคริปต์วัด Jev ไม่ใช่ส่วนของแอป — data/apis.json คือแหล่งนำเข้า 1,873 รายการ
 docs/adr/       การตัดสินใจ · docs/WORKLOG.md ประวัติ · docs/spec.md สเปก · docs/design/ drawio

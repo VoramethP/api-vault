@@ -1,3 +1,5 @@
+import pkg from './package.json'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
@@ -14,6 +16,12 @@ export default defineNuxtConfig({
       exclude: ['/demo', '/demo/*', '/about'],
     },
   },
-  // routeRules: เพิ่ม '/demo/**' และ '/about' เป็น prerender เมื่อหน้านั้นมีจริง (prerender หน้าที่ไม่มี = build พัง)
-  // หน้าที่อ่าน session ห้าม isr/swr/prerender เด็ดขาด
+  runtimeConfig: {
+    public: { appVersion: pkg.version },
+  },
+  // หน้าที่อ่าน session ห้าม isr/swr/prerender เด็ดขาด · เพิ่ม '/demo/**' เมื่อหน้าเดโมมีจริง
+  // (prerender หน้าที่ไม่มี = build พัง)
+  routeRules: {
+    '/about': { prerender: true },
+  },
 })

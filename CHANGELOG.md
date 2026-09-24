@@ -4,9 +4,15 @@
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-09-24
+
 ### Added
-- โครงโปรเจกต์: Nuxt 4 + Nuxt UI + `@nuxtjs/supabase` + Drizzle + Zod + Vitest, Vercel `sin1`
-- ระบบความจำโปรเจกต์ (CLAUDE / HOTCACHE / WORKLOG / CONTEXT) + ADR-0001…0006
-- spike สำหรับวัด Jev กับคำค้นไทย + ข้อมูล `public-apis` 1,873 รายการ
+- Catalogue: ตาราง `entries` (RLS เปิด ไม่มี policy ของ anon) + migration แรก
+- นำเข้า `public-apis`: 1,873 แถวต้นทาง → 1,871 Entry (API ที่อยู่สองหมวดรวมเป็นหนึ่ง) รันซ้ำได้ผลเท่าเดิม
+- ค้นด้วยคำอังกฤษผ่าน Ranker seam (keyword ranker) + filter หมวด / auth / HTTPS / CORS
+- บอกตรง ๆ ว่า "ไม่เจอ API ที่ตรง" แทนการเดา
+- หน้า `/about` แสดงเวอร์ชันและ changelog
+- `db:verify` ตรวจ RLS ในฐานะ anon / authenticated
+- โครงโปรเจกต์ Nuxt 4 + Nuxt UI + Supabase + Drizzle + Zod + Vitest, Vercel `sin1` · spec + ดีไซน์ drawio · ADR-0001…0006
 
 <!-- แผน: v0.1.0 นำเข้า+ค้น · v0.2.0 auth+MFA · v0.3.0 Vault+audit · v0.4.0 CLI · v0.5.0 เดโม · v1.0.0 Jev ranker -->

@@ -4,36 +4,39 @@
 > Updated: **2026-09-24**
 
 ## โปรเจกต์นี้คืออะไร
-คลัง API ส่วนตัว: Catalogue (1,873 รายการจาก `public-apis` + ที่เพิ่มเอง) ค้นไทยผ่าน Ranker + Vault เก็บ Key
-เข้ารหัส · เจ้าของคนเดียว · repo public + เดโม · Nuxt 4/Supabase/Drizzle บน Vercel `sin1` · เพดาน 1 เดือน
+คลัง API ส่วนตัว: Catalogue (1,871 Entry จาก `public-apis` + ที่เพิ่มเอง) ค้นผ่าน Ranker + Vault เก็บ Key
+เข้ารหัส · เจ้าของคนเดียว · repo public + เดโม · Nuxt 4/Supabase/Drizzle บน Vercel `sin1` · เพดานถึง 2026-10-24
+สเปก: `docs/spec.md` · ภาพ: `docs/design/api-vault.drawio`
 
 ## ตอนนี้อยู่ตรงไหน
-- ✅ Kickoff เสร็จ: สแต็กลงครบ `npm run check` + `build` ผ่าน · ADR-0001…0006 · commit แรกแล้ว
-- ⏳ ยังไม่มี: Supabase project · GitHub remote · Vercel project · ตารางใด ๆ
-- 🔴 TypeSafe ปิดรับสมัคร (2026-09-23) → Jev รอ · ใช้ keyword ranker ไปก่อน (ADR-0003)
+- ✅ **v0.1.0** (tag): entries + RLS · importer · keyword ranker · หน้าค้น + filter · `/about` · 15 เทส
+  — **ทดสอบกับ Postgres 15 ในเครื่องเท่านั้น** ยังไม่เคย migrate ขึ้น Supabase จริง
+- ⏳ ยังไม่มี: Supabase project · GitHub remote · Vercel project
+- 🔴 TypeSafe ปิดรับสมัคร → Jev รอ (ADR-0003)
 
 ## กฎเหล็ก
 ไม่มี gateway · Key envelope-encrypted, master key ใน env เท่านั้น, Reveal = re-auth + audit ·
 Key ไม่ออกไปหา Ranker/บริการภายนอก · ค้นผ่าน `Ranker` เท่านั้น · เดโมไม่ยิงสด ไม่มี secret ·
-`getDb()` ต่อ request · ห้าม service_role · RLS ทุกตาราง · drizzle-kit generate+migrate เท่านั้น
-(ที่มาครบใน `CLAUDE.md`)
+`getDb()`/`withDb()` ต่อ request · ห้าม service_role · RLS ทุกตาราง · drizzle-kit generate+migrate เท่านั้น
 
 ## งานถัดไป
-1. **ผู้ใช้:** สร้าง Supabase project `api-vault` region `ap-southeast-1` (โควตาฟรีเหลือ 1) · ปิด sign-up ·
-   เปิด TOTP · ใส่ค่าลง `.env` ตาม `.env.example` (ไม่วางในแชต)
-2. **ผู้ใช้อนุญาตก่อน:** `gh repo create VoramethP/api-vault --public` + push (สแกน repo-hygiene ก่อน push แรก)
-3. **v0.1.0:** ตาราง `entries` (+RLS: anon อ่านได้? — ตัดสินตอนทำ) · migration แรก · สคริปต์นำเข้า
-   `spike/data/apis.json` · `Ranker` interface + keyword ranker · หน้าค้น · `db:verify` ในฐานะ `authenticated`
-   · bump version + CHANGELOG + tag
+1. **ผู้ใช้:** Supabase `api-vault` (`ap-southeast-1`) · ปิด sign-up · เปิด TOTP · `.env` ตาม `.env.example`
+   → รัน `db:migrate` → `db:import` → `db:verify` กับของจริง
+2. **ผู้ใช้อนุญาตก่อน:** `gh repo create VoramethP/api-vault --public` + push (repo-hygiene ก่อน)
+3. **v0.2.0 Auth + TOTP** (spec §5): `/login` `/confirm` · เปิด `supabase.redirect` · กัน `/api/*` ด้วย `getUser()`+aal2
+   (มี `TODO(v0.2.0)` ใน `server/api/*.get.ts`)
 
 ## กับดักที่เคยเจอ
-- **TypeScript 7 ใช้กับ `vue-tsc` ไม่ได้** (`ERR_PACKAGE_PATH_NOT_EXPORTED` ตอนหา tsc) → pin `typescript@5`
-- **npm 11 บล็อก install scripts** (esbuild, fsevents, vue-demi) — build ผ่านโดยไม่ต้อง approve เพราะ binary มาจาก optional deps
-- `nuxt typecheck` ต้องมี `@types/node` ถึงจะรู้จัก `process` ใน server/
-- `@nuxtjs/supabase` เตือน `~/types/database.types.ts` ไม่มี → `Database = unknown` (ยังไม่ตัดสินว่าจะ gen จากไหน)
-- build/typecheck ต้องมี `SUPABASE_URL` + `SUPABASE_KEY` — ใส่ placeholder ก็ผ่าน
-- prerender route ที่ยังไม่มีหน้า = build ล้ม ("Exiting due to prerender errors")
-- `supabase.redirect: false` อยู่ — **ต้องเปิดใน v0.2.0** ไม่งั้นทั้งแอปไม่ต้องล็อกอิน
+- **TypeScript 7 ใช้กับ `vue-tsc` ไม่ได้** → pin `typescript@5`
+- npm 11 บล็อก install scripts (esbuild ฯลฯ) — build ผ่านได้โดยไม่ต้อง approve
+- `@nuxtjs/supabase` เตือน `database.types.ts` ไม่มี → `Database = unknown` (ยังไม่ตัดสิน)
+- build/typecheck ต้องมี `SUPABASE_URL` + `SUPABASE_KEY` — placeholder ก็ผ่าน
+- prerender route ที่ยังไม่มีหน้า = build ล้ม
+- `nuxt.config` อ่าน version จาก `package.json` ตอนเริ่ม — bump แล้วต้อง restart dev
+- ข้อมูลต้นทางสกปรก: `\apiKey\` (\a กลายเป็น BEL → "piKey"), `` `Yes` `` — importer จัดการแล้ว
+- keyword ranker: API ที่ชื่อมีคำค้นชนะ API ที่ตรงแค่หมวด ("weather" → Open-Meteo ไม่ติด top-5) — ข้อจำกัดที่รู้แล้ว
+- Postgres ในเครื่อง (ทดสอบ): initdb/pg_ctl ต้อง `LC_ALL=C` · path ใน scratchpad ยาวเกิน socket → `-k ''` ใช้ TCP
+  · ต้องสร้าง role `anon`/`authenticated` + default grants เองให้เหมือน Supabase
 
 ---
 📜 ประวัติเต็ม: `docs/WORKLOG.md` · 📐 กฎทั้งหมด: `CLAUDE.md`

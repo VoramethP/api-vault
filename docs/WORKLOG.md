@@ -44,6 +44,34 @@ V1 done = นำเข้า 1,873 · ค้นไทย · เพิ่มเ�
 
 **ผลที่ตามมา / สิ่งที่ต้องระวังต่อไป:** ดูกับดักใน HOTCACHE (TypeScript 7, npm install-scripts, database.types)
 
+## [2026-09-24] Spec + ดีไซน์ drawio + v0.1.0
+
+**ทำอะไร:**
+- `docs/spec.md` (สเปก V1 ทุกเวอร์ชัน) + `docs/design/api-vault.drawio` 10 หน้า (generator ไม่เก็บ — แก้ใน draw.io)
+- v0.1.0: ตาราง `entries` + RLS (migration `0000_entries`) · `shared/import-public-apis.ts` + `scripts/import-entries.ts` ·
+  `server/ranker/` (interface + keyword) · `/api/search` `/api/categories` · หน้า `/` และ `/about` · `scripts/db-verify.ts`
+- ทดสอบครบวงจรกับ Postgres 15 ในเครื่อง (role anon/authenticated แบบ Supabase): migrate → import สองรอบ (1,871 → +0) →
+  verify ผ่าน · ใส่ policy ของ anon + ตารางไม่เปิด RLS แล้ว verify ล้มถูกต้อง · ลองค้นในเบราว์เซอร์จริง
+
+**ทำไมถึงเลือกแบบนี้:**
+- **Entry = unique (name, url), `categories text[]`** — ต้นทางมี TasteDive, Open-Meteo อยู่สองหมวด ถ้าแยกแถวจะได้ผลค้นซ้ำ
+  → 1,873 แถว = 1,871 Entry (เกณฑ์ "นำเข้า 1,873" ใน HANDOFF เดิมหมายถึงแถวต้นทาง)
+- **entries ไม่มี policy ของ anon** — Data API ของ Supabase ไม่เปิดให้คนนอก · server อ่านผ่าน Drizzle (role postgres) และ
+  กันสิทธิ์ที่ route (v0.2.0) · policy ของ authenticated เป็น `true` เพราะปิด sign-up = มีผู้ใช้คนเดียว
+- **importer แถวผิด = หยุดทั้งก้อน** ไม่ข้ามเงียบ ๆ · ไม่ทับ Entry ที่ `source = manual`
+- **Ranker อยู่ใน JS รับ candidates** แทน Postgres FTS — Jev ต้องการ candidate list อยู่แล้ว (≤ 255 ต่อ Choice) และทำให้เทสได้โดยไม่ต้องมี DB
+- **`withDb()` ปิด connection ทุกครั้ง** — serverless ที่ไม่ปิดจะกิน connection ของ pooler
+- ฟิลเตอร์: HTTPS 3 ค่า / CORS 4 ค่า = `URadioGroup` · หมวด 51 / auth 6 = `USelect` (ui-decision)
+
+**ทางเลือกที่ไม่ได้เลือก:** Postgres FTS (ผูกการค้นกับ SQL ข้าม seam) · แยก Entry ต่อหมวด (ผลซ้ำ) ·
+`drizzle-kit push` (ห้ามตาม FDR-0009)
+
+**ผลที่ตามมา / สิ่งที่ต้องระวังต่อไป:**
+- เกณฑ์ v0.1.0 เดิม "weather → Open-Meteo ใน top-5" **ไม่ผ่านจริง** — keyword ranker ให้ชื่อชนะหมวด และมี ~20 API ที่ชื่อมี
+  "Weather" · เปลี่ยนเกณฑ์เป็น "top-5 เป็นหมวด Weather ทั้งหมด" และจดเป็นข้อจำกัดใน spec — เป็นหลักฐานว่าทำไมต้องมี Jev
+- เจอบั๊ก "cat" ไม่เจอ "Cats" (คำสั้นไม่ match พหูพจน์) → แก้แล้ว + เทส
+- ยังไม่เคยรันกับ Supabase จริง: pooler, `prepare:false`, role/grant ของ Supabase อาจต่างจากที่จำลอง
+
 ---
 
 ## งานถัดไป

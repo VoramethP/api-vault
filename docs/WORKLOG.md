@@ -121,6 +121,14 @@ pooler ถูก region, :6543/:5432 ถูกช่อง, `SUPABASE_KEY` เ�
 · ทำ TOTP หาย → ลบ factor ใน dashboard › Users แล้ว enroll ใหม่ (ยังไม่มี recovery codes)
 · deploy ต้องตั้ง Authentication › URL Configuration ให้ตรงโดเมน
 
+## [2026-09-24] push ขึ้น GitHub (public)
+
+**ทำอะไร:** `gh repo create VoramethP/api-vault --public` + push `main` และ tag `v0.1.0` `v0.2.0`
+
+**ตรวจก่อน push (repo-hygiene):** ไฟล์ env ที่ track มีแค่ `.env.example` · สแกนทุก git object ด้วย regex
+(postgres URL มีรหัส, `sb_secret_`, JWT, `sk-`) = 0 · ค่าจริงทุกตัวใน `.env` ไม่อยู่ใน object ไหนเลย
+· อีเมลเจ้าของอยู่แค่ใน author ของ commit/tag (git identity ปกติ) ไม่อยู่ในไฟล์
+
 ---
 
 ## งานถัดไป

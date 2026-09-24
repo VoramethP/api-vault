@@ -11,7 +11,7 @@
 ## ตอนนี้อยู่ตรงไหน
 - ✅ **v0.1.0** (tag) บน Supabase จริง: 1,871 Entry · `db:verify` ผ่าน · ค้น ~0.5 วิ ผ่าน :6543
 - ✅ **v0.2.0** (tag) ล็อกอิน + บังคับ TOTP ทดสอบจริงผ่าน: ไม่ล็อกอิน 401 · aal1 403 · aal2 200
-- ⏳ ยังไม่มี: GitHub remote · Vercel project
+- ✅ GitHub public: `VoramethP/api-vault` (main + tags) · ⏳ ยังไม่มี Vercel project
 - 🔴 TypeSafe ปิดรับสมัคร → Jev รอ (ADR-0003)
 
 ## กฎเหล็ก
@@ -20,9 +20,8 @@ Key ไม่ออกไปหา Ranker/บริการภายนอก �
 `getDb()`/`withDb()` ต่อ request · ห้าม service_role · RLS ทุกตาราง · drizzle-kit generate+migrate เท่านั้น
 
 ## งานถัดไป
-1. **ผู้ใช้อนุญาตก่อน:** `gh repo create VoramethP/api-vault --public` + push (repo-hygiene ก่อน)
-2. deploy Vercel ได้แล้ว — ตั้ง Supabase URL Configuration ให้ตรงโดเมน
-3. **v0.3.0 Vault + audit** (spec §6) — ยืนยันข้อ 🟡 (Project/env_var, เวลา re-auth) กับผู้ใช้ก่อนเริ่ม
+1. deploy Vercel ได้แล้ว — ตั้ง Supabase URL Configuration ให้ตรงโดเมน
+2. **v0.3.0 Vault + audit** (spec §6) — ยืนยันข้อ 🟡 (Project/env_var, เวลา re-auth) กับผู้ใช้ก่อนเริ่ม
 
 ## กับดักที่เคยเจอ
 - **TypeScript 7 ใช้กับ `vue-tsc` ไม่ได้** → pin `typescript@5`

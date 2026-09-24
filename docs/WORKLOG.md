@@ -83,6 +83,30 @@ pooler ถูก region, :6543/:5432 ถูกช่อง, `SUPABASE_KEY` เ�
 **ผลที่ตามมา:** 0.5 วิ/ค้นรวมเปิด connection ใหม่ + ดึง 1,871 แถวทุกครั้ง + ไป-กลับสิงคโปร์ — พอสำหรับตอนนี้
 ถ้าช้าบน Vercel `sin1` ค่อยดู (ยังไม่ได้วัดบน Vercel)
 
+## [2026-09-24] v0.2.0 Auth + TOTP — โค้ดเสร็จ รอทดสอบล็อกอินจริง
+
+**ทำอะไร:** `shared/auth-flow.ts` (`nextStep`, `decideAccess` เป็นฟังก์ชันล้วน เทสได้) · `server/utils/auth.ts`
+`requireOwner()` · `app/middleware/mfa.global.ts` · หน้า `/login` `/mfa` `/mfa/enroll` `/confirm` · ปุ่มออกจากระบบ ·
+เปิด redirect ของโมดูล · `/api/**` `cache-control: private, no-store` · env ใหม่ `OWNER_EMAIL` ·
+เทสที่ล้มถ้ามี route ใน `server/api` ไม่เรียก `requireOwner(event)` บรรทัดแรก และถ้า exclude ใน config ไม่ตรง `PUBLIC_PATHS`
+
+**ทำไมถึงเลือกแบบนี้:**
+- **ตรวจสามชั้นที่ server:** `getUser()` (ถาม Auth server — token ที่ถูกเพิกถอนไม่ผ่าน) → `aal` จาก `getClaims()`
+  (ตรวจลายเซ็นแล้ว) → อีเมลต้องตรง `OWNER_EMAIL` แม้จะปิด sign-up แล้ว (กันบัญชีที่ถูกเพิ่มผ่าน dashboard พลาด ๆ)
+- **บังคับลงทะเบียน TOTP ก่อนใช้แอป** — ไม่มี factor = ไป `/mfa/enroll` · มี factor แต่ session ยัง aal1 = ไป `/mfa`
+  และห้ามเข้า `/mfa/enroll` (ไม่งั้นรหัสผ่านอย่างเดียวลงทะเบียน factor ใหม่ทับได้)
+- ล้าง factor ที่ค้างสถานะ unverified ก่อน enroll ใหม่ — ไม่งั้นชื่อชน · QR สร้างใน `onMounted` ไม่ให้ secret ไปอยู่ใน SSR payload
+- หน้า login ไม่บอกว่าผิดที่อีเมลหรือรหัส
+- `OWNER_EMAIL` ว่าง → 500 แทนการปล่อยผ่าน
+
+**ทางเลือกที่ไม่ได้เลือก:** ใช้แค่ middleware ของโมดูล (ไม่ดู aal) · ใช้ `getSession()` (ปลอมได้) ·
+`serverSupabaseUser` อย่างเดียว (ใช้ `getClaims` ไม่ถาม Auth server ว่า token ถูกเพิกถอนไหม)
+
+**ผลที่ตามมา / สิ่งที่ต้องระวังต่อไป:**
+- ทดสอบแล้วเฉพาะกรณีไม่ล็อกอิน (401 ทั้งไม่มี cookie และ cookie ปลอม · หน้าเด้งไป `/login`)
+- ยังไม่ได้ทดสอบ: ล็อกอินจริง, aal1 ต้องได้ 403, enroll + verify, ล็อกอินรอบสองต้องไป `/mfa`
+- ผู้ใช้ปิด sign-up (ตรวจแล้ว `disable_signup: true`) + เปิด TOTP ใน dashboard (Authentication › Multi-Factor) แล้ว
+
 ---
 
 ## งานถัดไป

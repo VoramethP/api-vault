@@ -9,10 +9,10 @@
 สเปก: `docs/spec.md` · ภาพ: `docs/design/api-vault.drawio`
 
 ## ตอนนี้อยู่ตรงไหน
-- ✅ **v0.1.0** (tag): entries + RLS · importer · keyword ranker · หน้าค้น + filter · `/about` · 15 เทส
-- ✅ **Supabase จริง** (`ap-southeast-1`, 2026-09-24): migrate → import 1,871 → `db:verify` ผ่าน (anon เห็น 0) ·
-  แอปผ่าน transaction pooler :6543 ได้ (~0.5 วิ/ค้น จากเครื่องในไทย)
-- ⏳ ยังไม่มี: GitHub remote · Vercel project (ยังไม่ deploy — `/api/*` ยังไม่กันสิทธิ์จนกว่า v0.2.0)
+- ✅ **v0.1.0** (tag) บน Supabase จริง: 1,871 Entry · `db:verify` ผ่าน · ค้น ~0.5 วิ ผ่าน :6543
+- 🟡 **v0.2.0 โค้ดเสร็จ ยังไม่ tag**: `/login` `/mfa` `/mfa/enroll` · `requireOwner()` ทุก `/api/*` ·
+  รอทดสอบล็อกอินจริง (ขั้นตอนใน HANDOFF)
+- ⏳ ยังไม่มี: GitHub remote · Vercel project
 - 🔴 TypeSafe ปิดรับสมัคร → Jev รอ (ADR-0003)
 
 ## กฎเหล็ก
@@ -21,10 +21,9 @@ Key ไม่ออกไปหา Ranker/บริการภายนอก �
 `getDb()`/`withDb()` ต่อ request · ห้าม service_role · RLS ทุกตาราง · drizzle-kit generate+migrate เท่านั้น
 
 ## งานถัดไป
-1. **ผู้ใช้ยืนยัน:** ปิด sign-up + เปิด TOTP ใน dashboard แล้วหรือยัง (ต้องมีก่อน v0.2.0)
+1. ปิด v0.2.0: ทดสอบล็อกอิน + TOTP จริง (HANDOFF) → CHANGELOG + tag
 2. **ผู้ใช้อนุญาตก่อน:** `gh repo create VoramethP/api-vault --public` + push (repo-hygiene ก่อน)
-3. **v0.2.0 Auth + TOTP** (spec §5): `/login` `/confirm` · เปิด `supabase.redirect` · กัน `/api/*` ด้วย `getUser()`+aal2
-   (มี `TODO(v0.2.0)` ใน `server/api/*.get.ts`)
+3. **v0.3.0 Vault + audit** (spec §6) — ยืนยันข้อ 🟡 (Project/env_var, เวลา re-auth) กับผู้ใช้ก่อนเริ่ม
 
 ## กับดักที่เคยเจอ
 - **TypeScript 7 ใช้กับ `vue-tsc` ไม่ได้** → pin `typescript@5`
@@ -33,7 +32,11 @@ Key ไม่ออกไปหา Ranker/บริการภายนอก �
 - build/typecheck ต้องมี `SUPABASE_URL` + `SUPABASE_KEY` — placeholder ก็ผ่าน
 - prerender route ที่ยังไม่มีหน้า = build ล้ม
 - `nuxt.config` อ่าน version จาก `package.json` ตอนเริ่ม — bump แล้วต้อง restart dev
-- ห้าม deploy ก่อน v0.2.0 — `/api/search` เปิดโล่ง
+- ห้าม deploy ก่อน tag v0.2.0
+- `OWNER_EMAIL` ว่าง = `/api/*` ตอบ 500 (ตั้งใจให้ล้มดัง ๆ) · แก้ `.env` แล้วต้อง restart dev
+- `useSupabaseUser()` ของ `@nuxtjs/supabase` v2 คืน **JWT claims** ไม่ใช่ User · middleware ของโมดูลเช็กแค่มี session ไม่ดู aal
+- `UPinInput type="number"` ให้ `number[]` — ใช้แบบไม่ใส่ type จะได้ `string[]`
+- สร้างบัญชีเจ้าของผ่าน dashboard (Users › Add user · Auto Confirm) เพราะ sign-up ปิด
 - ข้อมูลต้นทางสกปรก: `\apiKey\` (\a กลายเป็น BEL → "piKey"), `` `Yes` `` — importer จัดการแล้ว
 - keyword ranker: API ที่ชื่อมีคำค้นชนะ API ที่ตรงแค่หมวด ("weather" → Open-Meteo ไม่ติด top-5) — ข้อจำกัดที่รู้แล้ว
 - Postgres ในเครื่อง (ทดสอบ): initdb/pg_ctl ต้อง `LC_ALL=C` · path ใน scratchpad ยาวเกิน socket → `-k ''` ใช้ TCP

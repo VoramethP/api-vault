@@ -1,0 +1,21 @@
+# secrets — never committed (repo-hygiene)
+.env
+.env.*
+!.env.example
+
+# spike output
+spike/results-*.json
+
+# tooling
+node_modules/
+.output/
+.nuxt/
+.DS_Store
+
+# nuxt
+.data/
+.nitro/
+.cache/
+dist/
+.vercel/
+*.log

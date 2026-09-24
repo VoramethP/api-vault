@@ -1,5 +1,12 @@
 <script setup lang="ts">
 const version = useRuntimeConfig().public.appVersion
+const supabase = useSupabaseClient()
+const user = useSupabaseUser()
+
+async function signOut() {
+  await supabase.auth.signOut()
+  await navigateTo('/login')
+}
 </script>
 
 <template>
@@ -10,6 +17,7 @@ const version = useRuntimeConfig().public.appVersion
         <div class="flex items-center gap-2">
           <UButton to="/about" variant="ghost" color="neutral" size="sm">v{{ version }}</UButton>
           <UColorModeButton />
+          <UButton v-if="user" variant="ghost" color="neutral" size="sm" icon="i-lucide-log-out" aria-label="ออกจากระบบ" @click="signOut" />
         </div>
       </UContainer>
     </header>

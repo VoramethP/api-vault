@@ -3,8 +3,8 @@ import { entries } from '../db/schema'
 import { getRanker } from '../ranker'
 import { searchQuery, type SearchResponse } from '../../shared/entry'
 
-// TODO(v0.2.0): กันด้วย getUser() + aal2
 export default defineEventHandler(async (event): Promise<SearchResponse> => {
+  await requireOwner(event)
   const query = await getValidatedQuery(event, searchQuery.parse)
   const rows = await withDb(async (db) => {
     const where: SQL[] = []

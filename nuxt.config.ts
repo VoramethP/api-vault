@@ -7,13 +7,12 @@ export default defineNuxtConfig({
   modules: ['@nuxt/ui', '@nuxtjs/supabase'],
   css: ['~/assets/css/main.css'],
   supabase: {
-    // ปิด redirect ไว้จนกว่าจะมีหน้า /login ใน v0.2.0 — ตอนนั้นทั้งแอปอยู่หลังล็อกอิน
-    // ยกเว้นเดโมและ /about (ADR-0004)
-    redirect: false,
+    // middleware ของโมดูลเช็กแค่ว่ามี session · เรื่อง TOTP อยู่ที่ app/middleware/mfa.global.ts
+    // /login กับ /confirm ถูกยกเว้นให้อัตโนมัติ · รายการนี้ต้องตรงกับ PUBLIC_PATHS ใน shared/auth-flow.ts
     redirectOptions: {
       login: '/login',
       callback: '/confirm',
-      exclude: ['/demo', '/demo/*', '/about'],
+      exclude: ['/about', '/demo', '/demo/*'],
     },
   },
   runtimeConfig: {
@@ -23,5 +22,7 @@ export default defineNuxtConfig({
   // (prerender หน้าที่ไม่มี = build พัง)
   routeRules: {
     '/about': { prerender: true },
+    // คำตอบที่ขึ้นกับ session ห้ามให้ CDN แคช — ผู้ใช้ A อาจได้ของผู้ใช้ B
+    '/api/**': { headers: { 'cache-control': 'private, no-store' } },
   },
 })

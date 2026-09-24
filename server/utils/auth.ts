@@ -1,0 +1,24 @@
+import type { H3Event } from 'h3'
+import { serverSupabaseClient } from '#supabase/server'
+import { decideAccess, type Aal } from '../../shared/auth-flow'
+
+/**
+ * กันทุก route ที่ไม่ใช่สาธารณะ — เรียกบรรทัดแรกของ handler
+ * getUser() ถาม Auth server จริง (token ถูกเพิกถอน = ไม่ผ่าน) · aal อ่านจาก claims ที่ getClaims() ตรวจลายเซ็นแล้ว
+ * ห้ามใช้ getSession() ตัดสินสิทธิ์ (ADR-0006)
+ */
+export async function requireOwner(event: H3Event) {
+  const ownerEmail = process.env.OWNER_EMAIL
+  if (!ownerEmail) throw createError({ statusCode: 500, statusMessage: 'OWNER_EMAIL is not set' })
+
+  const client = await serverSupabaseClient(event)
+  const { data: { user } } = await client.auth.getUser()
+  let who: { email: string | undefined, aal: Aal } | null = null
+  if (user) {
+    const { data } = await client.auth.getClaims()
+    who = { email: user.email, aal: (data?.claims.aal as Aal) ?? null }
+  }
+  const decision = decideAccess(who, ownerEmail)
+  if (!decision.ok) throw createError({ statusCode: decision.status, statusMessage: decision.message })
+  return user!
+}

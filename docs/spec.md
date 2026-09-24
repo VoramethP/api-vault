@@ -1,0 +1,177 @@
+# api-vault — Spec
+
+> สเปกของ V1 · ศัพท์ตาม [`CONTEXT.md`](../CONTEXT.md) · เหตุผลอยู่ใน [`adr/`](adr/) · ภาพอยู่ใน [`design/api-vault.drawio`](design/api-vault.drawio)
+> สถานะ: **draft 2026-09-24** — หัวข้อที่มี 🟡 ยังเป็นข้อเสนอ ต้องยืนยันก่อนเริ่มเวอร์ชันนั้น
+
+## 1. เป้าหมาย
+
+เจ้าของคนเดียวต้อง (1) หา API ที่ใช้ได้จากคำค้นภาษาไทย (2) เก็บ Key ที่ถือไว้แบบปลอดภัย และ (3) ดึง Key ลง `.env` ของโปรเจกต์ได้ในคำสั่งเดียว
+พร้อมเดโมสาธารณะที่โชว์ว่าค้นไทยได้จริง · เพดานเวลา 1 เดือน (2026-09-24 → 2026-10-24)
+
+### ไม่ทำใน V1
+
+| ไม่ทำ | ไปอยู่ไหน |
+|---|---|
+| gateway / proxy ยิง API แทน | ไม่ทำเลย (ADR-0001) |
+| ผู้ใช้หลายคน / sign-up | ไม่ทำ (ADR-0006) |
+| zero-knowledge (เข้ารหัสในเบราว์เซอร์) | V2 |
+| ประวัติการแก้ของ Entry | V1.1 |
+| API งาน/ภายในองค์กร | ไม่ใส่ใน Catalogue |
+| ค้นสดในเดโม | ไม่ทำ (ADR-0004) |
+
+## 2. ผู้ใช้
+
+| ใคร | ทำอะไรได้ |
+|---|---|
+| **เจ้าของ** (อีเมลเดียว, TOTP) | ทุกอย่าง |
+| **ผู้ชมเดโม** (ไม่ล็อกอิน) | ดู `/demo` และ `/about` เท่านั้น |
+| **CLI** ของเจ้าของ | Pull Key ของ Project ที่ token อนุญาต |
+
+## 3. แผนเวอร์ชัน
+
+ทุกเวอร์ชันจบด้วย `npm run check` ผ่าน + commit + `git tag` + บรรทัดใน `CHANGELOG.md`
+
+| เวอร์ชัน | ได้อะไร | เกณฑ์ผ่าน |
+|---|---|---|
+| **v0.1.0** | Catalogue + ค้นอังกฤษ | §4 ครบ · นำเข้า 1,873 แถวต้นทาง = 1,871 Entry · ค้น "weather" ได้ Open-Meteo ใน top-5 · `/about` แสดงเวอร์ชัน |
+| **v0.2.0** | Auth + TOTP | ทุกหน้ายกเว้น `/demo` `/about` ต้องล็อกอิน + AAL2 · ทุก server route เช็ก `getUser()` · อีเมลอื่นเข้าไม่ได้ |
+| **v0.3.0** | Vault + audit | §6 ครบ · เทส crypto round-trip + tamper · Reveal ต้อง re-auth และมีแถวใน audit |
+| **v0.4.0** | CLI `vault pull` | §7 ครบ · pull ลง `.env` แล้วไฟล์ไม่ถูก track โดย git · pull ถูกบันทึกใน audit |
+| **v0.5.0** | เดโม | §8 ครบ · เทสว่า build ของเดโมไม่มี secret |
+| **v1.0.0** | Jev ranker + ค้นไทย | spike ผ่าน ≥ 15/20 ใน top-5 · เพิ่ม Entry เองพร้อม Tag อัตโนมัติ · เดโมใช้ผลของ Jev |
+
+ถ้าชนเพดาน 1 เดือน: **CLI ตัดไป V1.1 ก่อน** · ถ้า TypeSafe ยังปิด ณ v0.5.0: ใช้ Claude structured output เป็น Ranker ของ v1.0.0 (ADR-0003)
+
+## 4. Catalogue (v0.1.0)
+
+### 4.1 ตาราง `entries`
+
+| คอลัมน์ | ชนิด | หมายเหตุ |
+|---|---|---|
+| `id` | `bigint` identity | |
+| `name` | `text` not null | |
+| `url` | `text` not null | |
+| `description` | `text` not null | ต้นทางยาวสุด 128 ตัวอักษร |
+| `categories` | `text[]` not null | ≥ 1 · Entry เดียวอยู่ได้หลายหมวด |
+| `auth` | enum `none` `api_key` `oauth` `x_mashape_key` `user_agent` | |
+| `https` | `boolean` not null | |
+| `cors` | enum `yes` `no` `unknown` | |
+| `source` | enum `public_apis` `manual` | |
+| `tags` | `jsonb` null | Tag ที่ Ranker ตัดสิน (v1.0.0) · null = ยังไม่ตัดสิน |
+| `created_at` `updated_at` | `timestamptz` | |
+
+- **unique (`name`, `url`)** — แถวต้นทางที่ชื่อ+URL ซ้ำ = Entry เดียว รวม `categories`
+- **RLS เปิด** · policy: `authenticated` อ่าน/เขียนได้ · **ไม่มี policy ของ `anon`** → Data API ของ Supabase ไม่เปิดให้คนนอก
+  (server route อ่านผ่าน `getDb()` และกันสิทธิ์ที่ route เอง — เริ่มกันจริงใน v0.2.0)
+
+### 4.2 นำเข้า
+
+`npm run db:import` ← `spike/data/apis.json`
+
+1. ทำความสะอาดค่า: ตัด backtick / backslash / control char (`\apiKey\` → `apiKey`, `` `Yes` `` → `Yes`)
+2. validate ด้วย Zod (`shared/entry.ts`) — แถวไหนไม่ผ่าน **หยุดทั้งหมด** พร้อมบอกแถว ไม่ข้ามเงียบ ๆ
+3. รวมแถวที่ `name`+`url` ซ้ำ → `categories` รวมกัน
+4. upsert บน (`name`, `url`) — รันซ้ำได้ ผลเท่าเดิม
+5. พิมพ์สรุป: แถวต้นทาง / Entry / เพิ่มใหม่ / อัปเดต
+
+### 4.3 Ranker
+
+```ts
+interface Ranker {
+  readonly name: 'keyword' | 'jev' | 'claude'
+  rank(query: string, candidates: EntryForRanking[], opts: { limit: number }): Promise<RankResult>
+}
+type RankResult =
+  | { kind: 'match', hits: { entryId: number, score: number /* 0–1 */ }[], confidence: number }
+  | { kind: 'no_match', confidence: number }
+```
+
+- **ห้ามส่ง Key หรือข้อมูลใน Vault เข้า Ranker** — `EntryForRanking` มีแค่ id, name, description, categories, auth, https, cors
+- เลือก Ranker ด้วย env `RANKER` (ค่าเริ่ม `keyword`)
+- **keyword ranker:** แตกคำค้นเป็นคำ (ตัวพิมพ์เล็ก) · ชื่อตรงทั้งคำ ×3 · อยู่ในหมวด ×2 · อยู่ในคำอธิบาย ×1 ·
+  normalize เป็น 0–1 · ไม่มีคำไหนตรงเลย = `no_match` · `confidence` = สัดส่วนคำค้นที่เจออย่างน้อยหนึ่งที่
+- **jev ranker** (v1.0.0): 2 request — Choice เลือกหมวด top-K → Choice เลือก Entry ในหมวดเหล่านั้น (≤ 255 ตัว) + Nouls "no match"
+  ตาม `spike/run.mjs`
+
+### 4.4 หน้าจอและ route
+
+| route | ทำอะไร |
+|---|---|
+| `GET /api/search?q=&category=&auth=&https=&cors=&limit=` | กรองด้วย filter ใน SQL → ส่งให้ Ranker → คืน Entry + score + `kind` |
+| `GET /api/categories` | รายชื่อหมวด + จำนวน |
+| `/` | ช่องค้น + filter (หมวด, auth, HTTPS, CORS) + ผลลัพธ์ · แสดง "ไม่เจอที่ตรง" เมื่อ `no_match` |
+| `/about` | เวอร์ชันปัจจุบัน + `CHANGELOG.md` + เครดิต public-apis (prerender) |
+
+query string validate ด้วย Zod ที่ `shared/` · handler `return` ค่าเสมอ
+
+## 5. Auth (v0.2.0)
+
+- Supabase Auth · sign-up ปิดที่ dashboard · ล็อกอินด้วยอีเมล+รหัสผ่านของเจ้าของ · TOTP บังคับ
+- เปิด `supabase.redirect` · `/login` `/confirm` · ยกเว้น `/demo/**` `/about`
+- server route ที่กัน: `serverSupabaseUser` / `getUser()` + ตรวจ `aal2` · ไม่ใช้ `getSession()` ตัดสินสิทธิ์
+- route ที่อ่าน session ห้ามแคช
+
+## 6. Vault (v0.3.0)
+
+### ตาราง
+
+| ตาราง | คอลัมน์หลัก |
+|---|---|
+| `keys` | `id` · `entry_id` → entries · `label` · `ciphertext` `iv` `auth_tag` (bytea) · `wrapped_dek` `dek_iv` `dek_tag` · `master_key_version` · `created_at` `rotated_at` |
+| `projects` 🟡 | `id` · `name` unique (ชื่อที่ใช้กับ `vault pull <project>`) |
+| `project_keys` 🟡 | `project_id` · `key_id` · `env_var` (เช่น `OPENWEATHER_API_KEY`) |
+| `audit_log` | `id` · `key_id` · `action` (`create` `update` `delete` `reveal` `pull`) · `via` (`web` `cli`) · `at` · `user_agent` |
+
+RLS ทุกตาราง · `audit_log` เป็น append-only (ไม่มี policy update/delete)
+
+### Envelope encryption (ADR-0002)
+
+- **เก็บ:** สุ่ม DEK 32 ไบต์ → AES-256-GCM เข้ารหัส Key ด้วย DEK (IV 12 ไบต์สุ่ม) → ห่อ DEK ด้วย master key (AES-256-GCM, IV สุ่ม) → เก็บทุกชิ้นยกเว้น DEK ดิบ
+- **Reveal:** ต้อง re-auth (TOTP ใหม่ภายใน 5 นาที 🟡) → แกะ DEK → ถอด Key → เขียน `audit_log` **ก่อน** ส่งค่ากลับ
+- master key: `VAULT_MASTER_KEY` (base64 32 ไบต์) ใน Vercel env · `VAULT_MASTER_KEY_VERSION` สำหรับหมุน
+- list Key แสดงแค่ label + 4 ตัวท้ายไม่ได้ — **ไม่แสดงอะไรจากค่าจริงเลย** 🟡
+
+## 7. CLI (v0.4.0) 🟡
+
+```bash
+vault login                 # วาง token ที่สร้างจากหน้าเว็บ (หลัง AAL2) เก็บที่ ~/.config/api-vault/token (chmod 600)
+vault pull <project>        # เขียน/อัปเดต .env ในโฟลเดอร์ปัจจุบัน
+```
+
+- token: สร้างบนเว็บ · เก็บเป็น hash ใน DB · หมดอายุ · ขอบเขต pull เท่านั้น · เพิกถอนได้
+- `pull` ปฏิเสธถ้า `.env` ไม่อยู่ใน `.gitignore` ของ repo ปัจจุบัน · แก้เฉพาะบรรทัดของ env_var ที่ดึง ไม่ลบบรรทัดอื่น
+- ทุก pull = แถว `audit_log` (`via: cli`)
+
+## 8. เดโม (v0.5.0)
+
+- `/demo` prerender จาก `app/demo/results.json` ที่สร้างด้วยสคริปต์ในเครื่อง · 5–8 คำค้น (ไทย) · หนึ่งข้อเป็น "No match"
+- แสดง score + confidence ของแต่ละผล และบอกว่าเป็นผลจาก Ranker ตัวไหน
+- **ไม่มี route API ใดใน deployment ที่ผู้ชมเดโมเรียกได้** · เทสสแกน `.output/` หาค่าจาก `.env`
+
+## 9. Env
+
+| ตัวแปร | ใช้ที่ | ตั้งแต่ |
+|---|---|---|
+| `SUPABASE_URL` `SUPABASE_KEY` | `@nuxtjs/supabase` (publishable key เท่านั้น) | v0.1.0 |
+| `DATABASE_URL` | app — transaction pooler :6543 | v0.1.0 |
+| `MIGRATION_DATABASE_URL` | drizzle-kit — session pooler :5432 | v0.1.0 |
+| `RANKER` | เลือก Ranker | v0.1.0 |
+| `VAULT_MASTER_KEY` `VAULT_MASTER_KEY_VERSION` | Vault | v0.3.0 |
+| `TYPESAFE_API_KEY` | jev ranker + spike | v1.0.0 |
+
+## 10. เทสที่ต้องมีก่อน V1
+
+- `.env.example` ไม่มีค่าจริง ✅
+- keyword ranker: ตรงชื่อ > ตรงหมวด > ตรงคำอธิบาย · ไม่ตรงเลย = `no_match`
+- importer: ทำความสะอาดค่าสกปรก · รวมแถวซ้ำ · แถวผิดทำให้หยุด
+- `db:verify` (ในฐานะ `authenticated` ภายใน transaction): RLS เปิดทุกตาราง · `anon` อ่าน `entries` ไม่ได้
+- crypto round-trip · แก้ ciphertext/tag แล้ว decrypt ล้ม · DEK สองครั้งไม่ซ้ำ
+- Reveal/Pull เขียน audit
+- build ของเดโมไม่มี secret
+
+## 11. คำถามที่ยังเปิด
+
+- 🟡 รูปแบบ Project/env_var (§6) และ token ของ CLI (§7) — ยืนยันก่อน v0.3.0
+- 🟡 เวลา re-auth ของ Reveal
+- 🟡 Tag เก็บใน `jsonb` หรือแยกคอลัมน์ — ตัดสินตอน v1.0.0 เมื่อเห็นผลจริงของ Jev
+- `~/types/database.types.ts` gen จาก Supabase CLI หรือ type ของ Drizzle

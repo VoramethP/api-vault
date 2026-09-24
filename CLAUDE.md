@@ -14,6 +14,8 @@
 
 | หา | เปิด |
 |---|---|
+| สเปก V1 (ตาราง, route, Ranker contract, เกณฑ์ผ่านของแต่ละเวอร์ชัน) | [`docs/spec.md`](docs/spec.md) |
+| ภาพดีไซน์ทั้งระบบ (10 หน้า) | [`docs/design/api-vault.drawio`](docs/design/api-vault.drawio) |
 | คำนี้ในโปรเจกต์แปลว่าอะไร (Entry, Key, Vault, Ranker, Reveal, Demo…) | [`CONTEXT.md`](CONTEXT.md) |
 | ประวัติว่าทำอะไรไปบ้าง ทำไมถึงตัดสินใจแบบนั้น | [`docs/WORKLOG.md`](docs/WORKLOG.md) |
 | เหตุผลเบื้องหลังการตัดสินใจเชิงสถาปัตยกรรม | [`docs/adr/`](docs/adr/) |
@@ -111,7 +113,7 @@ server/db/      schema.ts (Drizzle) + migrations/ (generate เท่านั�
 shared/         Zod schema ที่ใช้สองฝั่ง
 test/           Vitest
 spike/          สคริปต์วัด Jev ไม่ใช่ส่วนของแอป — data/apis.json คือแหล่งนำเข้า 1,873 รายการ
-docs/adr/       การตัดสินใจ · docs/WORKLOG.md ประวัติ
+docs/adr/       การตัดสินใจ · docs/WORKLOG.md ประวัติ · docs/spec.md สเปก · docs/design/ drawio
 vercel.json     regions: sin1 (ต้องตรงกับ Supabase ap-southeast-1)
 ```
 

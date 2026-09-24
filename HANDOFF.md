@@ -3,19 +3,32 @@
 > **เขียนทับทั้งไฟล์ทุกครั้งที่ส่งมอบ** · ส่งมอบเมื่อ: 2026-09-24 · เซสชัน 4 (v0.5.1 → v1.0.0)
 
 ## ทำอะไรไปในเซสชันนี้
-- ADR-0007: v1.0.0 ไม่รอ Jev = thai-dict + เพิ่ม Entry เอง · Jev + Tag อัตโนมัติ → V1.1
-- v1.0.0: เพิ่ม/แก้/ลบ Entry `manual` (spec §4.5) + เทสกัน thai-dict ถอยหลัง ≥ 14/20
+- ADR-0007: v1.0.0 ไม่รอ Jev = thai-dict + เพิ่ม Entry เอง · Jev + Tag อัตโนมัติ + ประวัติ Entry → V1.1
+- **v1.0.0 ขึ้น production แล้ว** (`/about` = v1.0.0 · `POST /api/entries` ไม่ล็อกอิน = 401):
+  เพิ่ม/แก้/ลบ Entry `manual` (spec §4.5) + เทสกัน thai-dict ถอยหลัง ≥ 14/20
 - ผู้ใช้ยืนยันว่าเก็บสำเนา `VAULT_MASTER_KEY` นอกเครื่องแล้ว
 
 ## สถานะ ณ ตอนส่ง
-- push แล้ว + tag `v1.0.0` บน GitHub · production `/about` = v1.0.0 · `POST /api/entries` ไม่ล็อกอิน = 401
-- `npm run check` ผ่าน (87 เทส) · build + scan-build ผ่าน · ไม่มี migration
+- working tree สะอาด · push แล้ว · `npm run check` ผ่าน (87 เทส) · build + scan-build ผ่าน · tag ล่าสุด `v1.0.0` · ไม่มี migration
 
 ## ค้างอยู่ตรงไหน
-- ไม่มีงานค้าง
+- ไม่มีงานค้าง · V1 ครบตาม spec
 
 ## ทำต่อยังไง
-1. ถามผู้ใช้ว่าจะทำอะไรต่อ — V1 ครบตาม spec แล้ว · V1.1 รอ TypeSafe
+1. ถามผู้ใช้ว่าจะทำอะไรต่อ — ตัวเลือกที่เหลือ (เรียงตามที่เคยเสนอ):
+   - ปิดเรื่อง `database.types.ts` (`Database = unknown` ยังไม่ตัดสิน · spec §11)
+   - ขัดเกลา UI / หน้า `/demo`
+   - V1.1 เมื่อ TypeSafe เปิด
+2. เพดานเวลาถึง 2026-10-24
+
+## สิ่งที่ตกลงกันไว้แต่ยังไม่ได้เขียนลงไฟล์ไหน
+- ผู้ใช้เลือก "ตามที่แนะนำ" ทุกข้อในเซสชันนี้ — เสนอเป็นตัวเลือกพร้อมคำแนะนำ ผู้ใช้ตัดสินเร็ว
+- `v1.0.0` เป็น **lightweight tag** (tag ก่อนหน้าเป็น annotated) — ไม่ต้องแก้ แต่ tag ต่อไปใช้ `git tag -a`
+- ตาราง `entries` ไม่มี RLS policy ของ delete — ลบได้เพราะ server ต่อด้วย role ที่ข้าม RLS (เหมือนตาราง Vault)
+  **ห้ามเพิ่ม delete policy ให้ authenticated** (session aal1 จะลบผ่าน Data API ได้)
+- "มี Key ผูกอยู่ = ลบไม่ได้" ยังไม่ได้ลองบน DB จริง (ต้องสร้าง Key → audit ลบไม่ได้) · มีเทสกฎ + FK `restrict`
+- dev server port 3100 อาจเป็นของแชตอื่น (`preview_start {name}` ชน) — เปิดด้วย `preview_start {url: "http://localhost:3100"}`
+  ได้ แต่หัวเว็บอาจโชว์เวอร์ชันเก่า เพราะ version อ่านตอน server เริ่ม
 
 ## เกณฑ์ว่าไม้นี้ส่งได้จริง
 เปิดแชตใหม่ อ่านไฟล์นี้ + `HOTCACHE.md` แล้วทำงานต่อได้ทันที

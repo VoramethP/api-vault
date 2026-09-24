@@ -326,6 +326,8 @@ spec เดิมผูก v1.0.0 กับ Jev (≥ 15/20 + Tag อัตโน
   · แก้ได้ · ลบผ่าน modal แล้วรายการรีเฟรช (Entry ทดสอบ #1872 ถูกลบแล้ว จำนวนกลับเป็น 1,871)
   · ไม่ได้ทดสอบ "มี Key = ลบไม่ได้" บน DB จริง (ต้องสร้าง Key → audit ที่ลบไม่ได้) — มีเทสของกฎ + FK `restrict` กันชั้นล่าง
 - `npm run check` 87 เทส · build + scan-build ผ่าน · ไม่มี migration
+- deploy: push main → Vercel build ~60 วิ → prod `/about` = v1.0.0 · `POST /api/entries` ไม่ล็อกอิน = 401
+  · tag `v1.0.0` สร้างแบบ lightweight → `--follow-tags` ไม่ส่ง ต้อง `git push origin v1.0.0` แยก
 
 ## งานถัดไป
 

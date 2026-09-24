@@ -141,6 +141,36 @@ pooler ถูก region, :6543/:5432 ถูกช่อง, `SUPABASE_KEY` เ�
 
 **กับดัก:** `vercel link` ต่อท้าย `.vercel` + `.env*` ใน `.gitignore` — คืนค่าไฟล์ เพราะ `.env.*` / `!.env.example` / `.vercel/` มีอยู่แล้ว
 
+## [2026-09-24] v0.3.0 Vault + audit
+
+**ผู้ใช้ตัดสิน (🟡 ใน spec):** Reveal = TOTP ใหม่ทุกครั้ง · Project/env_var ทำใน v0.3.0 · รายการแสดง 4 ตัวท้าย
+
+**ทำอะไร:** ตาราง `keys` `projects` `project_keys` `audit_log` (migration 0001 generate + 0002 custom: trigger + REVOKE)
+· `server/vault/crypto.ts` (seal/open/loadMasterKey) · `server/vault/reveal.ts` (ลำดับ Reveal แยกเป็นฟังก์ชันเทสได้)
+· API `/api/keys` `/api/keys/[id]` `/api/keys/[id]/reveal` `/api/projects…` `/api/audit` · หน้า `/vault` `/vault/projects` `/vault/audit`
+· `requireOwner()` คืน `{ user, claims }` · master key สร้างด้วย `openssl rand -base64 32` ลง `.env` + Vercel (ไม่เคยแสดงค่า)
+
+**ทำไมถึงเลือกแบบนี้:**
+- **TOTP สดตรวจจาก `amr`** ไม่ใช่ verify ที่ server: server client ของ `@nuxtjs/supabase` verify ได้ แต่จะออก refresh
+  token ใหม่ใน Set-Cookie ขณะที่เบราว์เซอร์อาจยังถือตัวเก่า (เสี่ยง reuse detection) — ใช้ทางเดียวกับ `/mfa` ที่ทดสอบแล้วแทน
+- **หนึ่งรหัสต่อหนึ่ง Reveal** ด้วย partial unique index `audit_log(totp_at) where action='reveal'` — ไม่ต้องมี state ที่อื่น และกัน race ได้ที่ DB
+- **ตาราง Vault ไม่มี policy + REVOKE** — `entries` ใช้ policy `true` ของ authenticated ได้เพราะไม่ลับ แต่ถ้า Vault ทำแบบเดียวกัน
+  session aal1 จะอ่าน label/last4/ciphertext ผ่าน Data API ได้โดยไม่ผ่าน TOTP
+- **audit_log ไม่มี FK ไป keys** — `ON DELETE SET NULL` คือ UPDATE ที่ trigger ปฏิเสธ · เก็บ `key_label` ไว้อ่านหลัง Key ถูกลบ
+- **trigger แบบ FOR EACH STATEMENT** ล้มแม้คำสั่งไม่โดนแถวไหน → `db:verify` ตรวจได้โดยไม่ต้องมีข้อมูล
+- last4 เฉพาะ Key ≥ 16 ตัว · ค่า Key ถูก trim (ช่องว่างจากการคัดลอกทำให้ใช้กับ API ไม่ได้)
+
+**ทางเลือกที่ไม่ได้เลือก:** ช่วงผ่อน re-auth 5/15 นาที (ผู้ใช้เลือกทุกครั้ง) · policy ที่เช็ก `auth.jwt()->>'aal'` (ไม่ต้องมี —
+Data API ไม่ต้องใช้ตาราง Vault เลย) · verify TOTP ที่ server
+
+**ผลทดสอบ:** เทส 47 ข้อ (crypto round-trip, tamper 6 ฟิลด์, DEK/IV ไม่ซ้ำ, ลำดับ Reveal/audit, TOTP สด) · Postgres ในเครื่อง:
+migrate + `db:verify` ผ่าน และจับได้เมื่อถอด trigger / grant คืน · Supabase จริง: migrate + verify ผ่าน · dev: CRUD/โปรเจกต์/409/400
+ผ่าน, TOTP เก่า → 403 ไม่มี audit · **ผู้ใช้ Reveal จริงด้วย TOTP ได้ค่าและมีแถว audit** · ลบข้อมูลทดสอบแล้ว
+(แถว audit ของ `TEST-claude` อยู่ถาวรตามออกแบบ)
+
+**สิ่งที่ต้องระวังต่อไป:** master key หาย = Key ทั้งหมดอ่านไม่ได้ — ผู้ใช้ต้องเก็บสำเนาเอง · หมุน master key ยังไม่มีสคริปต์
+(`open()` ปฏิเสธ version ไม่ตรง) · Pull (v0.4.0) ต้องใช้ `reveal` ลำดับเดียวกัน via `cli`
+
 ---
 
 ## งานถัดไป

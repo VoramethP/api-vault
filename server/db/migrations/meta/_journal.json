@@ -8,6 +8,20 @@
       "when": 1790225344336,
       "tag": "0000_entries",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790238332254,
+      "tag": "0001_vault",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790238332921,
+      "tag": "0002_audit_append_only",
+      "breakpoints": true
     }
   ]
 }

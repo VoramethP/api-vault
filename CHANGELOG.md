@@ -4,6 +4,16 @@
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-09-24
+
+### Added
+- Vault: เพิ่ม / แก้ชื่อ / หมุน / ลบ Key (`/vault`) — envelope encryption AES-256-GCM, DEK ต่อ Key, master key ใน env
+- Reveal ต้องใส่ TOTP ใหม่ทุกครั้ง · หนึ่งรหัสต่อหนึ่ง Reveal · ค่าซ่อนเองใน 60 วินาที
+- โปรเจกต์ + ชื่อ env var ต่อ Key (`/vault/projects`) เตรียมให้ `vault pull` (v0.4.0)
+- Audit log (`/vault/audit`) — ทุกการเพิ่ม/แก้/ลบ/Reveal · append-only ด้วย trigger
+- ปุ่ม "เพิ่ม Key" บนการ์ด API ที่ต้องใช้ key
+- `db:verify` ตรวจว่า Data API แตะตาราง Vault ไม่ได้ และ audit_log แก้/ลบไม่ได้
+
 ## [0.2.0] - 2026-09-24
 
 ### Added

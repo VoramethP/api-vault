@@ -35,6 +35,17 @@ const AUTH_LABEL: Record<SearchHit['entry']['auth'], string> = {
       <UBadge :label="AUTH_LABEL[e.auth]" variant="outline" :color="e.auth === 'none' ? 'success' : 'neutral'" size="sm" />
       <UBadge v-if="!e.https" label="ไม่มี HTTPS" variant="outline" color="warning" size="sm" />
       <UBadge v-if="e.cors === 'yes'" label="CORS" variant="outline" color="neutral" size="sm" />
+      <UButton
+        v-if="e.auth !== 'none'"
+        :to="{ path: '/vault', query: { entry: e.id, name: e.name } }"
+        icon="i-lucide-key-round"
+        size="xs"
+        variant="ghost"
+        color="neutral"
+        class="ms-auto"
+      >
+        เพิ่ม Key
+      </UButton>
     </div>
   </UCard>
 </template>

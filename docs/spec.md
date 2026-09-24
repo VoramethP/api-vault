@@ -120,19 +120,20 @@ query string validate ด้วย Zod ที่ `shared/` · handler `return` �
 
 | ตาราง | คอลัมน์หลัก |
 |---|---|
-| `keys` | `id` · `entry_id` → entries · `label` · `ciphertext` `iv` `auth_tag` (bytea) · `wrapped_dek` `dek_iv` `dek_tag` · `master_key_version` · `created_at` `rotated_at` |
-| `projects` 🟡 | `id` · `name` unique (ชื่อที่ใช้กับ `vault pull <project>`) |
-| `project_keys` 🟡 | `project_id` · `key_id` · `env_var` (เช่น `OPENWEATHER_API_KEY`) |
-| `audit_log` | `id` · `key_id` · `action` (`create` `update` `delete` `reveal` `pull`) · `via` (`web` `cli`) · `at` · `user_agent` |
+| `keys` | `id` · `entry_id` → entries · `label` · `ciphertext` `iv` `auth_tag` (bytea) · `wrapped_dek` `dek_iv` `dek_tag` · `master_key_version` · `last4` (null ถ้า Key สั้นกว่า 16 ตัว) · `created_at` `rotated_at` |
+| `projects` | `id` · `name` unique (ชื่อที่ใช้กับ `vault pull <project>`) |
+| `project_keys` | `project_id` · `key_id` · `env_var` (เช่น `OPENWEATHER_API_KEY`) · env_var ไม่ซ้ำในโปรเจกต์เดียว |
+| `audit_log` | `id` · `key_id` (ไม่มี FK) · `key_label` · `action` (`create` `update` `delete` `reveal` `pull`) · `via` (`web` `cli`) · `at` · `user_agent` · `totp_at` (unique เมื่อ action = reveal) |
 
-RLS ทุกตาราง · `audit_log` เป็น append-only (ไม่มี policy update/delete)
+RLS ทุกตาราง **ไม่มี policy** + REVOKE จาก `anon`/`authenticated` — Data API แตะตาราง Vault ไม่ได้เลย เข้าได้ทาง server หลัง `requireOwner()` เท่านั้น
+· `audit_log` append-only ด้วย trigger (ปฏิเสธ UPDATE/DELETE/TRUNCATE แม้แต่ role postgres)
 
 ### Envelope encryption (ADR-0002)
 
 - **เก็บ:** สุ่ม DEK 32 ไบต์ → AES-256-GCM เข้ารหัส Key ด้วย DEK (IV 12 ไบต์สุ่ม) → ห่อ DEK ด้วย master key (AES-256-GCM, IV สุ่ม) → เก็บทุกชิ้นยกเว้น DEK ดิบ
-- **Reveal:** ต้อง re-auth (TOTP ใหม่ภายใน 5 นาที 🟡) → แกะ DEK → ถอด Key → เขียน `audit_log` **ก่อน** ส่งค่ากลับ
+- **Reveal:** ใส่ TOTP ใหม่**ทุกครั้ง** — เบราว์เซอร์ `challengeAndVerify` → server ดูเวลา TOTP ใน `amr` (ไม่เกิน 120 วิ) → แกะ DEK → ถอด Key → เขียน `audit_log` พร้อม `totp_at` **ก่อน** ส่งค่ากลับ · `totp_at` ซ้ำ = 409 (หนึ่งรหัสต่อหนึ่ง Reveal)
 - master key: `VAULT_MASTER_KEY` (base64 32 ไบต์) ใน Vercel env · `VAULT_MASTER_KEY_VERSION` สำหรับหมุน
-- list Key แสดงแค่ label + 4 ตัวท้ายไม่ได้ — **ไม่แสดงอะไรจากค่าจริงเลย** 🟡
+- list Key แสดง label + Entry + **4 ตัวท้าย** (เจ้าของเลือก 2026-09-24) — เก็บแยกเป็น plaintext เฉพาะ Key ≥ 16 ตัว
 
 ## 7. CLI (v0.4.0) 🟡
 
@@ -174,7 +175,6 @@ vault pull <project>        # เขียน/อัปเดต .env ในโ�
 
 ## 11. คำถามที่ยังเปิด
 
-- 🟡 รูปแบบ Project/env_var (§6) และ token ของ CLI (§7) — ยืนยันก่อน v0.3.0
-- 🟡 เวลา re-auth ของ Reveal
+- 🟡 token ของ CLI (§7) — ยืนยันก่อน v0.4.0
 - 🟡 Tag เก็บใน `jsonb` หรือแยกคอลัมน์ — ตัดสินตอน v1.0.0 เมื่อเห็นผลจริงของ Jev
 - `~/types/database.types.ts` gen จาก Supabase CLI หรือ type ของ Drizzle

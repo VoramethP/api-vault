@@ -14,11 +14,14 @@ export async function requireOwner(event: H3Event) {
   const client = await serverSupabaseClient(event)
   const { data: { user } } = await client.auth.getUser()
   let who: { email: string | undefined, aal: Aal } | null = null
+  let claims: Record<string, unknown> | undefined
   if (user) {
     const { data } = await client.auth.getClaims()
-    who = { email: user.email, aal: (data?.claims.aal as Aal) ?? null }
+    claims = data?.claims
+    who = { email: user.email, aal: (claims?.aal as Aal) ?? null }
   }
   const decision = decideAccess(who, ownerEmail)
   if (!decision.ok) throw createError({ statusCode: decision.status, statusMessage: decision.message })
-  return user!
+  // claims ตรวจลายเซ็นแล้ว — Reveal ใช้ amr ในนี้ดูว่าเพิ่งใส่ TOTP ไหม
+  return { user: user!, claims: claims! }
 }

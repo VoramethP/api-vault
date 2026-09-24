@@ -6,6 +6,7 @@ const url = process.env.MIGRATION_DATABASE_URL ?? process.env.DATABASE_URL
 if (!url) throw new Error('MIGRATION_DATABASE_URL / DATABASE_URL is not set')
 const sql = postgres(url, { prepare: false, max: 1 })
 const failures: string[] = []
+const VAULT_TABLES = ['keys', 'projects', 'project_keys', 'audit_log']
 
 try {
   const noRls = await sql<{ relname: string }[]>`
@@ -23,6 +24,26 @@ try {
     })
     return n
   }
+  // ตาราง Vault: RLS ไม่มี policy + REVOKE → role ของ Data API ต้องถูกปฏิเสธตั้งแต่สิทธิ์ตาราง (42501)
+  for (const role of ['anon', 'authenticated'] as const) {
+    for (const table of VAULT_TABLES) {
+      const code = await sql.begin(async (tx) => {
+        await tx.unsafe(`set local role ${role}`)
+        await tx.unsafe(`select 1 from public.${table} limit 1`)
+      }).then(() => 'ok', (e: { code?: string }) => e.code)
+      if (code !== '42501') failures.push(`${role} แตะ ${table} ได้ (ได้ ${code} ต้องเป็น 42501)`)
+    }
+  }
+
+  // audit_log append-only: trigger แบบ statement ต้องล้มแม้คำสั่งไม่โดนแถวไหน · rollback เสมอ
+  for (const stmt of ['update public.audit_log set key_label = key_label where false', 'delete from public.audit_log where false']) {
+    const blocked = await sql.begin(async (tx) => {
+      await tx.unsafe(stmt)
+      throw new Error('rollback')
+    }).catch((e: Error) => /append-only/.test(e.message))
+    if (!blocked) failures.push(`audit_log ไม่ได้กัน: ${stmt.split(' ')[0]}`)
+  }
+
   const anon = await asRole('anon')
   if (anon !== 0) failures.push(`anon อ่าน entries ได้ ${anon} แถว (ต้องเป็น 0)`)
   const authed = await asRole('authenticated')

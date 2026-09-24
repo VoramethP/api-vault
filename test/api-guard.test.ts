@@ -19,7 +19,7 @@ describe('server/api', () => {
     expect(files.length).toBeGreaterThan(0)
     for (const f of files) {
       const body = readFileSync(f, 'utf8')
-      expect(body, f).toMatch(/defineEventHandler\(async \(event\)[^{]*\{\s*await requireOwner\(event\)/)
+      expect(body, f).toMatch(/defineEventHandler\(async \(event\)[^{]*\{\s*(const [^=]+= )?await requireOwner\(event\)/)
     }
   })
 

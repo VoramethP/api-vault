@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-24T10:35:25.470Z",
+  "generatedAt": "2026-09-24T11:06:00.190Z",
   "ranker": "thai-dict",
   "catalogueSize": 1871,
   "results": [
@@ -19,16 +19,40 @@
       },
       "hits": [
         {
-          "name": "api-mint",
-          "url": "https://api-mint.hoiwan.workers.dev",
-          "description": "Free utility APIs: timezone, forex rates, crypto prices, page metadata",
+          "name": "Currency-api",
+          "url": "https://github.com/fawazahmed0/currency-api#readme",
+          "description": "Free Currency Exchange Rates API with 150+ Currencies & No Rate Limits",
           "categories": [
             "Currency Exchange"
           ],
           "auth": "none",
           "https": true,
           "cors": "yes",
-          "score": 0.07407407407407407
+          "score": 0.12400000000000001
+        },
+        {
+          "name": "Frankfurter",
+          "url": "https://www.frankfurter.app/docs",
+          "description": "Exchange rates, currency conversion and time series",
+          "categories": [
+            "Currency Exchange"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "yes",
+          "score": 0.12400000000000001
+        },
+        {
+          "name": "National Bank of Poland",
+          "url": "http://api.nbp.pl/en.html",
+          "description": "A collection of currency exchange rates (data in XML and JSON)",
+          "categories": [
+            "Currency Exchange"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "yes",
+          "score": 0.12400000000000001
         },
         {
           "name": "Bank of Russia",
@@ -40,43 +64,19 @@
           "auth": "none",
           "https": true,
           "cors": "unknown",
-          "score": 0.07407407407407407
+          "score": 0.1217037037037037
         },
         {
-          "name": "Currency-api",
-          "url": "https://github.com/fawazahmed0/currency-api#readme",
-          "description": "Free Currency Exchange Rates API with 150+ Currencies & No Rate Limits",
+          "name": "FreeForexAPI",
+          "url": "https://freeforexapi.com/Home/Api",
+          "description": "Real-time foreign exchange rates for major currency pairs",
           "categories": [
             "Currency Exchange"
           ],
           "auth": "none",
           "https": true,
-          "cors": "yes",
-          "score": 0.07407407407407407
-        },
-        {
-          "name": "Czech National Bank",
-          "url": "https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.xml",
-          "description": "A collection of exchange rates",
-          "categories": [
-            "Currency Exchange"
-          ],
-          "auth": "none",
-          "https": true,
-          "cors": "unknown",
-          "score": 0.07407407407407407
-        },
-        {
-          "name": "Economia.Awesome",
-          "url": "https://docs.awesomeapi.com.br/api-de-moedas",
-          "description": "Portuguese free currency prices and conversion with no rate limits",
-          "categories": [
-            "Currency Exchange"
-          ],
-          "auth": "none",
-          "https": true,
-          "cors": "unknown",
-          "score": 0.07407407407407407
+          "cors": "no",
+          "score": 0.1217037037037037
         }
       ]
     },
@@ -104,7 +104,7 @@
           "auth": "none",
           "https": true,
           "cors": "yes",
-          "score": 0.25
+          "score": 0.279
         },
         {
           "name": "HTTP Cat",
@@ -116,7 +116,7 @@
           "auth": "none",
           "https": true,
           "cors": "yes",
-          "score": 0.25
+          "score": 0.279
         },
         {
           "name": "Shibe.Online",
@@ -128,7 +128,7 @@
           "auth": "none",
           "https": true,
           "cors": "yes",
-          "score": 0.08333333333333333
+          "score": 0.09
         }
       ]
     },
@@ -144,28 +144,28 @@
       },
       "hits": [
         {
-          "name": "AccuWeather",
-          "url": "https://developer.accuweather.com/apis",
-          "description": "Weather and forecast data",
+          "name": "Open-Meteo Ensemble",
+          "url": "https://open-meteo.com/en/docs/ensemble-api",
+          "description": "Weather ensemble forecasts from multiple models",
           "categories": [
             "Weather"
           ],
-          "auth": "api_key",
-          "https": false,
-          "cors": "unknown",
-          "score": 0.3333333333333333
+          "auth": "none",
+          "https": true,
+          "cors": "yes",
+          "score": 0.36
         },
         {
-          "name": "Aemet",
-          "url": "https://opendata.aemet.es/centrodedescargas/inicio",
-          "description": "Weather and forecast data from Spain",
+          "name": "Pirate Weather",
+          "url": "https://pirateweather.net/en/latest/",
+          "description": "Free weather API with forecast data similar to Dark Sky",
           "categories": [
             "Weather"
           ],
-          "auth": "api_key",
+          "auth": "none",
           "https": true,
-          "cors": "unknown",
-          "score": 0.3333333333333333
+          "cors": "yes",
+          "score": 0.36
         },
         {
           "name": "AviationWeather",
@@ -177,19 +177,7 @@
           "auth": "none",
           "https": true,
           "cors": "unknown",
-          "score": 0.3333333333333333
-        },
-        {
-          "name": "HG Weather",
-          "url": "https://hgbrasil.com/status/weather",
-          "description": "Provides weather forecast data for cities in Brazil",
-          "categories": [
-            "Weather"
-          ],
-          "auth": "api_key",
-          "https": true,
-          "cors": "yes",
-          "score": 0.3333333333333333
+          "score": 0.35333333333333333
         },
         {
           "name": "Meltema",
@@ -201,7 +189,19 @@
           "auth": "none",
           "https": true,
           "cors": "no",
-          "score": 0.3333333333333333
+          "score": 0.35333333333333333
+        },
+        {
+          "name": "HG Weather",
+          "url": "https://hgbrasil.com/status/weather",
+          "description": "Provides weather forecast data for cities in Brazil",
+          "categories": [
+            "Weather"
+          ],
+          "auth": "api_key",
+          "https": true,
+          "cors": "yes",
+          "score": 0.3466666666666667
         }
       ]
     },
@@ -217,18 +217,6 @@
       },
       "hits": [
         {
-          "name": "Edamam recipes",
-          "url": "https://developer.edamam.com/edamam-docs-recipe-api",
-          "description": "Recipe Search",
-          "categories": [
-            "Food & Drink"
-          ],
-          "auth": "api_key",
-          "https": true,
-          "cors": "unknown",
-          "score": 1
-        },
-        {
           "name": "RecipeAPI",
           "url": "https://recipeapi.io",
           "description": "Recipes, ingredients, nutrition data and cooking instructions",
@@ -241,28 +229,16 @@
           "score": 1
         },
         {
-          "name": "CalorieNinjas",
-          "url": "https://calorieninjas.com/api",
-          "description": "Nutrition and calorie data for foods and recipes",
+          "name": "Edamam recipes",
+          "url": "https://developer.edamam.com/edamam-docs-recipe-api",
+          "description": "Recipe Search",
           "categories": [
             "Food & Drink"
           ],
           "auth": "api_key",
           "https": true,
-          "cors": "yes",
-          "score": 0.3333333333333333
-        },
-        {
-          "name": "Edamam",
-          "url": "https://developer.edamam.com/",
-          "description": "Food and nutrition data API with recipe search",
-          "categories": [
-            "Health"
-          ],
-          "auth": "api_key",
-          "https": true,
           "cors": "unknown",
-          "score": 0.3333333333333333
+          "score": 1
         },
         {
           "name": "PunkAPI",
@@ -274,7 +250,31 @@
           "auth": "none",
           "https": true,
           "cors": "unknown",
-          "score": 0.3333333333333333
+          "score": 0.35333333333333333
+        },
+        {
+          "name": "CalorieNinjas",
+          "url": "https://calorieninjas.com/api",
+          "description": "Nutrition and calorie data for foods and recipes",
+          "categories": [
+            "Food & Drink"
+          ],
+          "auth": "api_key",
+          "https": true,
+          "cors": "yes",
+          "score": 0.3466666666666667
+        },
+        {
+          "name": "TheCocktailDB",
+          "url": "https://www.thecocktaildb.com/api.php",
+          "description": "Cocktail Recipes",
+          "categories": [
+            "Food & Drink"
+          ],
+          "auth": "api_key",
+          "https": true,
+          "cors": "yes",
+          "score": 0.3466666666666667
         }
       ]
     },
@@ -301,19 +301,7 @@
           "auth": "api_key",
           "https": true,
           "cors": "unknown",
-          "score": 0.37037037037037035
-        },
-        {
-          "name": "FakeJSON",
-          "url": "https://fakejson.com",
-          "description": "Service to generate test and fake data",
-          "categories": [
-            "Test Data"
-          ],
-          "auth": "api_key",
-          "https": true,
-          "cors": "yes",
-          "score": 0.2962962962962963
+          "score": 0.4533333333333333
         },
         {
           "name": "FakerAPI",
@@ -325,7 +313,19 @@
           "auth": "none",
           "https": true,
           "cors": "yes",
-          "score": 0.2962962962962963
+          "score": 0.4
+        },
+        {
+          "name": "FakeJSON",
+          "url": "https://fakejson.com",
+          "description": "Service to generate test and fake data",
+          "categories": [
+            "Test Data"
+          ],
+          "auth": "api_key",
+          "https": true,
+          "cors": "yes",
+          "score": 0.3928888888888889
         },
         {
           "name": "FakeStoreAPI",
@@ -337,7 +337,7 @@
           "auth": "none",
           "https": true,
           "cors": "unknown",
-          "score": 0.2962962962962963
+          "score": 0.3925925925925926
         },
         {
           "name": "DummyJSON",
@@ -349,7 +349,7 @@
           "auth": "none",
           "https": true,
           "cors": "yes",
-          "score": 0.2222222222222222
+          "score": 0.32
         }
       ]
     },
@@ -365,9 +365,9 @@
       },
       "hits": [
         {
-          "name": "Drivet URL Shortener",
-          "url": "https://wiki.drivet.xyz/en/url-shortener/add-links",
-          "description": "Shorten a long URL easily and fast",
+          "name": "Free Url Shortener",
+          "url": "https://ulvis.net/developer.html",
+          "description": "Free URL Shortener offers a powerful API to interact with other sites",
           "categories": [
             "URL Shorteners"
           ],
@@ -377,9 +377,9 @@
           "score": 1
         },
         {
-          "name": "Free Url Shortener",
-          "url": "https://ulvis.net/developer.html",
-          "description": "Free URL Shortener offers a powerful API to interact with other sites",
+          "name": "Drivet URL Shortener",
+          "url": "https://wiki.drivet.xyz/en/url-shortener/add-links",
+          "description": "Shorten a long URL easily and fast",
           "categories": [
             "URL Shorteners"
           ],
@@ -398,19 +398,7 @@
           "auth": "none",
           "https": true,
           "cors": "yes",
-          "score": 0.6666666666666666
-        },
-        {
-          "name": "Bitly",
-          "url": "http://dev.bitly.com/get_started.html",
-          "description": "URL shortener and link management",
-          "categories": [
-            "URL Shorteners"
-          ],
-          "auth": "oauth",
-          "https": true,
-          "cors": "unknown",
-          "score": 0.6666666666666666
+          "score": 0.7560000000000001
         },
         {
           "name": "CleanURI",
@@ -422,7 +410,19 @@
           "auth": "none",
           "https": true,
           "cors": "yes",
-          "score": 0.6666666666666666
+          "score": 0.7560000000000001
+        },
+        {
+          "name": "GoTiny",
+          "url": "https://github.com/robvanbakel/gotiny-api",
+          "description": "A lightweight URL shortener, focused on ease-of-use for the developer and end-user",
+          "categories": [
+            "URL Shorteners"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "yes",
+          "score": 0.7560000000000001
         }
       ]
     },
@@ -438,18 +438,6 @@
       },
       "hits": [
         {
-          "name": "PostNord",
-          "url": "https://developer.postnord.com/api",
-          "description": "Provides information about parcels in transport for Sweden and Denmark",
-          "categories": [
-            "Tracking"
-          ],
-          "auth": "api_key",
-          "https": false,
-          "cors": "unknown",
-          "score": 0.3333333333333333
-        },
-        {
           "name": "SMKlog",
           "url": "https://smklog.com/openapi.json",
           "description": "Live parcel shipping rates and labels from a plain-words item description",
@@ -459,7 +447,7 @@
           "auth": "none",
           "https": true,
           "cors": "no",
-          "score": 0.3333333333333333
+          "score": 0.35333333333333333
         },
         {
           "name": "WhereParcel",
@@ -471,19 +459,46 @@
           "auth": "api_key",
           "https": true,
           "cors": "yes",
+          "score": 0.3466666666666667
+        },
+        {
+          "name": "PostNord",
+          "url": "https://developer.postnord.com/api",
+          "description": "Provides information about parcels in transport for Sweden and Denmark",
+          "categories": [
+            "Tracking"
+          ],
+          "auth": "api_key",
+          "https": false,
+          "cors": "unknown",
           "score": 0.3333333333333333
         }
       ]
     },
     {
       "q": "หาเพื่อนคุยตอนดึก",
-      "kind": "no_match",
-      "confidence": 0,
+      "kind": "match",
+      "confidence": 0.25,
       "understood": {
-        "terms": [],
+        "terms": [
+          "ตอน"
+        ],
         "filters": {}
       },
-      "hits": []
+      "hits": [
+        {
+          "name": "Catch The Show",
+          "url": "https://catchtheshow.herokuapp.com/api/documentation",
+          "description": "REST API for next-episode.net",
+          "categories": [
+            "Video"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "unknown",
+          "score": 0.35333333333333333
+        }
+      ]
     }
   ]
 }

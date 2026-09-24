@@ -1,0 +1,122 @@
+[
+  {
+    "q": "api ค่าฝุ่น pm2.5",
+    "expect": ["AQICN", "IQAir", "OpenAQ", "PM2.5 Open Data Portal", "Purple Air"],
+    "lang": "th",
+    "source": "Thai Medium post 'เช็คค่าฝุ่น PM2.5 ผ่าน API' https://medium.com/@natthavat28/%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B8%94%E0%B8%B9%E0%B8%9D%E0%B8%B8%E0%B9%88%E0%B8%99-pm2-5-%E0%B8%9C%E0%B9%88%E0%B8%B2%E0%B8%99-api-f5edf973b8a9"
+  },
+  {
+    "q": "อยากดึงวันหยุดราชการของแต่ละประเทศมาโชว์ในปฏิทินของแอป มี api ไหม",
+    "expect": ["Calendarific", "Nager.Date", "caldays", "Festivo Public Holidays", "Public Holidays"],
+    "lang": "th",
+    "source": "MindPHP forum thread on pulling Thai holidays with Python + Calendarific https://www.mindphp.com/forums/viewtopic.php?t=115041"
+  },
+  {
+    "q": "ทำ contact form ให้ส่งข้อมูลจากหน้าเว็บเข้าอีเมล โดยไม่ต้องเขียน back-end",
+    "expect": ["EmailJS"],
+    "lang": "th",
+    "source": "Thai Medium post 'สร้าง Contact form ให้ส่งข้อมูลจากหน้าเว็บไซต์เข้า E-mail โดยไม่ต้องเขียน Back-end' https://pakorn-srs.medium.com/5b6a57eef0b7"
+  },
+  {
+    "q": "สุ่มรูปแมวมาโชว์บนเว็บ ไม่ต้องใช้ key",
+    "expect": ["Shibe.Online", "HTTP Cat"],
+    "lang": "th",
+    "source": "Thai Medium tutorial 'สร้าง Simple Web App ด้วย JavaScript & TheCatApi' https://milerdev.medium.com/55f4b474a847 (The Cat API itself is not in the catalogue)"
+  },
+  {
+    "q": "หา api ข้อมูลอนิเม มีคะแนนกับจำนวนตอน เอามาทำเว็บรวมเรื่อง",
+    "expect": ["Jikan", "AniList", "Kitsu", "MyAnimeList", "AniDB"],
+    "lang": "th",
+    "source": "Topic from Jikan being a staple of beginner API lists (https://jikan.moe/, https://dev.to/mukeshkuiry/12-free-and-fun-api-for-your-next-project-5eem); Thai wording and the colloquial spelling 'อนิเม' written by me, no Thai source found"
+  },
+  {
+    "q": "api สร้าง qr code ฟรี ไม่ต้องสมัคร",
+    "expect": ["QR code", "QR Code Crafter", "QR & Barcode", "Qrcode Monkey", "Orca Scan"],
+    "lang": "th",
+    "source": "Thai page 'เว็บ API สร้าง QR Code ฟรี' (no sign-up) https://api.dee4u.com/qr"
+  },
+  {
+    "q": "ราคาบิดคอยตอนนี้ ดึงจาก api ฟรีได้ที่ไหน",
+    "expect": ["CoinGecko", "CoinDesk", "CoinCap", "Coinpaprika", "Coinlore"],
+    "lang": "th",
+    "source": "Thai Medium crypto-price tutorials, e.g. 'ดึงราคาเหรียญจาก Binance ด้วย Python' https://medium.com/qunt-i-love-u/2796101c0dac and LINE Developers Thailand crypto chatbot https://medium.com/linedevth/471f6c58b499; misspelling 'บิดคอย' is deliberate"
+  },
+  {
+    "q": "หาapiทำเว็บเติมเกมครับ",
+    "expect": [],
+    "lang": "th",
+    "source": "Pantip thread 'หาapiทำเว็บเติมเกมคับ' https://pantip.com/topic/44083543 (game top-up / gift-card reseller APIs are not in the catalogue)"
+  },
+  {
+    "q": "api เช็คสลิปโอนเงิน ตรวจสลิปปลอม",
+    "expect": [],
+    "lang": "th",
+    "source": "Thai slip-verification API market (SlipOK https://slipok.com/api/, EasySlip https://easyslip.com/api-verified-slip/); no Thai bank-slip verification API in the catalogue"
+  },
+  {
+    "q": "แปลภาษาไทยเป็นอังกฤษผ่าน api ฟรีๆ",
+    "expect": ["AI For Thai", "Kiprio Translate", "Langbly", "Lecto Translation", "LibreTranslate"],
+    "lang": "th",
+    "source": "Thai search results for free translation APIs, e.g. https://www.machinetranslation.com/th/blog/best-language-translation-api"
+  },
+  {
+    "q": "หาประเทศของคนที่เข้าเว็บจาก ip เรียกจากหน้าเว็บได้เลยไม่ผ่าน server",
+    "expect": ["ipapi.co", "ipwhois", "GeoJS", "geoPlugin", "ipgeolocationapi"],
+    "lang": "th",
+    "source": "Topic from client-side IP geolocation guides, e.g. https://ipinfo.io/blog/javascript-ip-geolocation-api; Thai wording mine; only CORS=Yes entries accepted because the query requires calling from the browser"
+  },
+  {
+    "q": "api แผนที่ ปักหมุดร้านบนเว็บ ที่ไม่ใช่ google map",
+    "expect": ["Longdo Map", "Mapbox", "TomTom", "HERE Maps", "Cartes.io"],
+    "lang": "th",
+    "source": "BorntoDev Thai list of JavaScript APIs (map embedding and pinning places) https://www.borntodev.com/2020/01/06/รวม-api-สำหรับ-javascript-ที่น่าสนใจ/"
+  },
+  {
+    "q": "f1 race results api",
+    "expect": ["Ergast F1", "OpenF1", "RacingHub"],
+    "lang": "en",
+    "source": "Fast-F1 discussion 'Ergast API is being deprecated' https://github.com/theOehrly/Fast-F1/discussions/445 and https://developers.hyprace.com/blog/ergast-api-alternative"
+  },
+  {
+    "q": "lookup book details by isbn",
+    "expect": ["Open Library", "Google Books", "Penguin Publishing"],
+    "lang": "en",
+    "source": "https://medium.com/@chanyamhung/apis-books-data-via-isbn-d29285572683 and https://www.vinzius.com/post/free-and-paid-api-isbn/"
+  },
+  {
+    "q": "remote jobs api json no auth",
+    "expect": ["RemoteOK", "Arbeitnow", "Artificial Intelligence Jobs"],
+    "lang": "en",
+    "source": "dev.to 'Four Remote Job Boards Have Free Public APIs' https://dev.to/scrapemint/four-remote-job-boards-have-free-public-apis-here-is-one-schema-for-all-of-them-5a4k"
+  },
+  {
+    "q": "generate fake user profiles api for testing",
+    "expect": ["RandomUser", "FakerAPI", "DummyJSON", "JSONPlaceholder", "Mockaroo"],
+    "lang": "en",
+    "source": "https://imnirmaljoshi.medium.com/10-free-dummy-mock-api-alternatives-for-developers-5635e5cdc0 and https://dummyjsongenerator.com/blog/best-random-user-generator-apis-2026"
+  },
+  {
+    "q": "tarot card meanings api",
+    "expect": [],
+    "lang": "en",
+    "source": "GitHub ekelen/tarot-api https://github.com/ekelen/tarot-api and dev.to https://dev.to/birdircik/building-a-tarot-card-meanings-api-with-json-free-dataset-for-developers-47b4 (catalogue has horoscope/astrology APIs but no tarot)"
+  },
+  {
+    "q": "free song lyrics api",
+    "expect": ["Lyrics.ovh", "Genius", "KSoft.Si Lyrics", "Vagalume"],
+    "lang": "en",
+    "source": "https://blog.openapihub.com/en-us/how-to-get-song-lyrics-with-free-api/ and https://github.com/topics/lyrics-api"
+  },
+  {
+    "q": "where is the iss right now api",
+    "expect": ["Open Notify"],
+    "lang": "en",
+    "source": "https://medium.com/@protobioengineering/how-to-see-where-the-international-space-station-is-right-now-with-code-32f63cd3334"
+  },
+  {
+    "q": "nutrition api calories for food tracker app",
+    "expect": ["CalorieNinjas", "Nutritionix", "FoodData Central", "Edamam nutrition", "Open Food Facts"],
+    "lang": "en",
+    "source": "https://www.spikeapi.com/blog/top-nutrition-apis-for-developers-2026 and https://github.com/jrhizor/awesome-nutrition-tracking"
+  }
+]

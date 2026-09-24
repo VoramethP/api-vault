@@ -8,7 +8,9 @@ const W_CATEGORY = 2
 const W_DESCRIPTION = 1
 
 export function tokenize(text: string): string[] {
-  return text.toLowerCase().split(/[^\p{L}\p{N}]+/u).filter(t => t.length >= 2 && !STOPWORDS.has(t))
+  // ตัดวรรณยุกต์ของอักษรละตินเท่านั้น ("Pokémon" → "pokemon") — สระ/วรรณยุกต์ไทยก็เป็น combining mark ห้ามตัด
+  return text.toLowerCase().normalize('NFD').replace(/(\p{Script=Latin})\p{M}+/gu, '$1').normalize('NFC')
+    .split(/[^\p{L}\p{N}]+/u).filter(t => t.length >= 2 && !STOPWORDS.has(t))
 }
 
 // "cat" ต้องเจอ "cats" · "weather" ต้องเจอ "weathering" · แต่คำสั้นอย่าง "go" ห้ามไปเจอ "google"

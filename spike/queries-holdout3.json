@@ -1,0 +1,122 @@
+[
+  {
+    "q": "ค่าฝุ่น pm2.5 แต่ละจังหวัด",
+    "expect": ["AQICN", "IQAir", "OpenAQ", "Purple Air", "PM2.5 Open Data Portal"],
+    "lang": "th",
+    "source": "Thai Medium posts on checking PM2.5 via API / LINE bot: https://medium.com/@natthavat28/%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B8%94%E0%B8%B9%E0%B8%9D%E0%B8%B8%E0%B9%88%E0%B8%99-pm2-5-%E0%B8%9C%E0%B9%88%E0%B8%B2%E0%B8%99-api-f5edf973b8a9 , https://medium.com/i-gear-geek/%E0%B8%AA%E0%B8%A3%E0%B9%89%E0%B8%B2%E0%B8%87-line-bot-%E0%B9%80%E0%B8%9E%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B9%81%E0%B8%AA%E0%B8%94%E0%B8%87%E0%B8%84%E0%B9%88%E0%B8%B2-pm-2-5-%E0%B8%A3%E0%B8%AD%E0%B8%9A-%E0%B9%86-%E0%B8%95%E0%B8%B1%E0%B8%A7%E0%B9%80%E0%B8%A3%E0%B8%B2%E0%B8%94%E0%B9%89%E0%B8%A7%E0%B8%A2-node-js-7605c5e6486c (titles seen via search; bodies not fetched, 403)"
+  },
+  {
+    "q": "อยากดึงอัตราแลกเปลี่ยนเงินบาทเป็น json แบบไม่ต้องสมัครสมาชิก",
+    "expect": ["Frankfurter", "Currency-api", "Exchangerate.dev", "VATComply.com"],
+    "lang": "th",
+    "source": "Thai search for THB exchange-rate APIs (BOT API portal https://apiportal.bot.or.th/bot/public/node/18274 , https://www.thestartupfounder.com/use-an-api-to-get-exchange-rate-in-thailand/) + no-key condition from https://deployu.ai/blog/free-apis-no-key ; THB checked live for Frankfurter, VATComply, Currency-api"
+  },
+  {
+    "q": "api วันหยุดราชการไทย เอาไปทำปฎิทินในแอป",
+    "expect": ["caldays", "Calendarific", "Holidays", "Public Holidays", "Festivo Public Holidays"],
+    "lang": "th",
+    "source": "https://www.mindphp.com/forums/viewtopic.php?t=115041 (Thai holidays via Calendarific), https://iapp.co.th/docs/data/holiday/thai ; typo ปฎิทิน (correct ปฏิทิน) is a common real misspelling. Nager.Date excluded: live check returned no data for TH; caldays checked live (returns Thai holidays)"
+  },
+  {
+    "q": "ดึงราคาบิทคอยมาแจ้งเตือนเข้าไลน์",
+    "expect": ["CoinGecko", "CoinCap", "CoinDesk", "Coinpaprika", "Coinlore"],
+    "lang": "th",
+    "source": "https://medium.com/investic/%E0%B8%94%E0%B8%B6%E0%B8%87%E0%B8%A3%E0%B8%B2%E0%B8%84%E0%B8%B2-bitcoin-%E0%B9%81%E0%B8%88%E0%B9%89%E0%B8%87%E0%B9%80%E0%B8%95%E0%B8%B7%E0%B8%AD%E0%B8%99%E0%B9%80%E0%B8%82%E0%B9%89%E0%B8%B2%E0%B9%84%E0%B8%A5%E0%B8%99%E0%B9%8C-11e9765bd8d5 , https://github.com/kevzen96/Price_LineNoti ; typo บิทคอย (standard spelling บิตคอยน์)"
+  },
+  {
+    "q": "มี api สุ่มรูปแมวไหม ขอแบบไม่ต้องใช้ key",
+    "expect": ["Shibe.Online", "HTTP Cat"],
+    "lang": "th",
+    "source": "Thai tutorial 'สร้าง Simple Web App ด้วย JavaScript & TheCatApi' https://milerdev.medium.com/%E0%B8%AA%E0%B8%A3%E0%B9%89%E0%B8%B2%E0%B8%87-simple-web-app-%E0%B8%94%E0%B9%89%E0%B8%A7%E0%B8%A2-javascript-thecatapi-55f4b474a847 (title via search); TheCatAPI itself is not in the catalogue, 'Cats' excluded because it needs apiKey"
+  },
+  {
+    "q": "ข้อมูลสินค้าปลอมไว้ทำเว็บ e-commerce ส่งอาจารย์",
+    "expect": ["FakeStoreAPI", "DummyJSON", "Dummy Products", "FakerAPI"],
+    "lang": "th",
+    "source": "https://www.mindphp.com/%E0%B8%9A%E0%B8%97%E0%B8%84%E0%B8%A7%E0%B8%B2%E0%B8%A1/software-project-manage/8970-free-web-api-for-front-end-development.html (Fake Store API for e-commerce/shopping-site projects), https://www.techstarthailand.com/blog/detail/15-Best-Free-APIs-Every-Developer-Should-Know-in-2026/3476 (via search snippet)"
+  },
+  {
+    "q": "api ข้อมูล anime มีเรื่องย่อ score จำนวนตอน",
+    "expect": ["Jikan", "AniList", "Kitsu", "MyAnimeList", "AniDB"],
+    "lang": "th",
+    "source": "Anime is a recurring free-API topic: https://github.com/Munna-Scriptz/free-anime-apis , https://apideposu.com/en/blog/best-free-anime-manga-apis ; Thai-English mixed phrasing written by me"
+  },
+  {
+    "q": "แปลข้อความภาษาไทยเป็นอังกฤษอัตโนมัติ มี api ฟรีไหม",
+    "expect": ["Langbly", "Kiprio Translate", "Lecto Translation", "LibreTranslate", "AI For Thai"],
+    "lang": "th",
+    "source": "https://github.com/paritsadeesamanjit-unt/Tech-news-to-Thai (Thai project with a translate step), https://www.machinetranslation.com/th/blog/best-language-translation-api ; LibreTranslate Thai support confirmed via https://docs.libretranslate.com/guides/supported_languages/ ; AI For Thai has a machine-translation module (https://oecd.ai/en/dashboards/policy-initiatives/ai-for-thai-thai-ai-service-platform)"
+  },
+  {
+    "q": "พยากรณ์อากาศ ฟรี ไม่ต้องสมัคร เรียกจากหน้าเว็บได้เลย",
+    "expect": ["Open-Meteo", "Open-Meteo Ensemble", "wttr.in", "Pirate Weather", "World Time & Weather"],
+    "lang": "th",
+    "source": "Thai weather-app tutorials https://www.daydev.com/developer/s6-programming-language/api-openweather.html , https://thaiskyward.com/api ; no-key + browser/CORS condition from https://deployu.ai/blog/free-apis-no-key ; expect = catalogue auth No AND cors Yes, global coverage"
+  },
+  {
+    "q": "ตารางคะแนนพรีเมียร์ลีก ผลบอลล่าสุด",
+    "expect": ["Football Standings", "API-FOOTBALL", "Football-Data", "Sportmonks Football", "Football Charts"],
+    "lang": "th",
+    "source": "Thai football-API demand: https://supapongai.com/football-api ; Thai search phrasing ตารางคะแนน/ผลบอล (e.g. https://www.thairath.co.th/sport/footballscore/premierleague)"
+  },
+  {
+    "q": "pantip มี api ให้ดึงกระทู้ป่ะ",
+    "expect": [],
+    "lang": "th",
+    "source": "https://pantip.com/topic/33572031 (asks whether Pantip has opened an API for pulling threads), https://pantip.com/topic/32910322 ; catalogue has no Pantip entry (only generic scrapers)"
+  },
+  {
+    "q": "ผลหวยงวดล่าสุด สลากกินแบ่งรัฐบาล",
+    "expect": [],
+    "lang": "th",
+    "source": "Many Thai lottery API repos/posts: https://github.com/rayriffy/thai-lotto-api , https://github.com/naigolf/lottery-thai-api , https://www.mindphp.com/forums/viewtopic.php?t=41160 ; catalogue only has LottoLens PH (Philippines) and Block Lottos (on-chain)"
+  },
+  {
+    "q": "movie database api for practice project",
+    "expect": ["TMDb", "Open Movie Database", "IMDb-API", "IMDbOT", "Trakt"],
+    "lang": "en",
+    "source": "https://forum.freecodecamp.org/t/movie-app-api-are-there-any-good-ones/718741 (answers: TMDB, OMDb)"
+  },
+  {
+    "q": "api to detect disposable email addresses",
+    "expect": ["Disify", "Email Validator by LifeStep", "Kiprio Email Validate", "RankFabrik Verify", "Kickbox"],
+    "lang": "en",
+    "source": "https://dev.to/miccho27/free-email-validation-api-catch-disposable-invalid-emails-before-they-hit-your-database-gld , https://debounce.com/free-disposable-check-api/"
+  },
+  {
+    "q": "live flight tracking api free",
+    "expect": ["OpenSky Network", "ADS-B Exchange", "apilayer aviationstack"],
+    "lang": "en",
+    "source": "https://dev.to/bhumit070/exploring-40-free-apis-for-your-next-programming-project-110m (OpenSky: track planes in real time)"
+  },
+  {
+    "q": "get nutrition info from barcode api",
+    "expect": ["Open Food Facts", "Nutritionix", "Chomp", "UPC database"],
+    "lang": "en",
+    "source": "https://dev.to/bhumit070/exploring-40-free-apis-for-your-next-programming-project-110m (Open Food Facts: product info via barcode)"
+  },
+  {
+    "q": "free llm api for my chatbot side project",
+    "expect": ["Groq", "Google Gemini", "Hugging Face", "DeepAI"],
+    "lang": "en",
+    "source": "https://dev.to/zhubaohua168/i-benchmarked-the-free-llm-apis-so-you-dont-have-to-2026-edition-3p63 , https://github.com/amardeeplakshkar/awesome-free-llm-apis"
+  },
+  {
+    "q": "leetcode api to get user solved count",
+    "expect": [],
+    "lang": "en",
+    "source": "https://github.com/topics/leetcode-api , https://github.com/JeremyTsaii/leetcode-stats-api ; catalogue only has Codeforces and KONTESTS, not LeetCode"
+  },
+  {
+    "q": "where is the iss right now api",
+    "expect": ["Open Notify"],
+    "lang": "en",
+    "source": "https://mixedanalytics.com/blog/list-actually-free-open-no-auth-needed-apis/ (Open Notify: ISS location/astronauts)"
+  },
+  {
+    "q": "remote jobs api json",
+    "expect": ["RemoteOK", "Arbeitnow", "Findwork"],
+    "lang": "en",
+    "source": "https://mixedanalytics.com/blog/list-actually-free-open-no-auth-needed-apis/ (Jobicy remote job listings; Jobicy not in catalogue)"
+  }
+]

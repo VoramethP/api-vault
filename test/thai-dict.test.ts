@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import dict from '../server/ranker/thai-dict.json'
 import { tokenize } from '../server/ranker/keyword'
-import { parseQuery, thaiDictRanker } from '../server/ranker/thai-dict'
+import { editDistance, parseQuery, thaiDictRanker } from '../server/ranker/thai-dict'
 import type { EntryForRanking } from '../server/ranker/types'
 
 const e = (id: number, name: string, categories: string[], description = '', auth: EntryForRanking['auth'] = 'none', cors: EntryForRanking['cors'] = 'yes'): EntryForRanking =>
@@ -67,6 +67,40 @@ describe('thaiDictRanker', () => {
     expect(partial.confidence).toBeLessThan(1)
     expect(partial.confidence).toBeGreaterThan(0)
   })
+})
+
+describe('typos, merging and ranking rules', () => {
+  it('tolerates a one-letter typo only in long enough words', () => {
+    expect(parseQuery('แผ่นดิไหว').concepts.map(c => c.source)).toEqual(['แผ่นดินไหว'])
+    expect(editDistance('แมว', 'แมง', 1)).toBe(1)
+    // คำสั้นห้ามเดา — "แมง" ต้องไม่กลายเป็น "แมว"
+    expect(parseQuery('แมง').concepts).toEqual([])
+  })
+
+  it('counts a Thai word and its English restatement once', () => {
+    expect(parseQuery('ตัดคำ nlp').concepts.map(c => c.source)).toEqual(['ตัดคำ'])
+  })
+
+  it('ranks an entry whose whole category is the need as high as a name match', async () => {
+    const cats = [e(1, 'US Weather', ['Government'], 'weather', 'api_key'), e(2, 'Open-Meteo', ['Weather'], 'forecast', 'none')]
+    const r = await thaiDictRanker.rank('สภาพอากาศ', cats, { limit: 5 })
+    expect(r.kind === 'match' && r.hits[0]!.entryId).toBe(2)
+  })
+
+  it('drops what the user says they do not want', async () => {
+    const maps = [e(1, 'Google Maps', ['Geocoding'], 'maps'), e(2, 'Longdo Map', ['Geocoding'], 'Thai map')]
+    for (const q of ['แผนที่ ที่ไม่ใช่ google map', 'map api alternative to google maps']) {
+      const r = await thaiDictRanker.rank(q, maps, { limit: 5 })
+      expect(r.kind === 'match' && r.hits.map(h => h.entryId), q).toEqual([2])
+    }
+  })
+
+  it('prefers keyless APIs when the query says free, without filtering keyed ones out', async () => {
+    const two = [e(1, 'Aaa Cats', ['Animals'], '', 'api_key', 'no'), e(2, 'Zzz Cats', ['Animals'], '', 'none', 'no')]
+    const r = await thaiDictRanker.rank('แมว ฟรี', two, { limit: 5 })
+    expect(r.kind === 'match' && r.hits.map(h => h.entryId)).toEqual([2, 1])
+  })
+
 })
 
 describe('thai-dict.json', () => {

@@ -1,5 +1,5 @@
 {
-  "_note": "คำ/วลีไทย → คำอังกฤษที่ใช้ค้น (เลือกตัวใดตัวหนึ่งตรงก็พอ) · key ไม่มีช่องว่าง · เพิ่มคำเมื่อเจอคำค้นที่หาไม่เจอ (ดู test/thai-dict.test.ts) · soft = คำระบุประเทศ/ภาษา ใช้เสริมคะแนนเท่านั้น ไม่นับเป็นความต้องการหลัก · englishStopwords = คำบอกรูปแบบ ไม่ใช่ความต้องการ · variants = คำสะกดแบบอื่น → คำหลัก · thaiOnly = ของไทยที่ Catalogue ไม่มี → no_match",
+  "_note": "คำ/วลีไทย → คำอังกฤษที่ใช้ค้น (เลือกตัวใดตัวหนึ่งตรงก็พอ) · key ไม่มีช่องว่าง · เพิ่มคำเมื่อเจอคำค้นที่หาไม่เจอ (ดู test/thai-dict.test.ts) · soft = คำระบุประเทศ/ภาษา ใช้เสริมคะแนนเท่านั้น ไม่นับเป็นความต้องการหลัก · englishStopwords = คำบอกรูปแบบ ไม่ใช่ความต้องการ · variants = คำสะกดแบบอื่น → คำหลัก · thaiOnly = ของไทยที่ Catalogue ไม่มี → no_match · englishAliases = คำอังกฤษ → คำที่ใช้ค้น (ทางเลือก)",
   "stopwords": [
     "อยาก",
     "อยากได้",
@@ -74,7 +74,20 @@
     "ล่าสุด",
     "จริง",
     "ดี",
-    "เร็ว"
+    "เร็ว",
+    "ใส่",
+    "ชื่อ",
+    "ตรง",
+    "ไหม",
+    "มั้ย",
+    "ผ่าน",
+    "เอามา",
+    "วันนี้",
+    "งวด",
+    "อยู่",
+    "ได้ไหม",
+    "ครับผม",
+    "หน่อยครับ"
   ],
   "phrases": {
     "สัตว์": [
@@ -786,10 +799,6 @@
     "คณิตศาสตร์": [
       "math"
     ],
-    "เลข": [
-      "number",
-      "math"
-    ],
     "ตัวเลข": [
       "number"
     ],
@@ -1143,10 +1152,12 @@
     ],
     "จังหวัด": [
       "province",
+      "state",
       "thailand"
     ],
     "อำเภอ": [
       "district",
+      "city",
       "thailand"
     ],
     "ตำบล": [
@@ -1154,11 +1165,13 @@
       "thailand"
     ],
     "ภาษาไทย": [
-      "thai"
+      "thai",
+      "multilingual"
     ],
     "ตัดคำ": [
       "word segmentation",
       "tokenization",
+      "natural language processing",
       "nlp"
     ],
     "ปลอม": [
@@ -1221,6 +1234,39 @@
     ],
     "ลูกค้า": [
       "customer"
+    ],
+    "นักขัตฤกษ์": [
+      "public holiday"
+    ],
+    "เขต": [
+      "district",
+      "city"
+    ],
+    "ภาษาธรรมชาติ": [
+      "natural language processing",
+      "nlp"
+    ],
+    "ปักหมุด": [
+      "marker",
+      "pin"
+    ],
+    "หมุด": [
+      "marker",
+      "pin"
+    ],
+    "คะแนน": [
+      "score",
+      "rating"
+    ],
+    "ตอน": [
+      "episode"
+    ],
+    "จำนวนตอน": [
+      "episode"
+    ],
+    "รีวิว": [
+      "review",
+      "rating"
     ]
   },
   "soft": [
@@ -1229,18 +1275,54 @@
     "กรุงเทพ",
     "ญี่ปุ่น",
     "จีน",
-    "เกาหลี"
+    "เกาหลี",
+    "บอท",
+    "ไลน์บอท",
+    "แจ้งเตือน"
   ],
   "englishStopwords": [
-    "json",
-    "xml",
-    "csv",
+    "any",
     "api",
     "apis",
+    "app",
+    "application",
+    "best",
+    "can",
+    "csv",
+    "easy",
+    "free",
+    "from",
+    "good",
+    "how",
+    "http",
+    "is",
+    "json",
+    "latest",
+    "list",
+    "live",
+    "me",
+    "my",
+    "project",
     "rest",
     "restful",
-    "http",
-    "free"
+    "service",
+    "simple",
+    "site",
+    "some",
+    "that",
+    "there",
+    "today",
+    "use",
+    "using",
+    "web",
+    "website",
+    "what",
+    "where",
+    "which",
+    "with",
+    "work",
+    "works",
+    "xml"
   ],
   "variants": {
     "ลิ้งค์": "ลิงก์",
@@ -1298,6 +1380,100 @@
     "เลขบัตรประชาชน",
     "บัตรประชาชน",
     "คนละครึ่ง",
-    "เป๋าตัง"
-  ]
+    "เป๋าตัง",
+    "เติมเกม",
+    "เติมเงินเกม",
+    "เติมเงินมือถือ",
+    "เติมเงิน"
+  ],
+  "englishAliases": {
+    "realtime": [
+      "realtime",
+      "real time"
+    ],
+    "nlp": [
+      "nlp",
+      "natural language processing"
+    ],
+    "ecommerce": [
+      "ecommerce",
+      "commerce",
+      "store"
+    ],
+    "latlong": [
+      "latitude",
+      "coordinates",
+      "geocoding"
+    ],
+    "geocode": [
+      "geocoding"
+    ],
+    "forex": [
+      "forex",
+      "currency exchange",
+      "exchange rate"
+    ],
+    "fx": [
+      "forex",
+      "currency exchange",
+      "exchange rate"
+    ],
+    "ocr": [
+      "ocr",
+      "text recognition"
+    ],
+    "tts": [
+      "text to speech"
+    ],
+    "stt": [
+      "speech to text"
+    ],
+    "lyrics": [
+      "lyrics",
+      "lyric"
+    ],
+    "quotes": [
+      "quote"
+    ],
+    "quote": [
+      "quote"
+    ],
+    "zip": [
+      "zip",
+      "postal code",
+      "postcode"
+    ],
+    "zipcode": [
+      "zip",
+      "postal code",
+      "postcode"
+    ],
+    "postcode": [
+      "postal code",
+      "postcode",
+      "zip"
+    ],
+    "pokedex": [
+      "pokemon",
+      "pokédex"
+    ],
+    "movies": [
+      "movie",
+      "film"
+    ],
+    "movie": [
+      "movie",
+      "film"
+    ],
+    "crypto": [
+      "crypto",
+      "cryptocurrency"
+    ],
+    "stocks": [
+      "stock"
+    ],
+    "news": [
+      "news"
+    ]
+  }
 }

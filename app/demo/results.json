@@ -1,16 +1,15 @@
 {
-  "generatedAt": "2026-09-24T10:26:28.376Z",
+  "generatedAt": "2026-09-24T10:35:25.470Z",
   "ranker": "thai-dict",
   "catalogueSize": 1871,
   "results": [
     {
       "q": "อยากได้อัตราแลกเปลี่ยนเงินบาทรายวัน แบบไม่ต้องใช้ key",
       "kind": "match",
-      "confidence": 0.75,
+      "confidence": 0.6666666666666666,
       "understood": {
         "terms": [
           "อัตราแลกเปลี่ยน",
-          "เงิน",
           "บาท",
           "รายวัน"
         ],
@@ -19,18 +18,6 @@
         }
       },
       "hits": [
-        {
-          "name": "Currency-api",
-          "url": "https://github.com/fawazahmed0/currency-api#readme",
-          "description": "Free Currency Exchange Rates API with 150+ Currencies & No Rate Limits",
-          "categories": [
-            "Currency Exchange"
-          ],
-          "auth": "none",
-          "https": true,
-          "cors": "yes",
-          "score": 0.20833333333333334
-        },
         {
           "name": "api-mint",
           "url": "https://api-mint.hoiwan.workers.dev",
@@ -41,7 +28,7 @@
           "auth": "none",
           "https": true,
           "cors": "yes",
-          "score": 0.16666666666666666
+          "score": 0.07407407407407407
         },
         {
           "name": "Bank of Russia",
@@ -53,7 +40,19 @@
           "auth": "none",
           "https": true,
           "cors": "unknown",
-          "score": 0.16666666666666666
+          "score": 0.07407407407407407
+        },
+        {
+          "name": "Currency-api",
+          "url": "https://github.com/fawazahmed0/currency-api#readme",
+          "description": "Free Currency Exchange Rates API with 150+ Currencies & No Rate Limits",
+          "categories": [
+            "Currency Exchange"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "yes",
+          "score": 0.07407407407407407
         },
         {
           "name": "Czech National Bank",
@@ -65,7 +64,7 @@
           "auth": "none",
           "https": true,
           "cors": "unknown",
-          "score": 0.16666666666666666
+          "score": 0.07407407407407407
         },
         {
           "name": "Economia.Awesome",
@@ -77,7 +76,7 @@
           "auth": "none",
           "https": true,
           "cors": "unknown",
-          "score": 0.16666666666666666
+          "score": 0.07407407407407407
         }
       ]
     },
@@ -282,10 +281,11 @@
     {
       "q": "ข้อมูลปลอมไว้ทดสอบ ผู้ใช้สุ่ม",
       "kind": "match",
-      "confidence": 0.6666666666666666,
+      "confidence": 1,
       "understood": {
         "terms": [
           "ข้อมูลปลอม",
+          "ทดสอบ",
           "ผู้ใช้สุ่ม"
         ],
         "filters": {}
@@ -301,19 +301,7 @@
           "auth": "api_key",
           "https": true,
           "cors": "unknown",
-          "score": 0.25
-        },
-        {
-          "name": "Mocky",
-          "url": "https://designer.mocky.io/",
-          "description": "Mock user defined test JSON for REST API endpoints",
-          "categories": [
-            "Development"
-          ],
-          "auth": "none",
-          "https": true,
-          "cors": "yes",
-          "score": 0.25
+          "score": 0.37037037037037035
         },
         {
           "name": "FakeJSON",
@@ -325,7 +313,7 @@
           "auth": "api_key",
           "https": true,
           "cors": "yes",
-          "score": 0.16666666666666666
+          "score": 0.2962962962962963
         },
         {
           "name": "FakerAPI",
@@ -337,7 +325,7 @@
           "auth": "none",
           "https": true,
           "cors": "yes",
-          "score": 0.16666666666666666
+          "score": 0.2962962962962963
         },
         {
           "name": "FakeStoreAPI",
@@ -349,7 +337,19 @@
           "auth": "none",
           "https": true,
           "cors": "unknown",
-          "score": 0.16666666666666666
+          "score": 0.2962962962962963
+        },
+        {
+          "name": "DummyJSON",
+          "url": "https://dummyjson.com/",
+          "description": "Fake REST API with products, users, posts, comments, todos and more",
+          "categories": [
+            "Test Data"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "yes",
+          "score": 0.2222222222222222
         }
       ]
     },

@@ -34,7 +34,20 @@ describe('parseQuery', () => {
   })
 })
 
+describe('normalizeThai', () => {
+  it('folds look-alike spellings into one', async () => {
+    const { normalizeThai } = await import('../server/ranker/thai-dict')
+    expect(normalizeThai('อัตราเเลกเปลี่ยน')).toBe('อัตราแลกเปลี่ยน')
+    expect(normalizeThai('ย่อลิ้งค์')).toBe('ย่อลิงก์')
+    expect(normalizeThai('แมว\u200Bน่ารัก')).toBe('แมวน่ารัก')
+  })
+})
+
 describe('thaiDictRanker', () => {
+  it('answers no_match with high confidence for Thai-only needs the catalogue cannot serve', async () => {
+    expect(await thaiDictRanker.rank('api ตรวจหวยงวดล่าสุด', catalogue, { limit: 5 })).toEqual({ kind: 'no_match', confidence: 0.8 })
+  })
+
   it('finds Thai queries in English data', async () => {
     const r = await thaiDictRanker.rank('อยากได้รูปแมว', catalogue, { limit: 5 })
     expect(r.kind).toBe('match')
@@ -62,6 +75,12 @@ describe('thai-dict.json', () => {
       expect(k, k).not.toMatch(/\s/)
       expect(v.length, k).toBeGreaterThan(0)
       for (const term of v) expect(tokenize(term).length, `${k} → ${term}`).toBeGreaterThan(0)
+    }
+  })
+
+  it('points every variant at a known phrase or stopword', () => {
+    for (const [from, to] of Object.entries(dict.variants as Record<string, string>)) {
+      expect(Object.hasOwn(dict.phrases, to) || dict.stopwords.includes(to), `${from} → ${to}`).toBe(true)
     }
   })
 

@@ -22,7 +22,7 @@ Key ไม่ออกไปหา Ranker/บริการภายนอก �
 `getDb()`/`withDb()` ต่อ request · ห้าม service_role · RLS ทุกตาราง · drizzle-kit generate+migrate เท่านั้น
 
 ## งานถัดไป
-1. thai-dict ได้ test **6/15** (เกณฑ์ 75%) — รอผู้ใช้เลือก: จูนต่อ (ต้องชุด test ใหม่) / Claude / รอ Jev · `spike/queries-{dev,test}.json`
+1. thai-dict holdout **14/20** (เกณฑ์ 15/20) · วัดรอบใหม่ต้องให้ subagent ที่ไม่เห็นพจนานุกรมเขียนชุดใหม่ (ชุดใน `spike/` ใช้ปรับไปแล้วทั้งหมด)
 2. v1.0.0 (Jev เมื่อ TypeSafe เปิด)
 
 ## กับดักที่เคยเจอ

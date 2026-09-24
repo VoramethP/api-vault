@@ -13,7 +13,8 @@ export interface Filters { auth?: 'none', cors?: 'yes', https?: true }
 /** หนึ่งความต้องการในคำค้น — ตรงแค่ทางเลือกใดทางเลือกหนึ่งก็พอ · ทางเลือกหนึ่งอาจมีหลายคำ ("currency exchange") */
 export interface Concept { source: string, alternatives: string[][], soft?: boolean }
 
-export interface ParsedQuery { concepts: Concept[], unknown: string[], filters: Filters }
+/** thaiOnly = ความต้องการเฉพาะของไทยที่ Catalogue ไม่มีบริการรองรับ (หวย, พร้อมเพย์, ปตท…) */
+export interface ParsedQuery { concepts: Concept[], unknown: string[], filters: Filters, thaiOnly: string[] }
 
 // เงื่อนไขที่พูดเป็นประโยค → ตัวกรอง · จับจากข้อความดิบก่อนตัดคำ แล้วลบทิ้ง ไม่ให้ไปนับเป็นคำค้น
 const CONDITIONS: { re: RegExp, filter: Filters }[] = [
@@ -28,9 +29,23 @@ const englishStopwords = new Set(dict.englishStopwords)
 // คำระบุประเทศ/ภาษา — Catalogue แทบไม่มี API เฉพาะประเทศ ถ้านับเต็มน้ำหนัก API ที่แค่ชื่อมี "Thai" จะชนะตัวที่ตรงความต้องการจริง
 const soft = new Set(dict.soft)
 const THAI = /\p{Script=Thai}/u
+// ยาวก่อน — "ย่อลิ้งค์" ต้องถูกแทนทั้งคำก่อนที่ "ลิ้งค์" จะไปแทนแค่ครึ่งหลัง
+const variants = Object.entries(dict.variants as Record<string, string>).sort((a, b) => b[0].length - a[0].length)
+const thaiOnlyWords = dict.thaiOnly as string[]
+
+/** ทำให้คำที่พิมพ์ต่างกันแต่หมายถึงคำเดียวกันกลายเป็นแบบเดียว ก่อนตัดคำ */
+export function normalizeThai(text: string): string {
+  let t = text.normalize('NFC')
+    .replace(/[\u200B-\u200D\uFEFF]/g, '') // อักขระล่องหนที่ติดมากับการคัดลอก
+    .replace(/เเ/g, 'แ') // พิมพ์ เ สองตัวแทน แ — เห็นเหมือนกันแต่คนละอักขระ
+    .replace(/\u0E4D\u0E32/g, 'ำ') // นิคหิต + สระอา แทน สระอำ
+  for (const [from, to] of variants) t = t.split(from).join(to)
+  return t
+}
 
 export function parseQuery(query: string): ParsedQuery {
-  let rest = query.toLowerCase()
+  let rest = normalizeThai(query.toLowerCase())
+  const thaiOnly = thaiOnlyWords.filter(w => rest.includes(w))
   const filters: Filters = {}
   for (const c of CONDITIONS) {
     if (c.re.test(rest)) Object.assign(filters, c.filter)
@@ -70,7 +85,7 @@ export function parseQuery(query: string): ParsedQuery {
   }
   // "แมว" สองครั้งในคำค้นเดียวไม่ควรนับน้ำหนักสองเท่า
   const seen = new Set<string>()
-  return { concepts: concepts.filter(c => !seen.has(c.source) && seen.add(c.source)), unknown, filters }
+  return { concepts: concepts.filter(c => !seen.has(c.source) && seen.add(c.source)), unknown, filters, thaiOnly }
 }
 
 function passes(e: EntryForRanking, f: Filters): boolean {
@@ -80,7 +95,9 @@ function passes(e: EntryForRanking, f: Filters): boolean {
 export const thaiDictRanker: Ranker = {
   name: 'thai-dict',
   async rank(query, candidates, { limit }): Promise<RankResult> {
-    const { concepts, unknown, filters } = parseQuery(query)
+    const { concepts, unknown, filters, thaiOnly } = parseQuery(query)
+    // รู้แน่ว่า Catalogue ไม่มี → ตอบว่าไม่เจอด้วยความมั่นใจสูง ดีกว่าคืน API ต่างประเทศที่ใกล้เคียงผิวเผิน
+    if (thaiOnly.length) return { kind: 'no_match', confidence: 0.8 }
     const core = concepts.filter(c => !c.soft)
     const extra = concepts.filter(c => c.soft)
     // ไม่รู้จักความต้องการหลักสักคำ = ไม่รู้ว่าผู้ใช้อยากได้อะไร → ตอบตรง ๆ ว่าไม่เจอ ดีกว่าโชว์ทุกอย่างที่แค่ผ่านตัวกรอง

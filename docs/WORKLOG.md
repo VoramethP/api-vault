@@ -107,6 +107,20 @@ pooler ถูก region, :6543/:5432 ถูกช่อง, `SUPABASE_KEY` เ�
 - ยังไม่ได้ทดสอบ: ล็อกอินจริง, aal1 ต้องได้ 403, enroll + verify, ล็อกอินรอบสองต้องไป `/mfa`
 - ผู้ใช้ปิด sign-up (ตรวจแล้ว `disable_signup: true`) + เปิด TOTP ใน dashboard (Authentication › Multi-Factor) แล้ว
 
+## [2026-09-24] v0.2.0 ทดสอบล็อกอินจริงผ่าน → tag
+
+**ทำอะไร:** ผู้ใช้กรอก `OWNER_EMAIL` + สร้างบัญชีเจ้าของผ่าน dashboard (Add user · Auto Confirm) แล้วล็อกอินเองใน browser pane
+
+**ผลทดสอบ (dev :3100, Supabase จริง):**
+- ไม่ล็อกอิน → `/api/search` 401
+- ล็อกอินครั้งแรก → ไป `/mfa/enroll` · สแกน QR + verify → `/` ค้นได้ `/api/search` 200
+- ออกจากระบบ → ล็อกอินใหม่ → ไป **`/mfa`** (ไม่ใช่ enroll) · ที่ aal1 `/api/search` และ `/api/categories` ได้ **403**
+- ใส่รหัส → aal2 → ทั้งสอง route 200
+
+**สิ่งที่ต้องระวังต่อไป:** เช็ก 403 ที่ aal1 ตอน enroll ครั้งแรกหลุดไป (ผู้ใช้สแกนต่อเลย) แต่ได้เช็กแทนในรอบ `/mfa` ซึ่งเป็น aal1 เหมือนกัน
+· ทำ TOTP หาย → ลบ factor ใน dashboard › Users แล้ว enroll ใหม่ (ยังไม่มี recovery codes)
+· deploy ต้องตั้ง Authentication › URL Configuration ให้ตรงโดเมน
+
 ---
 
 ## งานถัดไป

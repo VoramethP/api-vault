@@ -4,6 +4,15 @@
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-09-24
+
+### Added
+- ล็อกอินเจ้าของคนเดียว (`/login`) — sign-up ปิด · อีเมลต้องตรง `OWNER_EMAIL`
+- บังคับ TOTP: ครั้งแรกไป `/mfa/enroll` (QR) · ครั้งต่อไปไป `/mfa` · ปุ่มออกจากระบบ
+- `requireOwner()` กันทุก `/api/*` — ไม่ล็อกอิน 401 · รหัสผ่านอย่างเดียว (aal1) 403 · ต้อง aal2
+- `/api/**` ส่ง `cache-control: private, no-store`
+- เทสที่ล้มถ้า route ใน `server/api` ไม่เรียก `requireOwner(event)` บรรทัดแรก
+
 ## [0.1.0] - 2026-09-24
 
 ### Added

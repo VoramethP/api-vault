@@ -110,6 +110,22 @@ async function pull(positional, flags) {
   console.log(`\nรหัส: ${req.userCode}\nอนุมัติที่: ${approveUrl}\n(ตรวจว่ารหัสบนเว็บตรงกับที่นี่ แล้วใส่ TOTP)\n`)
   if (!flags['no-open']) openBrowser(approveUrl)
 
+  // Ctrl+C = ยกเลิกคำขอบนเซิร์ฟเวอร์ด้วย ไม่งั้นคำขอค้างอยู่ให้เผลออนุมัติได้โดยไม่มีใครรอรับ
+  process.once('SIGINT', async () => {
+    process.stdout.write('\n')
+    try {
+      const res = await fetch(new URL(`/api/cli/pull-requests/${req.id}/cancel`, cfg.url), {
+        method: 'POST', headers: { authorization: `Bearer ${cfg.token}` }, signal: AbortSignal.timeout(3000),
+      })
+      if (!res.ok) throw new Error(String(res.status))
+      console.error(`✖ ยกเลิกคำขอ ${req.userCode} แล้ว`)
+    }
+    catch {
+      console.error(`✖ ยกเลิกแล้วในเครื่อง — คำขอ ${req.userCode} บนเว็บจะหมดอายุเอง อย่าอนุมัติ`)
+    }
+    process.exit(130)
+  })
+
   const deadline = new Date(req.expiresAt).getTime()
   process.stdout.write('รออนุมัติ')
   while (Date.now() < deadline) {

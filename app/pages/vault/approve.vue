@@ -45,7 +45,7 @@ const STATUS: Record<PullRequestView['status'], { title: string, color: 'success
   pending: { title: 'รออนุมัติ', color: 'warning' },
   approved: { title: 'อนุมัติแล้ว — กลับไปที่ terminal', color: 'success' },
   consumed: { title: 'CLI ดึงค่าไปแล้ว', color: 'success' },
-  denied: { title: 'ปฏิเสธแล้ว', color: 'neutral' },
+  denied: { title: 'ปฏิเสธหรือยกเลิกแล้ว', color: 'neutral' },
   expired: { title: 'หมดอายุ — รัน vault pull ใหม่', color: 'neutral' },
 }
 </script>
@@ -54,7 +54,7 @@ const STATUS: Record<PullRequestView['status'], { title: string, color: 'success
   <UContainer class="py-8 max-w-lg flex flex-col gap-6">
     <div>
       <h1 class="text-xl font-semibold">อนุมัติ vault pull</h1>
-      <p class="text-sm text-muted mt-1">อนุมัติเฉพาะคำขอที่คุณเพิ่งรันเอง และรหัสตรงกับใน terminal</p>
+      <p class="text-sm text-muted mt-1">อนุมัติเฉพาะคำขอที่ terminal <strong>กำลังรออยู่ตอนนี้</strong> และรหัสตรงกัน — รหัสจากรอบที่ยกเลิกไปแล้วไม่ต้องอนุมัติ</p>
     </div>
 
     <UFormField label="รหัสจาก terminal">

@@ -11,7 +11,7 @@
 ## ตอนนี้อยู่ตรงไหน
 - ✅ **v0.1.0** (tag) บน Supabase จริง: 1,871 Entry · `db:verify` ผ่าน · ค้น ~0.5 วิ ผ่าน :6543
 - ✅ **v0.2.0** (tag) ล็อกอิน + บังคับ TOTP ทดสอบจริงผ่าน: ไม่ล็อกอิน 401 · aal1 403 · aal2 200
-- ✅ GitHub public: `VoramethP/api-vault` (main + tags) · ⏳ ยังไม่มี Vercel project
+- ✅ GitHub public: `VoramethP/api-vault` · ✅ Vercel prod: https://api-vault-two.vercel.app (`sin1`, ล็อกอินจริงผ่าน)
 - 🔴 TypeSafe ปิดรับสมัคร → Jev รอ (ADR-0003)
 
 ## กฎเหล็ก
@@ -20,8 +20,7 @@ Key ไม่ออกไปหา Ranker/บริการภายนอก �
 `getDb()`/`withDb()` ต่อ request · ห้าม service_role · RLS ทุกตาราง · drizzle-kit generate+migrate เท่านั้น
 
 ## งานถัดไป
-1. deploy Vercel ได้แล้ว — ตั้ง Supabase URL Configuration ให้ตรงโดเมน
-2. **v0.3.0 Vault + audit** (spec §6) — ยืนยันข้อ 🟡 (Project/env_var, เวลา re-auth) กับผู้ใช้ก่อนเริ่ม
+1. **v0.3.0 Vault + audit** (spec §6) — ยืนยันข้อ 🟡 (Project/env_var, เวลา re-auth) กับผู้ใช้ก่อนเริ่ม
 
 ## กับดักที่เคยเจอ
 - **TypeScript 7 ใช้กับ `vue-tsc` ไม่ได้** → pin `typescript@5`
@@ -30,6 +29,8 @@ Key ไม่ออกไปหา Ranker/บริการภายนอก �
 - build/typecheck ต้องมี `SUPABASE_URL` + `SUPABASE_KEY` — placeholder ก็ผ่าน
 - prerender route ที่ยังไม่มีหน้า = build ล้ม
 - `nuxt.config` อ่าน version จาก `package.json` ตอนเริ่ม — bump แล้วต้อง restart dev
+- **`vercel link` เพิ่ม `.env*` ลง `.gitignore`** → คืนค่าไฟล์ทุกครั้ง (กฎเดิมครอบแล้ว)
+- env บน Vercel: 4 ตัว (SUPABASE_URL/KEY, DATABASE_URL, OWNER_EMAIL) · deploy ด้วย `npx vercel` (ไม่ได้ติดตั้ง global)
 - ทำ TOTP หาย → ลบ factor ใน dashboard › Users แล้ว enroll ใหม่
 - `OWNER_EMAIL` ว่าง = `/api/*` ตอบ 500 (ตั้งใจให้ล้มดัง ๆ) · แก้ `.env` แล้วต้อง restart dev
 - `useSupabaseUser()` ของ `@nuxtjs/supabase` v2 คืน **JWT claims** ไม่ใช่ User · middleware ของโมดูลเช็กแค่มี session ไม่ดู aal

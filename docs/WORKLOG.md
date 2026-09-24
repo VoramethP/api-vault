@@ -129,6 +129,18 @@ pooler ถูก region, :6543/:5432 ถูกช่อง, `SUPABASE_KEY` เ�
 (postgres URL มีรหัส, `sb_secret_`, JWT, `sk-`) = 0 · ค่าจริงทุกตัวใน `.env` ไม่อยู่ใน object ไหนเลย
 · อีเมลเจ้าของอยู่แค่ใน author ของ commit/tag (git identity ปกติ) ไม่อยู่ในไฟล์
 
+## [2026-09-24] deploy Vercel production
+
+**ทำอะไร:** `npx vercel link --project api-vault` → env 4 ตัว (SUPABASE_URL, SUPABASE_KEY, DATABASE_URL, OWNER_EMAIL)
+ทั้ง production + preview โดย pipe จาก `.env` → `vercel deploy --prod` → https://api-vault-two.vercel.app (`sin1`)
+
+**ทำไม:** ไม่ใส่ `MIGRATION_DATABASE_URL` / `TYPESAFE_API_KEY` — แอปไม่ใช้ตอนรัน ลด secret ที่อยู่บน host · `RANKER` ว่าง = keyword
+
+**ผลทดสอบ:** `/about` `/login` 200 · `/` `/mfa` ไม่ล็อกอิน → 302 `/login` · `/api/*` 401 + `private, no-store`
+· ผู้ใช้ตั้ง Supabase Authentication › URL Configuration (Site URL + Redirect URLs) แล้วล็อกอิน + TOTP บน production ได้
+
+**กับดัก:** `vercel link` ต่อท้าย `.vercel` + `.env*` ใน `.gitignore` — คืนค่าไฟล์ เพราะ `.env.*` / `!.env.example` / `.vercel/` มีอยู่แล้ว
+
 ---
 
 ## งานถัดไป

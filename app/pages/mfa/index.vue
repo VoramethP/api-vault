@@ -17,7 +17,7 @@ async function verify() {
   const { error: err } = await supabase.auth.mfa.challengeAndVerify({ factorId: factor.id, code: code.value.join('') })
   loading.value = false
   if (err) {
-    error.value = 'รหัสไม่ถูกต้องหรือหมดเวลา ลองรหัสใหม่'
+    error.value = totpErrorMessage(err)
     code.value = []
     return
   }

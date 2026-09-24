@@ -32,7 +32,7 @@ async function verifyAndReveal() {
     const factor = factors?.totp[0]
     if (!factor) throw new Error('ไม่พบ TOTP ของบัญชีนี้')
     const { error: err } = await supabase.auth.mfa.challengeAndVerify({ factorId: factor.id, code: code.value.join('') })
-    if (err) throw new Error('รหัสไม่ถูกต้องหรือหมดเวลา ลองรหัสใหม่')
+    if (err) throw new Error(totpErrorMessage(err))
     const res = await $fetch<{ value: string }>(`/api/keys/${props.keyId}/reveal`, { method: 'POST' })
     value.value = res.value
     secondsLeft.value = HIDE_AFTER_S

@@ -27,7 +27,7 @@ async function decide(approve: boolean) {
       const factor = factors?.totp[0]
       if (!factor) throw new Error('ไม่พบ TOTP ของบัญชีนี้')
       const { error: err } = await supabase.auth.mfa.challengeAndVerify({ factorId: factor.id, code: totp.value.join('') })
-      if (err) throw new Error('รหัสไม่ถูกต้องหรือหมดเวลา ลองรหัสใหม่')
+      if (err) throw new Error(totpErrorMessage(err))
     }
     await $fetch(`/api/pull-requests/${code.value}/decision`, { method: 'POST', body: { approve } })
     await refresh()

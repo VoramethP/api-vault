@@ -35,6 +35,7 @@ Key ไม่ออกไปหา Ranker/บริการภายนอก �
   (ครั้งที่ deploy จาก CLI ใช้ build cache แล้ว `/about` ที่ prerender ออกมาเป็นของเก่า v0.1.0 — ต้อง `vercel promote` ตัวที่ build จาก git) · หลัง deploy เช็ก `/about`
 - ตาราง Vault: RLS **ไม่มี policy** + REVOKE (ห้ามเพิ่ม policy `true` แบบ entries — aal1 จะอ่านได้) · audit_log แก้/ลบไม่ได้แม้ postgres
 - `/api/cli/*` ใช้ `requireCliToken` แทน `requireOwner` (เทสบังคับทั้งสองทาง) · TOTP ใช้ซ้ำกันด้วย `totp_uses`
+- **ซ่อน input ด้วย `rl._writeToOutput`: ห้ามส่ง `s` ต่อ** — readline วาดบรรทัดใหม่เป็น prompt+ข้อความ (token เคยหลุดบนจอ v0.4.0)
 - zsh ไม่แยกคำในตัวแปร (`$P "sql"` พัง) — ใช้ function
 - ทำ TOTP หาย → ลบ factor ใน dashboard › Users แล้ว enroll ใหม่
 - `OWNER_EMAIL` ว่าง = `/api/*` ตอบ 500 (ตั้งใจให้ล้มดัง ๆ) · แก้ `.env` แล้วต้อง restart dev

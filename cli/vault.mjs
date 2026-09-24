@@ -53,7 +53,14 @@ function askHidden(question) {
   if (!process.stdin.isTTY) return new Promise(r => { let d = ''; process.stdin.on('data', c => d += c).on('end', () => r(d.trim())) })
   return new Promise((r) => {
     const rl = createInterface({ input: process.stdin, output: process.stdout, terminal: true })
-    rl._writeToOutput = s => { if (s.includes(question)) process.stdout.write(s) }
+    // readline วาดบรรทัดใหม่ (prompt + ข้อความ) ทุกครั้งที่วาง/พิมพ์ — ปล่อย prompt ออกไปแค่ครั้งแรก ไม่ปล่อยตัว token เลย
+    let shown = false
+    rl._writeToOutput = (s) => {
+      if (!shown && s.includes(question)) {
+        process.stdout.write(question)
+        shown = true
+      }
+    }
     rl.question(question, (a) => { rl.close(); process.stdout.write('\n'); r(a.trim()) })
   })
 }

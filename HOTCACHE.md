@@ -23,7 +23,7 @@ Key ไม่ออกไปหา Ranker/บริการภายนอก �
 `getDb()`/`withDb()` ต่อ request · ห้าม service_role · RLS ทุกตาราง · drizzle-kit generate+migrate เท่านั้น
 
 ## งานถัดไป
-1. push `main` + tag `v1.0.0` (= deploy) เมื่อผู้ใช้สั่ง → เช็ก `/about` บน prod
+1. V1 ครบแล้ว (prod = v1.0.0) — ถามผู้ใช้ว่าจะทำอะไรต่อ
 2. V1.1: Jev + Tag อัตโนมัติ + ประวัติ Entry (เมื่อ TypeSafe เปิด)
 
 ## กับดักที่เคยเจอ
@@ -31,6 +31,7 @@ Key ไม่ออกไปหา Ranker/บริการภายนอก �
 - `@nuxtjs/supabase` เตือน `database.types.ts` ไม่มี → `Database = unknown` (ยังไม่ตัดสิน)
 - build/typecheck ต้องมี `SUPABASE_URL` + `SUPABASE_KEY` — placeholder ก็ผ่าน
 - prerender route ที่ยังไม่มีหน้า = build ล้ม
+- tag ใช้ `git tag -a` — `--follow-tags` ไม่ส่ง lightweight tag
 - `nuxt.config` อ่าน version จาก `package.json` ตอนเริ่ม — bump แล้วต้อง restart dev
 - **`vercel link` เพิ่ม `.env*` ลง `.gitignore`** → คืนค่าไฟล์ทุกครั้ง (กฎเดิมครอบแล้ว)
 - env บน Vercel: 6 ตัว (SUPABASE_URL/KEY, DATABASE_URL, OWNER_EMAIL, VAULT_MASTER_KEY(_VERSION)) · Vercel ผูก GitHub แล้ว: **`git push` main = deploy production เอง** ห้าม `vercel deploy` ซ้ำ

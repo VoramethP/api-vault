@@ -8,15 +8,14 @@
 - ผู้ใช้ยืนยันว่าเก็บสำเนา `VAULT_MASTER_KEY` นอกเครื่องแล้ว
 
 ## สถานะ ณ ตอนส่ง
-- commit + tag `v1.0.0` **ในเครื่องเท่านั้น ยังไม่ push** (push main = deploy production)
+- push แล้ว + tag `v1.0.0` บน GitHub · production `/about` = v1.0.0 · `POST /api/entries` ไม่ล็อกอิน = 401
 - `npm run check` ผ่าน (87 เทส) · build + scan-build ผ่าน · ไม่มี migration
 
 ## ค้างอยู่ตรงไหน
-- รอผู้ใช้สั่ง push
+- ไม่มีงานค้าง
 
 ## ทำต่อยังไง
-1. ผู้ใช้สั่งแล้ว: `git push origin main --follow-tags` → เช็ก `/about` บน prod ว่าเป็น v1.0.0 และลองเพิ่ม Entry
-2. V1.1 รอ TypeSafe
+1. ถามผู้ใช้ว่าจะทำอะไรต่อ — V1 ครบตาม spec แล้ว · V1.1 รอ TypeSafe
 
 ## เกณฑ์ว่าไม้นี้ส่งได้จริง
 เปิดแชตใหม่ อ่านไฟล์นี้ + `HOTCACHE.md` แล้วทำงานต่อได้ทันที

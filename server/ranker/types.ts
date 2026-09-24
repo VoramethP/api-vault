@@ -16,6 +16,6 @@ export type RankResult =
   | { kind: 'no_match', confidence: number }
 
 export interface Ranker {
-  readonly name: 'keyword' | 'jev' | 'claude'
+  readonly name: 'keyword' | 'thai-dict' | 'jev' | 'claude'
   rank(query: string, candidates: EntryForRanking[], opts: { limit: number }): Promise<RankResult>
 }

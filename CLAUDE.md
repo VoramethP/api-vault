@@ -86,6 +86,8 @@ npm run db:generate  # drizzle-kit generate — สร้างไฟล์ migr
 npm run db:migrate   # drizzle-kit migrate — ใช้ MIGRATION_DATABASE_URL (session pooler :5432)
 npm run db:import    # นำเข้า spike/data/apis.json → entries (รันซ้ำได้)
 npm run db:verify    # ตรวจ RLS ในฐานะ anon/authenticated — รันหลัง migrate ทุกครั้ง
+npm run eval:ranker [ranker] [queries.json]  # วัด Ranker (ค่าเริ่ม thai-dict, spike/queries.json)
+npm run demo:build   # คำนวณผลเดโมใหม่ → app/demo/results.json (ต้อง commit)
 node --env-file=.env spike/run.mjs   # spike Jev (ต้องมี TYPESAFE_API_KEY)
 ```
 

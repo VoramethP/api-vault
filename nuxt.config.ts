@@ -18,10 +18,10 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: { appVersion: pkg.version },
   },
-  // หน้าที่อ่าน session ห้าม isr/swr/prerender เด็ดขาด · เพิ่ม '/demo/**' เมื่อหน้าเดโมมีจริง
-  // (prerender หน้าที่ไม่มี = build พัง)
+  // หน้าที่อ่าน session ห้าม isr/swr/prerender เด็ดขาด · prerender เฉพาะหน้าสาธารณะที่ไม่มีข้อมูลส่วนตัว
   routeRules: {
     '/about': { prerender: true },
+    '/demo': { prerender: true },
     // คำตอบที่ขึ้นกับ session ห้ามให้ CDN แคช — ผู้ใช้ A อาจได้ของผู้ใช้ B
     '/api/**': { headers: { 'cache-control': 'private, no-store' } },
   },

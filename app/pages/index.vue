@@ -69,7 +69,7 @@ const cors = bind('cors')
           icon="i-lucide-search"
           size="lg"
           class="w-full"
-          placeholder="ค้นด้วยคำอังกฤษ เช่น weather, currency exchange, cat pictures"
+          placeholder="ค้นได้ทั้งไทยและอังกฤษ เช่น อัตราแลกเปลี่ยนแบบไม่ต้องใช้ key, พยากรณ์อากาศ, cat pictures"
           aria-label="ค้นหา API"
         />
       </form>
@@ -87,7 +87,7 @@ const cors = bind('cors')
           variant="subtle"
           icon="i-lucide-search-x"
           title="ไม่เจอ API ที่ตรง"
-          :description="`ค้นใน ${data.candidates.toLocaleString()} รายการแล้วไม่มีคำไหนตรงเลย · ตอนนี้ค้นได้เฉพาะคำอังกฤษ (ค้นไทยมาใน v1.0.0)`"
+          :description="`ค้นใน ${data.candidates.toLocaleString()} รายการแล้วไม่มีคำไหนตรงเลย · ลองใช้คำอื่น หรือพิมพ์เป็นคำอังกฤษ (คำไทยค้นได้เฉพาะคำที่อยู่ในพจนานุกรม)`"
         />
         <p v-else class="text-sm text-muted">
           <template v-if="data.kind === 'browse'">ทั้งหมด {{ data.candidates.toLocaleString() }} รายการ · แสดง {{ data.hits.length }} รายการแรก</template>

@@ -87,12 +87,17 @@ type RankResult =
 ```
 
 - **ห้ามส่ง Key หรือข้อมูลใน Vault เข้า Ranker** — `EntryForRanking` มีแค่ id, name, description, categories, auth, https, cors
-- เลือก Ranker ด้วย env `RANKER` (ค่าเริ่ม `keyword`)
+- เลือก Ranker ด้วย env `RANKER` (ค่าเริ่ม `thai-dict` ตั้งแต่ v0.5.0)
 - **keyword ranker:** แตกคำค้นเป็นคำ (ตัวพิมพ์เล็ก ตัด stopword) · ตรงชื่อ ×3 · ตรงหมวด ×2 · ตรงคำอธิบาย ×1
   (คำละที่สูงสุดที่เดียว; "ตรง" = เท่ากัน, +s/+es, หรือขึ้นต้นด้วยคำค้นถ้าคำค้นยาว ≥ 4) · normalize 0–1 · เสมอกันเรียงตามชื่อ ·
   ไม่มีคำไหนตรงเลย = `no_match` · `confidence` = สัดส่วนคำค้นที่เจออย่างน้อยหนึ่งที่
   · ⚠️ ข้อจำกัดที่รู้แล้ว: API ที่ชื่อมีคำค้นชนะ API ที่ดีกว่าแต่ตรงแค่หมวด (ค้น "weather" → Open-Meteo ไม่ติด top-5
   เพราะมี ~20 ตัวที่ชื่อมี "Weather") — นี่คือเหตุผลที่ต้องมี Jev
+- **thai-dict ranker** (v0.5.0, ไม่มีค่าใช้จ่าย): `Intl.Segmenter('th')` ตัดคำ → จับวลีไทยยาวสุดก่อน (≤ 6 ท่อน) ใน
+  `server/ranker/thai-dict.json` → คำอังกฤษ (ทางเลือกใดทางเลือกหนึ่งตรงก็พอ) → ให้คะแนนแบบ keyword ranker ·
+  วลีเงื่อนไข ("ไม่ต้องใช้ key", "เรียกจากเบราว์เซอร์", "https") → ตัวกรอง · คำไทยที่ไม่รู้จัก (ไม่ใช่ stopword) ลด `confidence`
+  · ไม่รู้จักสักคำ = `no_match` · คำอังกฤษในคำค้นใช้ได้เหมือนเดิม · วัดด้วย `npm run eval:ranker`
+- **claude ranker** (v0.5.0, เก็บไว้ไม่เปิด): structured output + cache แคตตาล็อก · `RANKER=claude` + `ANTHROPIC_API_KEY`
 - **jev ranker** (v1.0.0): 2 request — Choice เลือกหมวด top-K → Choice เลือก Entry ในหมวดเหล่านั้น (≤ 255 ตัว) + Nouls "no match"
   ตาม `spike/run.mjs`
 
@@ -156,9 +161,11 @@ vault whoami · vault logout
 
 ## 8. เดโม (v0.5.0)
 
-- `/demo` prerender จาก `app/demo/results.json` ที่สร้างด้วยสคริปต์ในเครื่อง · 5–8 คำค้น (ไทย) · หนึ่งข้อเป็น "No match"
+- `/demo` prerender จาก `app/demo/results.json` ที่สร้างด้วย `npm run demo:build` (คำค้นใน `app/demo/queries.json`) · 8 คำค้นไทย · หนึ่งข้อเป็น "No match"
+- ผลมีแค่ข้อมูลสาธารณะของ Entry + สิ่งที่ Ranker เข้าใจ (คำ + ตัวกรอง)
 - แสดง score + confidence ของแต่ละผล และบอกว่าเป็นผลจาก Ranker ตัวไหน
-- **ไม่มี route API ใดใน deployment ที่ผู้ชมเดโมเรียกได้** · เทสสแกน `.output/` หาค่าจาก `.env`
+- **ไม่มี route API ใดใน deployment ที่ผู้ชมเดโมเรียกได้** · `postbuild` (`scripts/scan-build.ts`) สแกน `.output/` และ `.vercel/output/`
+  หาค่าของ env ที่เป็นความลับ เจอ = build ล้ม (รันบน Vercel ด้วย)
 
 ## 9. Env
 
@@ -167,7 +174,8 @@ vault whoami · vault logout
 | `SUPABASE_URL` `SUPABASE_KEY` | `@nuxtjs/supabase` (publishable key เท่านั้น) | v0.1.0 |
 | `DATABASE_URL` | app — transaction pooler :6543 | v0.1.0 |
 | `MIGRATION_DATABASE_URL` | drizzle-kit — session pooler :5432 | v0.1.0 |
-| `RANKER` | เลือก Ranker | v0.1.0 |
+| `RANKER` | เลือก Ranker (`thai-dict` ค่าเริ่ม) | v0.1.0 |
+| `ANTHROPIC_API_KEY` | claude ranker (ไม่ได้ใช้ตอนนี้) | v0.5.0 |
 | `VAULT_MASTER_KEY` `VAULT_MASTER_KEY_VERSION` | Vault | v0.3.0 |
 | `TYPESAFE_API_KEY` | jev ranker + spike | v1.0.0 |
 

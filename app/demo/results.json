@@ -1,0 +1,489 @@
+{
+  "generatedAt": "2026-09-24T10:07:18.627Z",
+  "ranker": "thai-dict",
+  "catalogueSize": 1871,
+  "results": [
+    {
+      "q": "อยากได้อัตราแลกเปลี่ยนเงินบาทรายวัน แบบไม่ต้องใช้ key",
+      "kind": "match",
+      "confidence": 0.75,
+      "understood": {
+        "terms": [
+          "อัตราแลกเปลี่ยน",
+          "เงิน",
+          "บาท",
+          "รายวัน"
+        ],
+        "filters": {
+          "auth": "none"
+        }
+      },
+      "hits": [
+        {
+          "name": "Currency-api",
+          "url": "https://github.com/fawazahmed0/currency-api#readme",
+          "description": "Free Currency Exchange Rates API with 150+ Currencies & No Rate Limits",
+          "categories": [
+            "Currency Exchange"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "yes",
+          "score": 0.4166666666666667
+        },
+        {
+          "name": "api-mint",
+          "url": "https://api-mint.hoiwan.workers.dev",
+          "description": "Free utility APIs: timezone, forex rates, crypto prices, page metadata",
+          "categories": [
+            "Currency Exchange"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "yes",
+          "score": 0.3333333333333333
+        },
+        {
+          "name": "Bank of Russia",
+          "url": "https://www.cbr.ru/development/SXML/",
+          "description": "Exchange rates and currency conversion",
+          "categories": [
+            "Currency Exchange"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "unknown",
+          "score": 0.3333333333333333
+        },
+        {
+          "name": "Czech National Bank",
+          "url": "https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.xml",
+          "description": "A collection of exchange rates",
+          "categories": [
+            "Currency Exchange"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "unknown",
+          "score": 0.3333333333333333
+        },
+        {
+          "name": "Economia.Awesome",
+          "url": "https://docs.awesomeapi.com.br/api-de-moedas",
+          "description": "Portuguese free currency prices and conversion with no rate limits",
+          "categories": [
+            "Currency Exchange"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "unknown",
+          "score": 0.3333333333333333
+        }
+      ]
+    },
+    {
+      "q": "สุ่มรูปแมวมาโชว์ในเว็บ เรียกจากเบราว์เซอร์ได้",
+      "kind": "match",
+      "confidence": 0.5,
+      "understood": {
+        "terms": [
+          "สุ่มรูป",
+          "แมว"
+        ],
+        "filters": {
+          "cors": "yes"
+        }
+      },
+      "hits": [
+        {
+          "name": "Cat Facts",
+          "url": "https://catfact.ninja/",
+          "description": "Random cat facts",
+          "categories": [
+            "Animals"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "yes",
+          "score": 0.5
+        },
+        {
+          "name": "HTTP Cat",
+          "url": "https://http.cat/",
+          "description": "Cat for every HTTP Status",
+          "categories": [
+            "Animals"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "yes",
+          "score": 0.5
+        },
+        {
+          "name": "Shibe.Online",
+          "url": "http://shibe.online/",
+          "description": "Random pictures of Shiba Inu, cats or birds",
+          "categories": [
+            "Animals"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "yes",
+          "score": 0.16666666666666666
+        }
+      ]
+    },
+    {
+      "q": "พยากรณ์อากาศ",
+      "kind": "match",
+      "confidence": 1,
+      "understood": {
+        "terms": [
+          "พยากรณ์อากาศ"
+        ],
+        "filters": {}
+      },
+      "hits": [
+        {
+          "name": "AccuWeather",
+          "url": "https://developer.accuweather.com/apis",
+          "description": "Weather and forecast data",
+          "categories": [
+            "Weather"
+          ],
+          "auth": "api_key",
+          "https": false,
+          "cors": "unknown",
+          "score": 0.3333333333333333
+        },
+        {
+          "name": "Aemet",
+          "url": "https://opendata.aemet.es/centrodedescargas/inicio",
+          "description": "Weather and forecast data from Spain",
+          "categories": [
+            "Weather"
+          ],
+          "auth": "api_key",
+          "https": true,
+          "cors": "unknown",
+          "score": 0.3333333333333333
+        },
+        {
+          "name": "AviationWeather",
+          "url": "https://www.aviationweather.gov/dataserver",
+          "description": "NOAA aviation weather forecasts and observations",
+          "categories": [
+            "Weather"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "unknown",
+          "score": 0.3333333333333333
+        },
+        {
+          "name": "HG Weather",
+          "url": "https://hgbrasil.com/status/weather",
+          "description": "Provides weather forecast data for cities in Brazil",
+          "categories": [
+            "Weather"
+          ],
+          "auth": "api_key",
+          "https": true,
+          "cors": "yes",
+          "score": 0.3333333333333333
+        },
+        {
+          "name": "Meltema",
+          "url": "https://meltema.com/docs",
+          "description": "Multi-model weather: GFS, ECMWF AIFS/IFS and a 31-member GEFS ensemble, keyless point forecasts",
+          "categories": [
+            "Weather"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "no",
+          "score": 0.3333333333333333
+        }
+      ]
+    },
+    {
+      "q": "ขอสูตรอาหาร",
+      "kind": "match",
+      "confidence": 1,
+      "understood": {
+        "terms": [
+          "สูตรอาหาร"
+        ],
+        "filters": {}
+      },
+      "hits": [
+        {
+          "name": "Edamam recipes",
+          "url": "https://developer.edamam.com/edamam-docs-recipe-api",
+          "description": "Recipe Search",
+          "categories": [
+            "Food & Drink"
+          ],
+          "auth": "api_key",
+          "https": true,
+          "cors": "unknown",
+          "score": 1
+        },
+        {
+          "name": "RecipeAPI",
+          "url": "https://recipeapi.io",
+          "description": "Recipes, ingredients, nutrition data and cooking instructions",
+          "categories": [
+            "Food & Drink"
+          ],
+          "auth": "api_key",
+          "https": true,
+          "cors": "yes",
+          "score": 1
+        },
+        {
+          "name": "CalorieNinjas",
+          "url": "https://calorieninjas.com/api",
+          "description": "Nutrition and calorie data for foods and recipes",
+          "categories": [
+            "Food & Drink"
+          ],
+          "auth": "api_key",
+          "https": true,
+          "cors": "yes",
+          "score": 0.3333333333333333
+        },
+        {
+          "name": "Edamam",
+          "url": "https://developer.edamam.com/",
+          "description": "Food and nutrition data API with recipe search",
+          "categories": [
+            "Health"
+          ],
+          "auth": "api_key",
+          "https": true,
+          "cors": "unknown",
+          "score": 0.3333333333333333
+        },
+        {
+          "name": "PunkAPI",
+          "url": "https://punkapi.com/",
+          "description": "Brewdog Beer Recipes",
+          "categories": [
+            "Food & Drink"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "unknown",
+          "score": 0.3333333333333333
+        }
+      ]
+    },
+    {
+      "q": "ข้อมูลปลอมไว้ทดสอบ ผู้ใช้สุ่ม",
+      "kind": "match",
+      "confidence": 0.6666666666666666,
+      "understood": {
+        "terms": [
+          "ข้อมูลปลอม",
+          "ผู้ใช้สุ่ม"
+        ],
+        "filters": {}
+      },
+      "hits": [
+        {
+          "name": "Mockaroo",
+          "url": "https://www.mockaroo.com/docs",
+          "description": "Generate fake data to JSON, CSV, TXT, SQL and XML",
+          "categories": [
+            "Test Data"
+          ],
+          "auth": "api_key",
+          "https": true,
+          "cors": "unknown",
+          "score": 0.5
+        },
+        {
+          "name": "Mocky",
+          "url": "https://designer.mocky.io/",
+          "description": "Mock user defined test JSON for REST API endpoints",
+          "categories": [
+            "Development"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "yes",
+          "score": 0.5
+        },
+        {
+          "name": "FakeJSON",
+          "url": "https://fakejson.com",
+          "description": "Service to generate test and fake data",
+          "categories": [
+            "Test Data"
+          ],
+          "auth": "api_key",
+          "https": true,
+          "cors": "yes",
+          "score": 0.3333333333333333
+        },
+        {
+          "name": "FakerAPI",
+          "url": "https://fakerapi.it/en",
+          "description": "APIs collection to get fake data",
+          "categories": [
+            "Test Data"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "yes",
+          "score": 0.3333333333333333
+        },
+        {
+          "name": "FakeStoreAPI",
+          "url": "https://fakestoreapi.com/",
+          "description": "Fake store rest API for your e-commerce or shopping website prototype",
+          "categories": [
+            "Test Data"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "unknown",
+          "score": 0.3333333333333333
+        }
+      ]
+    },
+    {
+      "q": "ย่อลิงก์",
+      "kind": "match",
+      "confidence": 1,
+      "understood": {
+        "terms": [
+          "ย่อลิงก์"
+        ],
+        "filters": {}
+      },
+      "hits": [
+        {
+          "name": "Drivet URL Shortener",
+          "url": "https://wiki.drivet.xyz/en/url-shortener/add-links",
+          "description": "Shorten a long URL easily and fast",
+          "categories": [
+            "URL Shorteners"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "unknown",
+          "score": 1
+        },
+        {
+          "name": "Free Url Shortener",
+          "url": "https://ulvis.net/developer.html",
+          "description": "Free URL Shortener offers a powerful API to interact with other sites",
+          "categories": [
+            "URL Shorteners"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "unknown",
+          "score": 1
+        },
+        {
+          "name": "1pt",
+          "url": "https://github.com/1pt-co/api/blob/main/README.md",
+          "description": "A simple URL shortener",
+          "categories": [
+            "URL Shorteners"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "yes",
+          "score": 0.6666666666666666
+        },
+        {
+          "name": "Bitly",
+          "url": "http://dev.bitly.com/get_started.html",
+          "description": "URL shortener and link management",
+          "categories": [
+            "URL Shorteners"
+          ],
+          "auth": "oauth",
+          "https": true,
+          "cors": "unknown",
+          "score": 0.6666666666666666
+        },
+        {
+          "name": "CleanURI",
+          "url": "https://cleanuri.com/docs",
+          "description": "URL shortener service",
+          "categories": [
+            "URL Shorteners"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "yes",
+          "score": 0.6666666666666666
+        }
+      ]
+    },
+    {
+      "q": "ติดตามพัสดุ",
+      "kind": "match",
+      "confidence": 1,
+      "understood": {
+        "terms": [
+          "ติดตามพัสดุ"
+        ],
+        "filters": {}
+      },
+      "hits": [
+        {
+          "name": "PostNord",
+          "url": "https://developer.postnord.com/api",
+          "description": "Provides information about parcels in transport for Sweden and Denmark",
+          "categories": [
+            "Tracking"
+          ],
+          "auth": "api_key",
+          "https": false,
+          "cors": "unknown",
+          "score": 0.3333333333333333
+        },
+        {
+          "name": "SMKlog",
+          "url": "https://smklog.com/openapi.json",
+          "description": "Live parcel shipping rates and labels from a plain-words item description",
+          "categories": [
+            "Transportation"
+          ],
+          "auth": "none",
+          "https": true,
+          "cors": "no",
+          "score": 0.3333333333333333
+        },
+        {
+          "name": "WhereParcel",
+          "url": "https://whereparcel.com/docs",
+          "description": "Unified parcel tracking API across 60+ carriers worldwide (USPS, FedEx, UPS, DHL, etc.)",
+          "categories": [
+            "Tracking"
+          ],
+          "auth": "api_key",
+          "https": true,
+          "cors": "yes",
+          "score": 0.3333333333333333
+        }
+      ]
+    },
+    {
+      "q": "หาเพื่อนคุยตอนดึก",
+      "kind": "no_match",
+      "confidence": 0,
+      "understood": {
+        "terms": [],
+        "filters": {}
+      },
+      "hits": []
+    }
+  ]
+}

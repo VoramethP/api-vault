@@ -17,14 +17,25 @@ function hit(words: string[], token: string): boolean {
     || (token.length >= 4 && w.startsWith(token)))
 }
 
+export interface EntryWords { name: string[], cats: string[], desc: string[] }
+
+export function entryWords(e: EntryForRanking): EntryWords {
+  return { name: tokenize(e.name), cats: e.categories.flatMap(tokenize), desc: tokenize(e.description) }
+}
+
+/** น้ำหนักของคำหนึ่งใน Entry — ตรงชื่อ > ตรงหมวด > ตรงคำอธิบาย · ใช้ร่วมกับ thai-dict ranker */
+export function tokenWeight(w: EntryWords, token: string): number {
+  return hit(w.name, token) ? W_NAME : hit(w.cats, token) ? W_CATEGORY : hit(w.desc, token) ? W_DESCRIPTION : 0
+}
+
+export const MAX_WEIGHT = W_NAME
+
 export function scoreEntry(tokens: string[], e: EntryForRanking): { score: number, matched: Set<string> } {
-  const name = tokenize(e.name)
-  const cats = e.categories.flatMap(tokenize)
-  const desc = tokenize(e.description)
+  const words = entryWords(e)
   let score = 0
   const matched = new Set<string>()
   for (const t of tokens) {
-    const w = hit(name, t) ? W_NAME : hit(cats, t) ? W_CATEGORY : hit(desc, t) ? W_DESCRIPTION : 0
+    const w = tokenWeight(words, t)
     if (w) matched.add(t)
     score += w
   }

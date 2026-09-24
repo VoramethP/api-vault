@@ -291,6 +291,8 @@ englishAliases / englishStopwords · ตัดวรรณยุกต์ละ�
 ข้อที่ล้มเป็นเรื่อง**ความหมาย** ไม่ใช่คำขาด: "free llm api" (ต้องรู้ว่า Groq/Gemini คือ LLM), "live flight tracking" (ชื่อที่มี tracking ชนะ),
 "nutrition from barcode", "leetcode" (ควร no_match), คำสะกดผิดที่ต่างเกิน 1 ตัว (บิทคอย) · **ฝั่งอังกฤษอ่อนกว่าไทย** (4/8) เพราะไม่มีตัวช่วยความหมายเลย
 · 18/20 กับชุดที่ไม่เคยเห็นน่าจะต้องใช้ Ranker ที่เข้าใจความหมาย (Claude/Jev) — ยังไม่ได้วัด
+· **บั๊กที่หลุดไปใน commit ก่อน:** เพิ่ม "ตอน" → episode ทำให้ "หาเพื่อนคุยตอนดึก" ไม่เป็น no_match → เดโมไม่มีข้อ No match (ผิด spec §8)
+  แก้: "ตอน" เป็น stopword (ปกติแปลว่า "เวลา") + `test/demo.test.ts` บังคับ No match หนึ่งข้อ และ hits มีแค่ฟิลด์สาธารณะ · holdout3 ยัง 14/20
 
 ---
 

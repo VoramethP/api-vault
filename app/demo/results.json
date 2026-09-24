@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-24T11:06:00.190Z",
+  "generatedAt": "2026-09-24T11:06:35.539Z",
   "ranker": "thai-dict",
   "catalogueSize": 1871,
   "results": [
@@ -477,28 +477,13 @@
     },
     {
       "q": "หาเพื่อนคุยตอนดึก",
-      "kind": "match",
-      "confidence": 0.25,
+      "kind": "no_match",
+      "confidence": 0,
       "understood": {
-        "terms": [
-          "ตอน"
-        ],
+        "terms": [],
         "filters": {}
       },
-      "hits": [
-        {
-          "name": "Catch The Show",
-          "url": "https://catchtheshow.herokuapp.com/api/documentation",
-          "description": "REST API for next-episode.net",
-          "categories": [
-            "Video"
-          ],
-          "auth": "none",
-          "https": true,
-          "cors": "unknown",
-          "score": 0.35333333333333333
-        }
-      ]
+      "hits": []
     }
   ]
 }

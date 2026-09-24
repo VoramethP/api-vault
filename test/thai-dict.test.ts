@@ -118,6 +118,10 @@ describe('thai-dict.json', () => {
     }
   })
 
+  it('keeps ambiguous everyday words out of the phrase list — "ตอน" usually means "when"', async () => {
+    expect(parseQuery('หาเพื่อนคุยตอนดึก').concepts).toEqual([])
+  })
+
   it('never lists a phrase as a stopword too', () => {
     for (const s of dict.stopwords) expect(Object.hasOwn(dict.phrases, s), s).toBe(false)
   })

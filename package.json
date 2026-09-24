@@ -17,6 +17,7 @@
     "db:verify": "tsx --env-file=.env scripts/db-verify.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.128.0",
     "@nuxt/ui": "^4.11.0",
     "@nuxtjs/supabase": "^2.0.10",
     "drizzle-orm": "^0.45.2",

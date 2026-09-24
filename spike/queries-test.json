@@ -1,0 +1,17 @@
+[
+  {"q":"api อัตราเเลกเปลี่ยน บาท ดอลลาร์ ฟรี","expect":["Frankfurter","Currency-api","ExchangeRate-API","Exchangerate.dev"],"source":"หัวข้อ exchange rate เจอซ้ำ: BOT API portal.api.bot.or.th, mindphp.com/forums/viewtopic.php?t=55512 · สะกด เเ (สระแอสองตัว) แบบที่คนพิมพ์จริง"},
+  {"q":"ขอ api วันพระ ปฏิทินจันทรคติไทย","expect":[],"source":"ต่อยอดจากหัวข้อวันหยุดไทย (iapp.co.th, dga.or.th/public-holiday) · ไม่มีใน catalogue"},
+  {"q":"ราคาน้ำมันวันนี้ ปตท บางจาก","expect":[],"source":"search 'api ราคาทอง อัตราแลกเปลี่ยน' ผลรวมพูดถึง 'ราคาน้ำมัน' เป็นข้อมูลที่คนหา · catalogue ไม่มีราคาน้ำมันรายปั๊มไทย"},
+  {"q":"เช็คเลขพัสดุ ไปรษณีย์ไทย kerry flash","expect":["Aftership"],"source":"ไม่ได้ค้นเจอแหล่งตรง — หัวข้อพบบ่อยในงานโปรเจกต์ร้านออนไลน์ไทย (ตัดสินเอง)"},
+  {"q":"ข้อมูลสินค้าปลอม ทำเว็บ e-commerce ฝึก react","expect":["FakeStoreAPI","DummyJSON"],"source":"mindphp.com 8970 'ข้อมูลที่ไว้ใช้ทำโปรเจค e-commerce'"},
+  {"q":"api ย่อลิ้งค์ ฟรี","expect":["Bitly","TinyURL","CleanURI","1pt"],"source":"สะกด 'ลิ้งค์' แบบพูด · หัวข้อ URL shortener ใน list API ฟรี"},
+  {"q":"พยากรณ์อากาศล่วงหน้า 7 วัน กรุงเทพ ไม่ต้องใช้ key","expect":["Open-Meteo","wttr.in","Meltema","Pirate Weather"],"source":"หัวข้อ weather + เงื่อนไขไม่ใช้ key"},
+  {"q":"ราคาบิทคอยน์ เป็นเงินบาท","expect":["CoinGecko","CoinDesk","CoinMarketCap"],"source":"หัวข้อ crypto/การเงินใน techstarthailand + apidog list"},
+  {"q":"api ปลอมไว้ฝึกเขียน fetch ไม่ต้องใช้ key","expect":["JSONPlaceholder","DummyJSON","ReqRes","restful-api"],"source":"chaichon.com การเรียกใช้ RESTful API ด้วย React (jsonplaceholder), mindphp.com บทความ API ฟรีสำหรับ Front-End"},
+  {"q":"api ข่าววันนี้ ภาษาไทย","expect":["NewsData","Currents"],"source":"facebook.com/saograw.dev คลัง API สาธารณะ, techstarthailand 20 APIs · ต้องการข่าวภาษาไทย → เลือกเฉพาะที่ multilingual"},
+  {"q":"ocr อ่านตัวหนังสือไทยจากรูป","expect":["AI For Thai","Hirak OCR","OCR.Space"],"source":"aigencorp.com/thai-ocr-ai-api-tutorial 'OCR API ภาษาไทยฟรี'"},
+  {"q":"สุ่มข้อมูลผู้ใช้พร้อมรูปโปรไฟล์","expect":["RandomUser","FakerAPI"],"source":"mindphp.com 8970 (Random User Generator)"},
+  {"q":"ส่งข้อความหาลูกค้าผ่าน LINE","expect":["Line"],"source":"LINE bot เป็นปลายทางที่เจอซ้ำ: medium.com/linedevth, medium.com/i-gear-geek, github.com/Pongphat007/line-weather-bot"},
+  {"q":"สูตรอาหาร api","expect":["TheMealDB","Spoonacular","Edamam recipes","RecipeAPI"],"source":"หัวข้อ food/recipe ใน list API ฟรี (apidog, techstarthailand)"},
+  {"q":"ราคาทองแท่ง ทองรูปพรรณ ตามประกาศสมาคมค้าทองคำ","expect":[],"source":"ราคาทองแบบไทย (บาททอง/สมาคมค้าทองคำ) — github.com/max180643/thai-gold-api, medium.com/linedevth รายงานราคาทองผ่าน LINE · catalogue มีแค่ spot price สากล"}
+]

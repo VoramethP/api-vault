@@ -11,7 +11,7 @@ const MAX_PHRASE_SEGMENTS = 6
 export interface Filters { auth?: 'none', cors?: 'yes', https?: true }
 
 /** หนึ่งความต้องการในคำค้น — ตรงแค่ทางเลือกใดทางเลือกหนึ่งก็พอ · ทางเลือกหนึ่งอาจมีหลายคำ ("currency exchange") */
-export interface Concept { source: string, alternatives: string[][] }
+export interface Concept { source: string, alternatives: string[][], soft?: boolean }
 
 export interface ParsedQuery { concepts: Concept[], unknown: string[], filters: Filters }
 
@@ -24,6 +24,9 @@ const CONDITIONS: { re: RegExp, filter: Filters }[] = [
 
 const phrases = dict.phrases as Record<string, string[]>
 const stopwords = new Set(dict.stopwords)
+const englishStopwords = new Set(dict.englishStopwords)
+// คำระบุประเทศ/ภาษา — Catalogue แทบไม่มี API เฉพาะประเทศ ถ้านับเต็มน้ำหนัก API ที่แค่ชื่อมี "Thai" จะชนะตัวที่ตรงความต้องการจริง
+const soft = new Set(dict.soft)
 const THAI = /\p{Script=Thai}/u
 
 export function parseQuery(query: string): ParsedQuery {
@@ -45,7 +48,7 @@ export function parseQuery(query: string): ParsedQuery {
     const seg = segments[i]!
     if (!THAI.test(seg)) {
       // คำอังกฤษ/ตัวเลข → หนึ่งความต้องการต่อคำ เหมือน keyword ranker
-      for (const t of tokenize(seg)) concepts.push({ source: t, alternatives: [[t]] })
+      for (const t of tokenize(seg)) if (!englishStopwords.has(t)) concepts.push({ source: t, alternatives: [[t]] })
       i++
       continue
     }
@@ -55,7 +58,7 @@ export function parseQuery(query: string): ParsedQuery {
       const phrase = segments.slice(i, j).join('')
       const terms = phrases[phrase]
       if (terms) {
-        concepts.push({ source: phrase, alternatives: terms.map(tokenize).filter(t => t.length) })
+        concepts.push({ source: phrase, alternatives: terms.map(tokenize).filter(t => t.length), soft: soft.has(phrase) })
         i = j
         matched = true
         break
@@ -78,20 +81,30 @@ export const thaiDictRanker: Ranker = {
   name: 'thai-dict',
   async rank(query, candidates, { limit }): Promise<RankResult> {
     const { concepts, unknown, filters } = parseQuery(query)
-    // ไม่รู้จักสักคำ = ไม่รู้ว่าผู้ใช้อยากได้อะไร → ตอบตรง ๆ ว่าไม่เจอ ดีกว่าโชว์ทุกอย่างที่แค่ผ่านตัวกรอง
-    if (!concepts.length) return { kind: 'no_match', confidence: 0 }
+    const core = concepts.filter(c => !c.soft)
+    const extra = concepts.filter(c => c.soft)
+    // ไม่รู้จักความต้องการหลักสักคำ = ไม่รู้ว่าผู้ใช้อยากได้อะไร → ตอบตรง ๆ ว่าไม่เจอ ดีกว่าโชว์ทุกอย่างที่แค่ผ่านตัวกรอง
+    if (!core.length) return { kind: 'no_match', confidence: 0 }
+
+    const conceptWeight = (words: ReturnType<typeof entryWords>, c: Concept) =>
+      // วลีหลายคำนับเท่าคำที่อ่อนที่สุดในวลี — "currency exchange" ต้องเจอทั้งสองคำ
+      Math.max(0, ...c.alternatives.map(alt => Math.min(...alt.map(t => tokenWeight(words, t)))))
 
     const found = new Set<string>()
     const scored = candidates.filter(e => passes(e, filters)).map((e) => {
       const words = entryWords(e)
-      let score = 0
-      for (const c of concepts) {
-        // วลีหลายคำนับเท่าคำที่อ่อนที่สุดในวลี — "currency exchange" ต้องเจอทั้งสองคำ
-        const best = Math.max(0, ...c.alternatives.map(alt => Math.min(...alt.map(t => tokenWeight(words, t)))))
-        if (best) found.add(c.source)
-        score += best
+      let sum = 0
+      let hits = 0
+      for (const c of core) {
+        const w = conceptWeight(words, c)
+        if (w) { found.add(c.source); hits++ }
+        sum += w
       }
-      return { entryId: e.id, score: score / (concepts.length * MAX_WEIGHT), name: e.name }
+      // coordination: ตรงหลายความต้องการ > ตรงชื่อแค่คำเดียว — ไม่งั้น "Contentful Images" ชนะ Pexels เพราะชื่อมีคำว่า image
+      let score = (sum / (core.length * MAX_WEIGHT)) * (hits / core.length)
+      // คำเสริมเพิ่มได้ไม่เกิน 10% และไม่ช่วยตัวที่ไม่ตรงความต้องการหลักเลย
+      if (hits && extra.some(c => conceptWeight(words, c))) score = Math.min(1, score * 1.1)
+      return { entryId: e.id, score, name: e.name }
     }).filter(s => s.score > 0)
     if (!scored.length) return { kind: 'no_match', confidence: 0 }
 
@@ -100,7 +113,7 @@ export const thaiDictRanker: Ranker = {
     return {
       kind: 'match',
       hits: scored.slice(0, limit).map(({ entryId, score }) => ({ entryId, score })),
-      confidence: found.size / (concepts.length + unknown.length),
+      confidence: found.size / (core.length + unknown.length),
     }
   },
 }

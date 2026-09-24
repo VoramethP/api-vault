@@ -12,10 +12,10 @@
 - ผู้ใช้ใช้ `vault pull` จริงแล้ว · token CLI ที่หลุดบนจอถูกเพิกถอน ใช้ `nx_macbook-2`
 
 ## ค้างอยู่ตรงไหน
-- **รอผู้ใช้**: เขียนคำค้นไทย 20 ข้อใน `spike/queries.json` (ต้องเป็นผู้ใช้เขียน ไม่ใช่ Claude)
+- **รอผู้ใช้เลือกทาง** หลังวัด thai-dict ได้ชุด test 6/15 (ดู WORKLOG วันเดียวกัน)
 
 ## ทำต่อยังไง
-1. ได้คำค้นแล้ว → `npm run eval:ranker` → เติม `server/ranker/thai-dict.json` จนผ่าน ≥ 15/20 → `npm run demo:build` → commit
+1. ถามผู้ใช้: จูนพจนานุกรมต่อ (ต้องให้ subagent เขียนชุด test ใหม่) / เปิด Claude ranker (มีค่าใช้จ่าย) / รอ Jev
 2. ถามผู้ใช้ว่าเก็บสำเนา `VAULT_MASTER_KEY` นอกเครื่องแล้วหรือยัง
 3. v1.0.0 รอ Jev (TypeSafe)
 

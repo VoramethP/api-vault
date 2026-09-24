@@ -1,0 +1,17 @@
+[
+  {"q":"เช็คค่าฝุ่น pm2.5 ทำไลน์บอทแจ้งเตือน","expect":["AQICN","IQAir","OpenAQ"],"source":"medium.com/i-gear-geek LINE bot PM2.5, aumsurapong.medium.com bot แจ้งเตือนค่าฝุ่น, medium.com/@natthavat28 เช็คค่าฝุ่นผ่าน API"},
+  {"q":"รูปภาพฟรีไม่ติดลิขสิทธิ์ เอามาใส่เว็บ","expect":["Unsplash","Pexels","Pixabay","Lorem Picsum"],"source":"mindphp.com 8970 (Unsplash)"},
+  {"q":"ราคาหุ้นไทย set realtime","expect":["Yahoo Finance","EOD Historical Data"],"source":"pantip.com/topic/41773944 แนะนำ settrade api, ultimatepython.co yahoo finance, medium.com/investic ดึงข้อมูลหุ้นไม่เสียเงิน"},
+  {"q":"covid ยอดผู้ติดเชื้อรายประเทศ","expect":["Covid-19","Open Disease","Covid-19 JHU CSSE","Covid-19 Live Data"],"source":"covid19.ddc.moph.go.th, myifew.com/5658 รวม API COVID ไทยและทั่วโลก, pasinsiri.medium.com"},
+  {"q":"api วันหยุดราชการไทย","expect":["Calendarific","caldays","Public Holidays","Festivo Public Holidays"],"source":"facebook.com/groups/ThaiPGAssociateSociety 'api holidays thailand', mindphp t=115041 (Calendarific), iapp.co.th Thai Holiday API"},
+  {"q":"api ราคาทองวันนี้","expect":["Goldprice.dev","KmalServico Gold Price Dataset"],"source":"medium.com/@ch.chinnawat 'API เช็คราคาทอง', devbanban.com/?p=4728, github.com/max180643/thai-gold-api"},
+  {"q":"แผนที่ประเทศไทย ค้นหาสถานที่ ได้ lat long","expect":["Longdo Map","Nominatim","Geoapify","LocationIQ"],"source":"deemap.com/service-docs, drtan.medium.com API จังหวัด/lat-long, หัวข้อ map ใน techstarthailand"},
+  {"q":"อยากได้ข้อมูลหนัง โปสเตอร์ เรื่องย่อ ทำเว็บรีวิวหนัง","expect":["TMDb","Open Movie Database","IMDb-API","Trakt"],"source":"pantip.com/topic/32458565 ถาม API โรงหนัง, หัวข้อหนังเจอซ้ำใน list API ฟรี"},
+  {"q":"ตัดคำภาษาไทย nlp","expect":["AI For Thai","ELI"],"source":"งาน NLP ไทย (AI for Thai) — เชื่อมจากบทความ OCR ไทย; ไม่ได้เจอกระทู้เฉพาะ"},
+  {"q":"แปลงค่าเงินบาทเป็นเยน ใช้กับเว็บได้ ไม่ต้องสมัคร","expect":["Frankfurter","Currency-api"],"source":"หัวข้อ exchange rate (BOT/mindphp) + เงื่อนไข no-auth/CORS"},
+  {"q":"api ตรวจหวย รัฐบาล งวดล่าสุด","expect":[],"source":"github.com/rayriffy/thai-lotto-api, github.com/naigolf/lottery-thai-api, krupreecha.com/docs, dek-com.com · catalogue ไม่มีหวยไทย"},
+  {"q":"api สภาพอากาศ ฟรี","expect":["Open-Meteo","OpenWeatherMap","WeatherAPI","Pirate Weather"],"source":"หัวข้อ weather เจอทุก list: apidog.com/th/blog/free-apis-7, github.com/Pongphat007/line-weather-bot"},
+  {"q":"api แปลภาษาไทยเป็นอังกฤษ ฟรี","expect":["Langbly","Kiprio Translate","Lecto Translation"],"source":"cloud-ace.co.th Cloud Translation, translatiz.com · เลือกเฉพาะที่รองรับ 50+ ภาษา"},
+  {"q":"สร้าง qr พร้อมเพย์ รับเงิน","expect":[],"source":"pantip.com/topic/37137311 ขอ API Promptpay ทำโปรเจคจบ · QR generator ทั่วไปไม่ใช่ PromptPay"},
+  {"q":"ข้อมูลจังหวัด อำเภอ ตำบล รหัสไปรษณีย์ เป็น json ทำ dropdown","expect":["Open Government, Thailand"],"source":"thaicreate.com/php/forum/051357, blog.2my.xyz thai-province-data, github.com/earthchie/jquery.Thailand.js · data.go.th มีชุดข้อมูลเขตการปกครอง (ตัดสินแบบหลวม)"}
+]

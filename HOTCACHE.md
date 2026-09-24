@@ -22,7 +22,7 @@ Key ไม่ออกไปหา Ranker/บริการภายนอก �
 `getDb()`/`withDb()` ต่อ request · ห้าม service_role · RLS ทุกตาราง · drizzle-kit generate+migrate เท่านั้น
 
 ## งานถัดไป
-1. รอผู้ใช้เขียนคำค้นไทย 20 ข้อ (`spike/queries.json`) → `npm run eval:ranker` → เติมพจนานุกรมจนผ่าน 15/20
+1. thai-dict ได้ test **6/15** (เกณฑ์ 75%) — รอผู้ใช้เลือก: จูนต่อ (ต้องชุด test ใหม่) / Claude / รอ Jev · `spike/queries-{dev,test}.json`
 2. v1.0.0 (Jev เมื่อ TypeSafe เปิด)
 
 ## กับดักที่เคยเจอ

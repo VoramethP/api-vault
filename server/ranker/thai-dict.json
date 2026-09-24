@@ -1,53 +1,1181 @@
 {
-  "_note": "คำ/วลีไทย → คำอังกฤษที่ใช้ค้น (เลือกตัวใดตัวหนึ่งตรงก็พอ) · key ไม่มีช่องว่าง · เพิ่มคำเมื่อเจอคำค้นที่หาไม่เจอ (ดู test/thai-dict.test.ts)",
-  "stopwords": ["อยาก", "อยากได้", "ได้", "ขอ", "หา", "ค้นหา", "ที่", "แบบ", "ใช้", "ต้อง", "ไม่", "มี", "เอา", "ให้", "ของ", "และ", "หรือ", "กับ", "เป็น", "จาก", "ใน", "สำหรับ", "ไว้", "มา", "ไป", "โชว์", "แสดง", "บน", "เว็บ", "เว็บไซต์", "แอป", "แอพ", "หน่อย", "ครับ", "ค่ะ", "คะ", "นะ", "จะ", "เพื่อ", "ด้วย", "ตัว", "อัน", "ไหน", "อะไร", "บ้าง", "ช่วย", "ทำ", "ดู", "เช็ค", "เช็ก", "ตรวจ", "เรียก", "ดึง", "ข้อมูล", "api", "เอพีไอ", "ฟรี", "ง่าย", "ๆ", "แล้ว", "ก็", "ว่า", "คือ", "มัน", "นี้", "นั้น", "ต่าง", "ทั้ง", "หลาย", "เยอะ", "ล่าสุด", "จริง", "ดี", "เร็ว"],
+  "_note": "คำ/วลีไทย → คำอังกฤษที่ใช้ค้น (เลือกตัวใดตัวหนึ่งตรงก็พอ) · key ไม่มีช่องว่าง · เพิ่มคำเมื่อเจอคำค้นที่หาไม่เจอ (ดู test/thai-dict.test.ts) · soft = คำระบุประเทศ/ภาษา ใช้เสริมคะแนนเท่านั้น ไม่นับเป็นความต้องการหลัก · englishStopwords = คำบอกรูปแบบ ไม่ใช่ความต้องการ",
+  "stopwords": [
+    "อยาก",
+    "อยากได้",
+    "ได้",
+    "ขอ",
+    "หา",
+    "ค้นหา",
+    "ที่",
+    "แบบ",
+    "ใช้",
+    "ต้อง",
+    "ไม่",
+    "มี",
+    "เอา",
+    "ให้",
+    "ของ",
+    "และ",
+    "หรือ",
+    "กับ",
+    "เป็น",
+    "จาก",
+    "ใน",
+    "สำหรับ",
+    "ไว้",
+    "มา",
+    "ไป",
+    "โชว์",
+    "แสดง",
+    "บน",
+    "เว็บ",
+    "เว็บไซต์",
+    "แอป",
+    "แอพ",
+    "หน่อย",
+    "ครับ",
+    "ค่ะ",
+    "คะ",
+    "นะ",
+    "จะ",
+    "เพื่อ",
+    "ด้วย",
+    "ตัว",
+    "อัน",
+    "ไหน",
+    "อะไร",
+    "บ้าง",
+    "ช่วย",
+    "ทำ",
+    "ดู",
+    "เช็ค",
+    "เช็ก",
+    "ตรวจ",
+    "เรียก",
+    "ดึง",
+    "ข้อมูล",
+    "api",
+    "เอพีไอ",
+    "ฟรี",
+    "ง่าย",
+    "ๆ",
+    "แล้ว",
+    "ก็",
+    "ว่า",
+    "คือ",
+    "มัน",
+    "นี้",
+    "นั้น",
+    "ต่าง",
+    "ทั้ง",
+    "หลาย",
+    "เยอะ",
+    "ล่าสุด",
+    "จริง",
+    "ดี",
+    "เร็ว"
+  ],
   "phrases": {
-    "สัตว์": ["animal"], "สัตว์เลี้ยง": ["pet", "animal"], "แมว": ["cat"], "หมา": ["dog"], "สุนัข": ["dog"], "นก": ["bird"], "ปลา": ["fish"], "ม้า": ["horse"], "จิ้งจอก": ["fox"], "เป็ด": ["duck"],
-    "อนิเมะ": ["anime"], "อนิเม": ["anime"], "การ์ตูน": ["anime", "comic", "cartoon"], "มังงะ": ["manga"], "การ์ตูนญี่ปุ่น": ["anime", "manga"],
-    "มัลแวร์": ["malware"], "ไวรัส": ["virus", "malware"], "ฟิชชิ่ง": ["phishing"], "ลิงก์อันตราย": ["malicious url", "phishing"],
-    "ศิลปะ": ["art"], "ออกแบบ": ["design"], "สี": ["color"], "ไอคอน": ["icon"], "ฟอนต์": ["font"], "ภาพวาด": ["art", "painting"], "พิพิธภัณฑ์": ["museum"],
-    "ยืนยันตัวตน": ["authentication"], "ล็อกอิน": ["login", "authentication"], "เข้าสู่ระบบ": ["login", "authentication"],
-    "บล็อกเชน": ["blockchain"], "คริปโต": ["crypto", "cryptocurrency"], "คริปโตเคอร์เรนซี": ["cryptocurrency"], "บิตคอยน์": ["bitcoin"], "บิทคอยน์": ["bitcoin"], "อีเธอเรียม": ["ethereum"], "เหรียญ": ["coin", "crypto"], "เอ็นเอฟที": ["nft"],
-    "หนังสือ": ["book"], "นิยาย": ["novel", "book"], "คัมภีร์": ["bible", "quran"], "บทกวี": ["poetry", "poem"], "กลอน": ["poetry"],
-    "ธุรกิจ": ["business"], "บริษัท": ["company"], "ภาษี": ["tax", "vat"],
-    "ปฏิทิน": ["calendar"], "วันหยุด": ["holiday"], "วันหยุดราชการ": ["public holiday"], "วันหยุดนักขัตฤกษ์": ["public holiday"], "เทศกาล": ["holiday", "festival"],
-    "เก็บไฟล์": ["file sharing", "storage"], "แชร์ไฟล์": ["file sharing"], "อัปโหลด": ["upload"], "ไฟล์": ["file"], "คลาวด์": ["cloud"], "พื้นที่เก็บ": ["storage"],
-    "ตรวจสอบ": ["validation", "verify"], "ตรวจอีเมล": ["email validation", "verify email"], "เบอร์โทร": ["phone"], "เบอร์โทรศัพท์": ["phone number"], "โทรศัพท์": ["phone"], "เอสเอ็มเอส": ["sms"], "ข้อความ": ["message", "sms"],
-    "พัฒนา": ["development"], "นักพัฒนา": ["developer"], "โค้ด": ["code"], "เขียนโปรแกรม": ["programming", "code"], "ภาษาโปรแกรม": ["programming language"], "คิวอาร์": ["qr"], "คิวอาร์โค้ด": ["qr code"], "บาร์โค้ด": ["barcode"], "สกรีนช็อต": ["screenshot"], "จับภาพหน้าจอ": ["screenshot"], "ไอพี": ["ip"], "ที่อยู่ไอพี": ["ip address"],
-    "พจนานุกรม": ["dictionary"], "คำศัพท์": ["dictionary", "word"], "ความหมาย": ["definition", "dictionary"], "แปล": ["translate", "translation"], "แปลภาษา": ["translation", "translate"], "ภาษา": ["language"], "คำพ้อง": ["synonym", "thesaurus"],
-    "เอกสาร": ["document"], "พีดีเอฟ": ["pdf"], "สเปรดชีต": ["spreadsheet"], "โน้ต": ["note"], "งาน": ["task", "job"], "สิ่งที่ต้องทำ": ["todo", "task"],
-    "อีเมล": ["email"], "อีเมล์": ["email"], "เมล": ["email", "mail"], "อีเมลชั่วคราว": ["temporary email", "disposable email"],
-    "บันเทิง": ["entertainment"], "มุก": ["joke"], "มุกตลก": ["joke"], "ตลก": ["joke", "funny"], "คำคม": ["quote"], "คำพูด": ["quote"], "เกร็ดความรู้": ["fact", "trivia"], "ความรู้รอบตัว": ["trivia", "fact"],
-    "สิ่งแวดล้อม": ["environment"], "มลพิษ": ["pollution"], "คุณภาพอากาศ": ["air quality", "pollution"], "ฝุ่น": ["air quality", "pollution"], "พีเอ็ม": ["air quality"], "คาร์บอน": ["carbon"], "พลังงาน": ["energy"], "ไฟฟ้า": ["electricity", "energy"],
-    "อีเวนต์": ["event"], "กิจกรรม": ["event", "activity"],
-    "การเงิน": ["finance"], "หุ้น": ["stock"], "ตลาดหุ้น": ["stock market"], "ธนาคาร": ["bank"], "เงิน": ["money", "currency"], "สกุลเงิน": ["currency"], "อัตราแลกเปลี่ยน": ["currency exchange", "exchange rate"], "แลกเงิน": ["currency exchange"], "แลกเปลี่ยนเงิน": ["currency exchange"], "บาท": ["thb", "thai baht"], "ดอลลาร์": ["usd", "dollar"], "ราคาทอง": ["gold price", "gold"], "ทอง": ["gold"], "ดอกเบี้ย": ["interest rate"], "เงินเฟ้อ": ["inflation"], "จ่ายเงิน": ["payment"], "ชำระเงิน": ["payment"], "ใบแจ้งหนี้": ["invoice"],
-    "อาหาร": ["food"], "เครื่องดื่ม": ["drink"], "สูตรอาหาร": ["recipe"], "เมนู": ["recipe", "menu"], "ทำอาหาร": ["recipe", "cooking"], "ค็อกเทล": ["cocktail"], "เบียร์": ["beer"], "ไวน์": ["wine"], "กาแฟ": ["coffee"], "ผลไม้": ["fruit"], "โภชนาการ": ["nutrition"], "แคลอรี่": ["calorie", "nutrition"], "ร้านอาหาร": ["restaurant"],
-    "เกม": ["game"], "เกมส์": ["game"], "คอมมิค": ["comic"], "โปเกมอน": ["pokemon"], "มายคราฟ": ["minecraft"], "การ์ด": ["card"], "ลูกเต๋า": ["dice"], "หมากรุก": ["chess"],
-    "แผนที่": ["map", "geocoding"], "พิกัด": ["geocoding", "coordinates"], "ที่อยู่": ["address", "geocoding"], "ตำแหน่ง": ["location", "geolocation"], "ประเทศ": ["country"], "เมือง": ["city"], "รหัสไปรษณีย์": ["postal code", "zip"], "ไปรษณีย์": ["postal"], "เขตเวลา": ["timezone"], "โซนเวลา": ["timezone"], "เวลา": ["time"],
-    "รัฐบาล": ["government"], "ราชการ": ["government"], "ข้อมูลเปิด": ["open data"], "สถิติ": ["statistics", "data"], "ประชากร": ["population", "census"], "เลือกตั้ง": ["election"], "กฎหมาย": ["law", "legal"],
-    "สุขภาพ": ["health"], "ยา": ["drug", "medicine"], "โรค": ["disease"], "โควิด": ["covid"], "โรงพยาบาล": ["hospital"], "ออกกำลังกาย": ["fitness", "exercise"], "การแพทย์": ["medical"],
-    "งานหางาน": ["job"], "หางาน": ["job"], "สมัครงาน": ["job"], "ตำแหน่งงาน": ["job"],
-    "ปัญญาประดิษฐ์": ["machine learning", "ai"], "เอไอ": ["ai", "machine learning"], "แมชชีนเลิร์นนิง": ["machine learning"], "จดจำใบหน้า": ["face recognition"], "ใบหน้า": ["face"], "ข้อความเป็นเสียง": ["text to speech"], "เสียงเป็นข้อความ": ["speech to text"], "แชทบอท": ["chatbot"],
-    "เพลง": ["music", "song"], "ดนตรี": ["music"], "เนื้อเพลง": ["lyrics"], "ศิลปิน": ["artist"], "วิทยุ": ["radio"], "พอดแคสต์": ["podcast"],
-    "ข่าว": ["news"], "หนังสือพิมพ์": ["newspaper", "news"], "บทความ": ["article"],
-    "โอเพนซอร์ส": ["open source"],
-    "สิทธิบัตร": ["patent"],
-    "บุคลิกภาพ": ["personality"], "แรงบันดาลใจ": ["inspiration", "quote"], "ดวง": ["horoscope"], "ดูดวง": ["horoscope"], "ราศี": ["zodiac", "horoscope"], "คำแนะนำ": ["advice"],
-    "รูป": ["image", "photo"], "รูปภาพ": ["image", "photo"], "ภาพ": ["image", "photo"], "ภาพถ่าย": ["photo"], "รูปถ่าย": ["photo"], "วอลเปเปอร์": ["wallpaper"], "สุ่มรูป": ["random image"], "ภาพฟรี": ["stock photo"],
-    "วิทยาศาสตร์": ["science"], "คณิตศาสตร์": ["math"], "เลข": ["number", "math"], "ตัวเลข": ["number"], "อวกาศ": ["space"], "ดาวเคราะห์": ["planet"], "ดาว": ["star"], "นาซ่า": ["nasa"], "จรวด": ["rocket", "spacex"], "ดวงจันทร์": ["moon"], "แผ่นดินไหว": ["earthquake"], "ธาตุ": ["element", "periodic table"],
-    "ความปลอดภัย": ["security"], "รหัสผ่าน": ["password"], "รหัสผ่านรั่ว": ["breach", "pwned"], "ข้อมูลรั่ว": ["breach"], "เข้ารหัส": ["encryption"],
-    "ช้อปปิ้ง": ["shopping"], "ซื้อของ": ["shopping"], "สินค้า": ["product"], "ร้านค้า": ["store", "shop"], "ราคา": ["price"],
-    "โซเชียล": ["social"], "โซเชียลมีเดีย": ["social media"], "เฟซบุ๊ก": ["facebook"], "ทวิตเตอร์": ["twitter"], "อินสตาแกรม": ["instagram"], "ยูทูบ": ["youtube"], "ติ๊กต็อก": ["tiktok"], "ไลน์": ["line"], "เรดดิต": ["reddit"], "ดิสคอร์ด": ["discord"], "เทเลแกรม": ["telegram"], "แชท": ["chat"],
-    "กีฬา": ["sports"], "ฟุตบอล": ["football", "soccer"], "บาสเกตบอล": ["basketball"], "บาส": ["basketball"], "ผลบอล": ["football", "soccer"], "ฟิตเนส": ["fitness"], "วิ่ง": ["running", "fitness"], "เอฟวัน": ["formula 1", "f1"],
-    "ข้อมูลทดสอบ": ["test data", "fake data"], "ข้อมูลปลอม": ["fake data", "mock"], "ข้อมูลจำลอง": ["mock", "fake data"], "ชื่อปลอม": ["fake name", "random user"], "ผู้ใช้สุ่ม": ["random user"], "สุ่ม": ["random"], "ม็อก": ["mock"],
-    "วิเคราะห์ข้อความ": ["text analysis"], "ความรู้สึก": ["sentiment"], "คำหยาบ": ["profanity"], "ตรวจคำหยาบ": ["profanity filter"], "สรุปความ": ["summarization", "summary"],
-    "ติดตาม": ["tracking"], "ติดตามพัสดุ": ["package tracking", "parcel"], "พัสดุ": ["parcel", "package tracking"], "ขนส่ง": ["shipping", "transportation"], "เลขพัสดุ": ["tracking number"],
-    "เดินทาง": ["transportation", "travel"], "รถไฟ": ["train", "rail"], "รถเมล์": ["bus"], "เที่ยวบิน": ["flight"], "เครื่องบิน": ["flight", "aircraft"], "สนามบิน": ["airport"], "จักรยาน": ["bike", "bicycle"], "ขนส่งสาธารณะ": ["public transport", "transit"], "จราจร": ["traffic"], "ท่องเที่ยว": ["travel", "tourism"], "โรงแรม": ["hotel"],
-    "ลิงก์สั้น": ["url shortener"], "ย่อลิงก์": ["url shortener"], "ย่อยูอาร์แอล": ["url shortener"], "ลิงก์": ["url", "link"],
-    "รถยนต์": ["car", "vehicle"], "รถ": ["car", "vehicle"], "ทะเบียนรถ": ["license plate", "vehicle"], "น้ำมัน": ["fuel", "gas price"], "ราคาน้ำมัน": ["fuel price", "gas price"], "รถยนต์ไฟฟ้า": ["electric vehicle", "ev charging"],
-    "วิดีโอ": ["video"], "หนัง": ["movie", "film"], "ภาพยนตร์": ["movie", "film"], "ซีรีส์": ["tv series", "tv show"], "ทีวี": ["tv"], "สตรีม": ["streaming"],
-    "สภาพอากาศ": ["weather"], "อากาศ": ["weather"], "พยากรณ์": ["forecast"], "พยากรณ์อากาศ": ["weather forecast"], "ฝน": ["rain", "weather"], "อุณหภูมิ": ["temperature", "weather"], "พายุ": ["storm", "weather"], "น้ำท่วม": ["flood"],
-    "รายวัน": ["daily"], "เรียลไทม์": ["realtime", "real-time"], "ย้อนหลัง": ["historical"], "ประวัติ": ["historical", "history"],
-    "ไทย": ["thailand", "thai"], "ประเทศไทย": ["thailand"], "กรุงเทพ": ["bangkok"], "ญี่ปุ่น": ["japan"], "จีน": ["china"], "เกาหลี": ["korea"]
-  }
+    "สัตว์": [
+      "animal"
+    ],
+    "สัตว์เลี้ยง": [
+      "pet",
+      "animal"
+    ],
+    "แมว": [
+      "cat"
+    ],
+    "หมา": [
+      "dog"
+    ],
+    "สุนัข": [
+      "dog"
+    ],
+    "นก": [
+      "bird"
+    ],
+    "ปลา": [
+      "fish"
+    ],
+    "ม้า": [
+      "horse"
+    ],
+    "จิ้งจอก": [
+      "fox"
+    ],
+    "เป็ด": [
+      "duck"
+    ],
+    "อนิเมะ": [
+      "anime"
+    ],
+    "อนิเม": [
+      "anime"
+    ],
+    "การ์ตูน": [
+      "anime",
+      "comic",
+      "cartoon"
+    ],
+    "มังงะ": [
+      "manga"
+    ],
+    "การ์ตูนญี่ปุ่น": [
+      "anime",
+      "manga"
+    ],
+    "มัลแวร์": [
+      "malware"
+    ],
+    "ไวรัส": [
+      "virus",
+      "malware"
+    ],
+    "ฟิชชิ่ง": [
+      "phishing"
+    ],
+    "ลิงก์อันตราย": [
+      "malicious url",
+      "phishing"
+    ],
+    "ศิลปะ": [
+      "art"
+    ],
+    "ออกแบบ": [
+      "design"
+    ],
+    "สี": [
+      "color"
+    ],
+    "ไอคอน": [
+      "icon"
+    ],
+    "ฟอนต์": [
+      "font"
+    ],
+    "ภาพวาด": [
+      "art",
+      "painting"
+    ],
+    "พิพิธภัณฑ์": [
+      "museum"
+    ],
+    "ยืนยันตัวตน": [
+      "authentication"
+    ],
+    "ล็อกอิน": [
+      "login",
+      "authentication"
+    ],
+    "เข้าสู่ระบบ": [
+      "login",
+      "authentication"
+    ],
+    "บล็อกเชน": [
+      "blockchain"
+    ],
+    "คริปโต": [
+      "crypto",
+      "cryptocurrency"
+    ],
+    "คริปโตเคอร์เรนซี": [
+      "cryptocurrency"
+    ],
+    "บิตคอยน์": [
+      "bitcoin"
+    ],
+    "บิทคอยน์": [
+      "bitcoin"
+    ],
+    "อีเธอเรียม": [
+      "ethereum"
+    ],
+    "เหรียญ": [
+      "coin",
+      "crypto"
+    ],
+    "เอ็นเอฟที": [
+      "nft"
+    ],
+    "หนังสือ": [
+      "book"
+    ],
+    "นิยาย": [
+      "novel",
+      "book"
+    ],
+    "คัมภีร์": [
+      "bible",
+      "quran"
+    ],
+    "บทกวี": [
+      "poetry",
+      "poem"
+    ],
+    "กลอน": [
+      "poetry"
+    ],
+    "ธุรกิจ": [
+      "business"
+    ],
+    "บริษัท": [
+      "company"
+    ],
+    "ภาษี": [
+      "tax",
+      "vat"
+    ],
+    "ปฏิทิน": [
+      "calendar"
+    ],
+    "วันหยุด": [
+      "holiday"
+    ],
+    "วันหยุดราชการ": [
+      "public holiday"
+    ],
+    "วันหยุดนักขัตฤกษ์": [
+      "public holiday"
+    ],
+    "เทศกาล": [
+      "holiday",
+      "festival"
+    ],
+    "เก็บไฟล์": [
+      "file sharing",
+      "storage"
+    ],
+    "แชร์ไฟล์": [
+      "file sharing"
+    ],
+    "อัปโหลด": [
+      "upload"
+    ],
+    "ไฟล์": [
+      "file"
+    ],
+    "คลาวด์": [
+      "cloud"
+    ],
+    "พื้นที่เก็บ": [
+      "storage"
+    ],
+    "ตรวจสอบ": [
+      "validation",
+      "verify"
+    ],
+    "ตรวจอีเมล": [
+      "email validation",
+      "verify email"
+    ],
+    "เบอร์โทร": [
+      "phone"
+    ],
+    "เบอร์โทรศัพท์": [
+      "phone number"
+    ],
+    "โทรศัพท์": [
+      "phone"
+    ],
+    "เอสเอ็มเอส": [
+      "sms"
+    ],
+    "ข้อความ": [
+      "message",
+      "sms"
+    ],
+    "พัฒนา": [
+      "development"
+    ],
+    "นักพัฒนา": [
+      "developer"
+    ],
+    "โค้ด": [
+      "code"
+    ],
+    "เขียนโปรแกรม": [
+      "programming",
+      "code"
+    ],
+    "ภาษาโปรแกรม": [
+      "programming language"
+    ],
+    "คิวอาร์": [
+      "qr"
+    ],
+    "คิวอาร์โค้ด": [
+      "qr code"
+    ],
+    "บาร์โค้ด": [
+      "barcode"
+    ],
+    "สกรีนช็อต": [
+      "screenshot"
+    ],
+    "จับภาพหน้าจอ": [
+      "screenshot"
+    ],
+    "ไอพี": [
+      "ip"
+    ],
+    "ที่อยู่ไอพี": [
+      "ip address"
+    ],
+    "พจนานุกรม": [
+      "dictionary"
+    ],
+    "คำศัพท์": [
+      "dictionary",
+      "word"
+    ],
+    "ความหมาย": [
+      "definition",
+      "dictionary"
+    ],
+    "แปล": [
+      "translate",
+      "translation"
+    ],
+    "แปลภาษา": [
+      "translation",
+      "translate"
+    ],
+    "ภาษา": [
+      "language"
+    ],
+    "คำพ้อง": [
+      "synonym",
+      "thesaurus"
+    ],
+    "เอกสาร": [
+      "document"
+    ],
+    "พีดีเอฟ": [
+      "pdf"
+    ],
+    "สเปรดชีต": [
+      "spreadsheet"
+    ],
+    "โน้ต": [
+      "note"
+    ],
+    "งาน": [
+      "task",
+      "job"
+    ],
+    "สิ่งที่ต้องทำ": [
+      "todo",
+      "task"
+    ],
+    "อีเมล": [
+      "email"
+    ],
+    "อีเมล์": [
+      "email"
+    ],
+    "เมล": [
+      "email",
+      "mail"
+    ],
+    "อีเมลชั่วคราว": [
+      "temporary email",
+      "disposable email"
+    ],
+    "บันเทิง": [
+      "entertainment"
+    ],
+    "มุก": [
+      "joke"
+    ],
+    "มุกตลก": [
+      "joke"
+    ],
+    "ตลก": [
+      "joke",
+      "funny"
+    ],
+    "คำคม": [
+      "quote"
+    ],
+    "คำพูด": [
+      "quote"
+    ],
+    "เกร็ดความรู้": [
+      "fact",
+      "trivia"
+    ],
+    "ความรู้รอบตัว": [
+      "trivia",
+      "fact"
+    ],
+    "สิ่งแวดล้อม": [
+      "environment"
+    ],
+    "มลพิษ": [
+      "pollution"
+    ],
+    "คุณภาพอากาศ": [
+      "air quality",
+      "pollution"
+    ],
+    "ฝุ่น": [
+      "air quality",
+      "pollution"
+    ],
+    "พีเอ็ม": [
+      "air quality"
+    ],
+    "คาร์บอน": [
+      "carbon"
+    ],
+    "พลังงาน": [
+      "energy"
+    ],
+    "ไฟฟ้า": [
+      "electricity",
+      "energy"
+    ],
+    "อีเวนต์": [
+      "event"
+    ],
+    "กิจกรรม": [
+      "event",
+      "activity"
+    ],
+    "การเงิน": [
+      "finance"
+    ],
+    "หุ้น": [
+      "stock",
+      "stock market"
+    ],
+    "ตลาดหุ้น": [
+      "stock market"
+    ],
+    "ธนาคาร": [
+      "bank"
+    ],
+    "เงิน": [
+      "money",
+      "currency"
+    ],
+    "สกุลเงิน": [
+      "currency"
+    ],
+    "อัตราแลกเปลี่ยน": [
+      "currency exchange",
+      "exchange rate"
+    ],
+    "แลกเงิน": [
+      "currency exchange"
+    ],
+    "แลกเปลี่ยนเงิน": [
+      "currency exchange"
+    ],
+    "บาท": [
+      "thb",
+      "thai baht"
+    ],
+    "ดอลลาร์": [
+      "usd",
+      "dollar"
+    ],
+    "ราคาทอง": [
+      "gold price",
+      "gold"
+    ],
+    "ทอง": [
+      "gold"
+    ],
+    "ดอกเบี้ย": [
+      "interest rate"
+    ],
+    "เงินเฟ้อ": [
+      "inflation"
+    ],
+    "จ่ายเงิน": [
+      "payment"
+    ],
+    "ชำระเงิน": [
+      "payment"
+    ],
+    "ใบแจ้งหนี้": [
+      "invoice"
+    ],
+    "อาหาร": [
+      "food"
+    ],
+    "เครื่องดื่ม": [
+      "drink"
+    ],
+    "สูตรอาหาร": [
+      "recipe"
+    ],
+    "เมนู": [
+      "recipe",
+      "menu"
+    ],
+    "ทำอาหาร": [
+      "recipe",
+      "cooking"
+    ],
+    "ค็อกเทล": [
+      "cocktail"
+    ],
+    "เบียร์": [
+      "beer"
+    ],
+    "ไวน์": [
+      "wine"
+    ],
+    "กาแฟ": [
+      "coffee"
+    ],
+    "ผลไม้": [
+      "fruit"
+    ],
+    "โภชนาการ": [
+      "nutrition"
+    ],
+    "แคลอรี่": [
+      "calorie",
+      "nutrition"
+    ],
+    "ร้านอาหาร": [
+      "restaurant"
+    ],
+    "เกม": [
+      "game"
+    ],
+    "เกมส์": [
+      "game"
+    ],
+    "คอมมิค": [
+      "comic"
+    ],
+    "โปเกมอน": [
+      "pokemon"
+    ],
+    "มายคราฟ": [
+      "minecraft"
+    ],
+    "การ์ด": [
+      "card"
+    ],
+    "ลูกเต๋า": [
+      "dice"
+    ],
+    "หมากรุก": [
+      "chess"
+    ],
+    "แผนที่": [
+      "map",
+      "geocoding"
+    ],
+    "พิกัด": [
+      "geocoding",
+      "coordinates"
+    ],
+    "ที่อยู่": [
+      "address",
+      "geocoding"
+    ],
+    "ตำแหน่ง": [
+      "location",
+      "geolocation"
+    ],
+    "ประเทศ": [
+      "country"
+    ],
+    "เมือง": [
+      "city"
+    ],
+    "รหัสไปรษณีย์": [
+      "postal code",
+      "zip"
+    ],
+    "ไปรษณีย์": [
+      "postal"
+    ],
+    "เขตเวลา": [
+      "timezone"
+    ],
+    "โซนเวลา": [
+      "timezone"
+    ],
+    "เวลา": [
+      "time"
+    ],
+    "รัฐบาล": [
+      "government"
+    ],
+    "ราชการ": [
+      "government"
+    ],
+    "ข้อมูลเปิด": [
+      "open data"
+    ],
+    "สถิติ": [
+      "statistics",
+      "data"
+    ],
+    "ประชากร": [
+      "population",
+      "census"
+    ],
+    "เลือกตั้ง": [
+      "election"
+    ],
+    "กฎหมาย": [
+      "law",
+      "legal"
+    ],
+    "สุขภาพ": [
+      "health"
+    ],
+    "ยา": [
+      "drug",
+      "medicine"
+    ],
+    "โรค": [
+      "disease"
+    ],
+    "โควิด": [
+      "covid"
+    ],
+    "โรงพยาบาล": [
+      "hospital"
+    ],
+    "ออกกำลังกาย": [
+      "fitness",
+      "exercise"
+    ],
+    "การแพทย์": [
+      "medical"
+    ],
+    "งานหางาน": [
+      "job"
+    ],
+    "หางาน": [
+      "job"
+    ],
+    "สมัครงาน": [
+      "job"
+    ],
+    "ตำแหน่งงาน": [
+      "job"
+    ],
+    "ปัญญาประดิษฐ์": [
+      "machine learning",
+      "ai"
+    ],
+    "เอไอ": [
+      "ai",
+      "machine learning"
+    ],
+    "แมชชีนเลิร์นนิง": [
+      "machine learning"
+    ],
+    "จดจำใบหน้า": [
+      "face recognition"
+    ],
+    "ใบหน้า": [
+      "face"
+    ],
+    "ข้อความเป็นเสียง": [
+      "text to speech"
+    ],
+    "เสียงเป็นข้อความ": [
+      "speech to text"
+    ],
+    "แชทบอท": [
+      "chatbot"
+    ],
+    "เพลง": [
+      "music",
+      "song"
+    ],
+    "ดนตรี": [
+      "music"
+    ],
+    "เนื้อเพลง": [
+      "lyrics"
+    ],
+    "ศิลปิน": [
+      "artist"
+    ],
+    "วิทยุ": [
+      "radio"
+    ],
+    "พอดแคสต์": [
+      "podcast"
+    ],
+    "ข่าว": [
+      "news"
+    ],
+    "หนังสือพิมพ์": [
+      "newspaper",
+      "news"
+    ],
+    "บทความ": [
+      "article"
+    ],
+    "โอเพนซอร์ส": [
+      "open source"
+    ],
+    "สิทธิบัตร": [
+      "patent"
+    ],
+    "บุคลิกภาพ": [
+      "personality"
+    ],
+    "แรงบันดาลใจ": [
+      "inspiration",
+      "quote"
+    ],
+    "ดวง": [
+      "horoscope"
+    ],
+    "ดูดวง": [
+      "horoscope"
+    ],
+    "ราศี": [
+      "zodiac",
+      "horoscope"
+    ],
+    "คำแนะนำ": [
+      "advice"
+    ],
+    "รูป": [
+      "image",
+      "photo",
+      "photography"
+    ],
+    "รูปภาพ": [
+      "image",
+      "photo",
+      "photography"
+    ],
+    "ภาพ": [
+      "image",
+      "photo",
+      "photography"
+    ],
+    "ภาพถ่าย": [
+      "photo",
+      "photography"
+    ],
+    "รูปถ่าย": [
+      "photo"
+    ],
+    "วอลเปเปอร์": [
+      "wallpaper"
+    ],
+    "สุ่มรูป": [
+      "random image"
+    ],
+    "ภาพฟรี": [
+      "stock photo"
+    ],
+    "วิทยาศาสตร์": [
+      "science"
+    ],
+    "คณิตศาสตร์": [
+      "math"
+    ],
+    "เลข": [
+      "number",
+      "math"
+    ],
+    "ตัวเลข": [
+      "number"
+    ],
+    "อวกาศ": [
+      "space"
+    ],
+    "ดาวเคราะห์": [
+      "planet"
+    ],
+    "ดาว": [
+      "star"
+    ],
+    "นาซ่า": [
+      "nasa"
+    ],
+    "จรวด": [
+      "rocket",
+      "spacex"
+    ],
+    "ดวงจันทร์": [
+      "moon"
+    ],
+    "แผ่นดินไหว": [
+      "earthquake"
+    ],
+    "ธาตุ": [
+      "element",
+      "periodic table"
+    ],
+    "ความปลอดภัย": [
+      "security"
+    ],
+    "รหัสผ่าน": [
+      "password"
+    ],
+    "รหัสผ่านรั่ว": [
+      "breach",
+      "pwned"
+    ],
+    "ข้อมูลรั่ว": [
+      "breach"
+    ],
+    "เข้ารหัส": [
+      "encryption"
+    ],
+    "ช้อปปิ้ง": [
+      "shopping"
+    ],
+    "ซื้อของ": [
+      "shopping"
+    ],
+    "สินค้า": [
+      "product"
+    ],
+    "ร้านค้า": [
+      "store",
+      "shop"
+    ],
+    "ราคา": [
+      "price"
+    ],
+    "โซเชียล": [
+      "social"
+    ],
+    "โซเชียลมีเดีย": [
+      "social media"
+    ],
+    "เฟซบุ๊ก": [
+      "facebook"
+    ],
+    "ทวิตเตอร์": [
+      "twitter"
+    ],
+    "อินสตาแกรม": [
+      "instagram"
+    ],
+    "ยูทูบ": [
+      "youtube"
+    ],
+    "ติ๊กต็อก": [
+      "tiktok"
+    ],
+    "ไลน์": [
+      "line"
+    ],
+    "เรดดิต": [
+      "reddit"
+    ],
+    "ดิสคอร์ด": [
+      "discord"
+    ],
+    "เทเลแกรม": [
+      "telegram"
+    ],
+    "แชท": [
+      "chat"
+    ],
+    "กีฬา": [
+      "sports"
+    ],
+    "ฟุตบอล": [
+      "football",
+      "soccer"
+    ],
+    "บาสเกตบอล": [
+      "basketball"
+    ],
+    "บาส": [
+      "basketball"
+    ],
+    "ผลบอล": [
+      "football",
+      "soccer"
+    ],
+    "ฟิตเนส": [
+      "fitness"
+    ],
+    "วิ่ง": [
+      "running",
+      "fitness"
+    ],
+    "เอฟวัน": [
+      "formula 1",
+      "f1"
+    ],
+    "ข้อมูลทดสอบ": [
+      "test data",
+      "fake data"
+    ],
+    "ข้อมูลปลอม": [
+      "fake data",
+      "mock"
+    ],
+    "ข้อมูลจำลอง": [
+      "mock",
+      "fake data"
+    ],
+    "ชื่อปลอม": [
+      "fake name",
+      "random user"
+    ],
+    "ผู้ใช้สุ่ม": [
+      "random user"
+    ],
+    "สุ่ม": [
+      "random"
+    ],
+    "ม็อก": [
+      "mock"
+    ],
+    "วิเคราะห์ข้อความ": [
+      "text analysis"
+    ],
+    "ความรู้สึก": [
+      "sentiment"
+    ],
+    "คำหยาบ": [
+      "profanity"
+    ],
+    "ตรวจคำหยาบ": [
+      "profanity filter"
+    ],
+    "สรุปความ": [
+      "summarization",
+      "summary"
+    ],
+    "ติดตาม": [
+      "tracking"
+    ],
+    "ติดตามพัสดุ": [
+      "package tracking",
+      "parcel"
+    ],
+    "พัสดุ": [
+      "parcel",
+      "package tracking"
+    ],
+    "ขนส่ง": [
+      "shipping",
+      "transportation"
+    ],
+    "เลขพัสดุ": [
+      "tracking number"
+    ],
+    "เดินทาง": [
+      "transportation",
+      "travel"
+    ],
+    "รถไฟ": [
+      "train",
+      "rail"
+    ],
+    "รถเมล์": [
+      "bus"
+    ],
+    "เที่ยวบิน": [
+      "flight"
+    ],
+    "เครื่องบิน": [
+      "flight",
+      "aircraft"
+    ],
+    "สนามบิน": [
+      "airport"
+    ],
+    "จักรยาน": [
+      "bike",
+      "bicycle"
+    ],
+    "ขนส่งสาธารณะ": [
+      "public transport",
+      "transit"
+    ],
+    "จราจร": [
+      "traffic"
+    ],
+    "ท่องเที่ยว": [
+      "travel",
+      "tourism"
+    ],
+    "โรงแรม": [
+      "hotel"
+    ],
+    "ลิงก์สั้น": [
+      "url shortener"
+    ],
+    "ย่อลิงก์": [
+      "url shortener"
+    ],
+    "ย่อยูอาร์แอล": [
+      "url shortener"
+    ],
+    "ลิงก์": [
+      "url",
+      "link"
+    ],
+    "รถยนต์": [
+      "car",
+      "vehicle"
+    ],
+    "รถ": [
+      "car",
+      "vehicle"
+    ],
+    "ทะเบียนรถ": [
+      "license plate",
+      "vehicle"
+    ],
+    "น้ำมัน": [
+      "fuel",
+      "gas price"
+    ],
+    "ราคาน้ำมัน": [
+      "fuel price",
+      "gas price"
+    ],
+    "รถยนต์ไฟฟ้า": [
+      "electric vehicle",
+      "ev charging"
+    ],
+    "วิดีโอ": [
+      "video"
+    ],
+    "หนัง": [
+      "movie",
+      "film"
+    ],
+    "ภาพยนตร์": [
+      "movie",
+      "film"
+    ],
+    "ซีรีส์": [
+      "tv series",
+      "tv show"
+    ],
+    "ทีวี": [
+      "tv"
+    ],
+    "สตรีม": [
+      "streaming"
+    ],
+    "สภาพอากาศ": [
+      "weather"
+    ],
+    "อากาศ": [
+      "weather"
+    ],
+    "พยากรณ์": [
+      "forecast"
+    ],
+    "พยากรณ์อากาศ": [
+      "weather forecast"
+    ],
+    "ฝน": [
+      "rain",
+      "weather"
+    ],
+    "อุณหภูมิ": [
+      "temperature",
+      "weather"
+    ],
+    "พายุ": [
+      "storm",
+      "weather"
+    ],
+    "น้ำท่วม": [
+      "flood"
+    ],
+    "รายวัน": [
+      "daily"
+    ],
+    "เรียลไทม์": [
+      "realtime",
+      "real-time"
+    ],
+    "ย้อนหลัง": [
+      "historical"
+    ],
+    "ประวัติ": [
+      "historical",
+      "history"
+    ],
+    "ไทย": [
+      "thailand",
+      "thai"
+    ],
+    "ประเทศไทย": [
+      "thailand"
+    ],
+    "กรุงเทพ": [
+      "bangkok"
+    ],
+    "ญี่ปุ่น": [
+      "japan"
+    ],
+    "จีน": [
+      "china"
+    ],
+    "เกาหลี": [
+      "korea"
+    ],
+    "ลิขสิทธิ์": [
+      "stock photo",
+      "royalty free"
+    ],
+    "ไม่ติดลิขสิทธิ์": [
+      "stock photo",
+      "royalty free"
+    ],
+    "จังหวัด": [
+      "province",
+      "thailand"
+    ],
+    "อำเภอ": [
+      "district",
+      "thailand"
+    ],
+    "ตำบล": [
+      "subdistrict",
+      "thailand"
+    ],
+    "ภาษาไทย": [
+      "thai"
+    ],
+    "ตัดคำ": [
+      "word segmentation",
+      "tokenization",
+      "nlp"
+    ]
+  },
+  "soft": [
+    "ไทย",
+    "ประเทศไทย",
+    "กรุงเทพ",
+    "ญี่ปุ่น",
+    "จีน",
+    "เกาหลี"
+  ],
+  "englishStopwords": [
+    "json",
+    "xml",
+    "csv",
+    "api",
+    "apis",
+    "rest",
+    "restful",
+    "http",
+    "free"
+  ]
 }

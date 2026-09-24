@@ -72,6 +72,17 @@ V1 done = นำเข้า 1,873 · ค้นไทย · เพิ่มเ�
 - เจอบั๊ก "cat" ไม่เจอ "Cats" (คำสั้นไม่ match พหูพจน์) → แก้แล้ว + เทส
 - ยังไม่เคยรันกับ Supabase จริง: pooler, `prepare:false`, role/grant ของ Supabase อาจต่างจากที่จำลอง
 
+## [2026-09-24] v0.1.0 ขึ้น Supabase จริง
+
+**ทำอะไร:** ผู้ใช้สร้าง Supabase `api-vault` (`ap-southeast-1`) + กรอก `.env` เอง (ไม่ผ่านแชต) · ตรวจรูปแบบ `.env` แบบปิดค่า:
+pooler ถูก region, :6543/:5432 ถูกช่อง, `SUPABASE_KEY` เป็น `sb_publishable_` · `db:migrate` ✓ · `db:import` 1,871 (~2 วิ) ·
+`db:verify` ผ่าน (authenticated 1,871 · anon 0) · `nuxt dev` ค้นผ่าน :6543 + `prepare:false` ได้ ~0.5 วิ/ครั้ง
+
+**ทำไม:** ยืนยันว่าสิ่งที่จำลองในเครื่อง (role/grant ของ Supabase, pooler) ตรงกับของจริงก่อนต่อ auth
+
+**ผลที่ตามมา:** 0.5 วิ/ค้นรวมเปิด connection ใหม่ + ดึง 1,871 แถวทุกครั้ง + ไป-กลับสิงคโปร์ — พอสำหรับตอนนี้
+ถ้าช้าบน Vercel `sin1` ค่อยดู (ยังไม่ได้วัดบน Vercel)
+
 ---
 
 ## งานถัดไป

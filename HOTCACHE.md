@@ -12,9 +12,9 @@
 - ✅ v0.1.0 Catalogue 1,871 Entry · v0.2.0 ล็อกอิน + บังคับ TOTP (401/403/200)
 - ✅ **v0.3.0** (tag) Vault + audit: `/vault` · Reveal = TOTP ใหม่ทุกครั้ง · Project/env_var · audit append-only
 - ✅ **v0.4.0** (tag) CLI `vault pull` (device flow: อนุมัติบนเว็บด้วย TOTP ทุกครั้ง) · token 30 วัน · `npm i -g ./cli`
-- ✅ **v0.5.0** (tag) ค้นไทยด้วยพจนานุกรม (`thai-dict` ค่าเริ่ม, ฟรี) + `/demo` · Claude ranker เก็บไว้ไม่เปิด
+- ✅ **v0.5.0–v0.5.1** (tag) ค้นไทยด้วยพจนานุกรม (`thai-dict` ค่าเริ่ม, ฟรี) + `/demo` · Claude ranker เก็บไว้ไม่เปิด
 - ✅ GitHub public: `VoramethP/api-vault` · ✅ Vercel prod: https://api-vault-two.vercel.app (`sin1`, ล็อกอินจริงผ่าน)
-- 🔴 TypeSafe ปิดรับสมัคร → Jev รอ (ADR-0003)
+- 🔴 TypeSafe ปิดรับสมัคร → Jev ย้ายไป V1.1 (ADR-0007)
 
 ## กฎเหล็ก
 ไม่มี gateway · Key envelope-encrypted, master key ใน env เท่านั้น, Reveal = re-auth + audit ·
@@ -22,8 +22,9 @@ Key ไม่ออกไปหา Ranker/บริการภายนอก �
 `getDb()`/`withDb()` ต่อ request · ห้าม service_role · RLS ทุกตาราง · drizzle-kit generate+migrate เท่านั้น
 
 ## งานถัดไป
-1. thai-dict **14/20** กับชุดที่ไม่เคยเห็น — **ผู้ใช้ยอมรับแล้ว (2026-09-24) ไม่เปิด Claude** · ถ้าจะวัดใหม่ต้องเขียนชุดใหม่ (ทุกชุดใน `spike/` ใช้ปรับแล้ว)
-2. v1.0.0 (Jev เมื่อ TypeSafe เปิด)
+1. **v1.0.0 = เพิ่ม Entry เอง** (ADR-0007, spec §4.5) — เพิ่ม/แก้/ลบเฉพาะ `manual` · คำอธิบายอังกฤษ · `tags = null`
+   · เกณฑ์ค้น = กันถอยหลัง thai-dict holdout3 ≥ 14/20 · 🟡 หน้าจอยังต้องยืนยัน
+2. V1.1: Jev + Tag อัตโนมัติ + ประวัติ Entry (เมื่อ TypeSafe เปิด)
 
 ## กับดักที่เคยเจอ
 - **TypeScript 7 ใช้กับ `vue-tsc` ไม่ได้** → pin `typescript@5`
@@ -33,7 +34,7 @@ Key ไม่ออกไปหา Ranker/บริการภายนอก �
 - `nuxt.config` อ่าน version จาก `package.json` ตอนเริ่ม — bump แล้วต้อง restart dev
 - **`vercel link` เพิ่ม `.env*` ลง `.gitignore`** → คืนค่าไฟล์ทุกครั้ง (กฎเดิมครอบแล้ว)
 - env บน Vercel: 6 ตัว (SUPABASE_URL/KEY, DATABASE_URL, OWNER_EMAIL, VAULT_MASTER_KEY(_VERSION)) · Vercel ผูก GitHub แล้ว: **`git push` main = deploy production เอง** ห้าม `vercel deploy` ซ้ำ
-  (ครั้งที่ deploy จาก CLI ใช้ build cache แล้ว `/about` ที่ prerender ออกมาเป็นของเก่า v0.1.0 — ต้อง `vercel promote` ตัวที่ build จาก git) · หลัง deploy เช็ก `/about`
+  (deploy จาก CLI ใช้ build cache → `/about` เก่า) · หลัง deploy เช็ก `/about`
 - ตาราง Vault: RLS **ไม่มี policy** + REVOKE (ห้ามเพิ่ม policy `true` แบบ entries — aal1 จะอ่านได้) · audit_log แก้/ลบไม่ได้แม้ postgres
 - `/api/cli/*` ใช้ `requireCliToken` แทน `requireOwner` (เทสบังคับทั้งสองทาง) · TOTP ใช้ซ้ำกันด้วย `totp_uses`
 - **ซ่อน input ด้วย `rl._writeToOutput`: ห้ามส่ง `s` ต่อ** — readline วาดบรรทัดใหม่เป็น prompt+ข้อความ (token เคยหลุดบนจอ v0.4.0)

@@ -16,6 +16,7 @@
 | ผู้ใช้หลายคน / sign-up | ไม่ทำ (ADR-0006) |
 | zero-knowledge (เข้ารหัสในเบราว์เซอร์) | V2 |
 | ประวัติการแก้ของ Entry | V1.1 |
+| Jev ranker + Tag อัตโนมัติ | V1.1 (ADR-0007) |
 | API งาน/ภายในองค์กร | ไม่ใส่ใน Catalogue |
 | ค้นสดในเดโม | ไม่ทำ (ADR-0004) |
 
@@ -38,9 +39,10 @@
 | **v0.3.0** | Vault + audit | §6 ครบ · เทส crypto round-trip + tamper · Reveal ต้อง re-auth และมีแถวใน audit |
 | **v0.4.0** | CLI `vault pull` | §7 ครบ · pull ลง `.env` แล้วไฟล์ไม่ถูก track โดย git · pull ถูกบันทึกใน audit |
 | **v0.5.0** | เดโม | §8 ครบ · เทสว่า build ของเดโมไม่มี secret |
-| **v1.0.0** | Jev ranker + ค้นไทย | spike ผ่าน ≥ 15/20 ใน top-5 · เพิ่ม Entry เองพร้อม Tag อัตโนมัติ · เดโมใช้ผลของ Jev |
+| **v1.0.0** | เพิ่ม Entry เอง + ปิด V1 (ADR-0007) | §4.5 ครบ · `eval:ranker thai-dict spike/queries-holdout3.json` ≥ 14/20 (กันถอยหลัง) · เดโมใช้ผลของ thai-dict |
+| V1.1 | Jev ranker + Tag อัตโนมัติ + ประวัติการแก้ของ Entry | Jev ผ่าน ≥ 15/20 ในชุดคำค้นใหม่ที่ไม่เคยใช้ปรับ (ADR-0003) |
 
-ถ้าชนเพดาน 1 เดือน: **CLI ตัดไป V1.1 ก่อน** · ถ้า TypeSafe ยังปิด ณ v0.5.0: ใช้ Claude structured output เป็น Ranker ของ v1.0.0 (ADR-0003)
+~~ถ้า TypeSafe ยังปิด ณ v0.5.0: ใช้ Claude เป็น Ranker ของ v1.0.0~~ — แทนที่ด้วย ADR-0007: เจ้าของยอมรับ thai-dict 14/20 ไม่เปิด Claude · Jev ไป V1.1
 
 ## 4. Catalogue (v0.1.0)
 
@@ -57,7 +59,7 @@
 | `https` | `boolean` not null | |
 | `cors` | enum `yes` `no` `unknown` | |
 | `source` | enum `public_apis` `manual` | |
-| `tags` | `jsonb` null | Tag ที่ Ranker ตัดสิน (v1.0.0) · null = ยังไม่ตัดสิน |
+| `tags` | `jsonb` null | Tag ที่ Ranker ตัดสิน (V1.1) · null = ยังไม่ตัดสิน |
 | `created_at` `updated_at` | `timestamptz` | |
 
 - **unique (`name`, `url`)** — แถวต้นทางที่ชื่อ+URL ซ้ำ = Entry เดียว รวม `categories`
@@ -98,7 +100,7 @@ type RankResult =
   วลีเงื่อนไข ("ไม่ต้องใช้ key", "เรียกจากเบราว์เซอร์", "https") → ตัวกรอง · คำไทยที่ไม่รู้จัก (ไม่ใช่ stopword) ลด `confidence`
   · ไม่รู้จักสักคำ = `no_match` · คำอังกฤษในคำค้นใช้ได้เหมือนเดิม · วัดด้วย `npm run eval:ranker`
 - **claude ranker** (v0.5.0, เก็บไว้ไม่เปิด): structured output + cache แคตตาล็อก · `RANKER=claude` + `ANTHROPIC_API_KEY`
-- **jev ranker** (v1.0.0): 2 request — Choice เลือกหมวด top-K → Choice เลือก Entry ในหมวดเหล่านั้น (≤ 255 ตัว) + Nouls "no match"
+- **jev ranker** (V1.1): 2 request — Choice เลือกหมวด top-K → Choice เลือก Entry ในหมวดเหล่านั้น (≤ 255 ตัว) + Nouls "no match"
   ตาม `spike/run.mjs`
 
 ### 4.4 หน้าจอและ route
@@ -111,6 +113,21 @@ type RankResult =
 | `/about` | เวอร์ชันปัจจุบัน + `CHANGELOG.md` + เครดิต public-apis (prerender) |
 
 query string validate ด้วย Zod ที่ `shared/` · handler `return` ค่าเสมอ
+
+### 4.5 เพิ่ม Entry เอง (v1.0.0 · ADR-0007)
+
+| route | ทำอะไร |
+|---|---|
+| `POST /api/entries` | สร้าง Entry `source = manual` · `tags = null` |
+| `PATCH /api/entries/:id` | แก้ได้เฉพาะ `source = manual` · อื่น ๆ = 403 |
+| `DELETE /api/entries/:id` | ลบได้เฉพาะ `source = manual` · มี Key ผูกอยู่ = 409 (FK `restrict`) |
+
+- ทุก route: `requireOwner` บรรทัดแรก · body validate ด้วย Zod ตัวเดียวกับ importer (`shared/entry.ts`)
+- **ชื่อ+URL ซ้ำ = 409** พร้อม id ของ Entry เดิม (ไม่ upsert ทับ — อาจเป็น Entry จาก `public_apis`)
+- **คำอธิบายต้องเป็นอังกฤษ** (มีตัวอักษรละตินอย่างน้อยหนึ่งคำ ไม่มีอักษรไทย) — thai-dict จับคำค้นกับข้อความอังกฤษเท่านั้น
+  ฟอร์มบอกเหตุผลนี้ตรง ๆ
+- Entry ใหม่ค้นเจอทันทีผ่าน `/api/search` (ไม่มี index แยก)
+- 🟡 หน้าจอ: ปุ่ม "เพิ่ม Entry" บน `/` + ฟอร์มแยกหน้า · แก้/ลบจาก EntryCard ของ Entry `manual` — ยืนยันตอนเริ่มทำ
 
 ## 5. Auth (v0.2.0)
 
@@ -177,7 +194,7 @@ vault whoami · vault logout
 | `RANKER` | เลือก Ranker (`thai-dict` ค่าเริ่ม) | v0.1.0 |
 | `ANTHROPIC_API_KEY` | claude ranker (ไม่ได้ใช้ตอนนี้) | v0.5.0 |
 | `VAULT_MASTER_KEY` `VAULT_MASTER_KEY_VERSION` | Vault | v0.3.0 |
-| `TYPESAFE_API_KEY` | jev ranker + spike | v1.0.0 |
+| `TYPESAFE_API_KEY` | jev ranker + spike | V1.1 |
 
 ## 10. เทสที่ต้องมีก่อน V1
 
@@ -188,8 +205,10 @@ vault whoami · vault logout
 - crypto round-trip · แก้ ciphertext/tag แล้ว decrypt ล้ม · DEK สองครั้งไม่ซ้ำ
 - Reveal/Pull เขียน audit
 - build ของเดโมไม่มี secret
+- เพิ่ม/แก้/ลบ Entry: `public_apis` แก้/ลบไม่ได้ · ซ้ำ = 409 · มี Key = ลบไม่ได้ · คำอธิบายไทย = 400
+- thai-dict บน `queries-holdout3.json` ≥ 14/20
 
 ## 11. คำถามที่ยังเปิด
 
-- 🟡 Tag เก็บใน `jsonb` หรือแยกคอลัมน์ — ตัดสินตอน v1.0.0 เมื่อเห็นผลจริงของ Jev
+- 🟡 Tag เก็บใน `jsonb` หรือแยกคอลัมน์ — ตัดสินตอน V1.1 เมื่อเห็นผลจริงของ Jev
 - `~/types/database.types.ts` gen จาก Supabase CLI หรือ type ของ Drizzle

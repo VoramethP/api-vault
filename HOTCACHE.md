@@ -12,7 +12,7 @@
 - ✅ v0.1–v0.5 (tag): Catalogue · ล็อกอิน+TOTP · Vault+audit (Reveal = TOTP ทุกครั้ง) · CLI `vault pull` (device flow, token 30 วัน) · `thai-dict` + `/demo`
 - ✅ GitHub public: `VoramethP/api-vault` · ✅ Vercel prod: https://api-vault-two.vercel.app (`sin1`, ล็อกอินจริงผ่าน)
 - ✅ **v1.0.0** (tag) เพิ่ม/แก้/ลบ Entry เอง (`manual` เท่านั้น) · เทสกัน thai-dict ถอยหลัง ≥ 14/20 (ADR-0007)
-- ✅ หลัง v1.0.0 (ขึ้น prod แล้ว, ยังไม่ tag — CHANGELOG `Unreleased`): ปุ่ม "ขอ Key" · Catalogue โหลดครั้งเดียว กรองในเบราว์เซอร์ + cache Vault · `Server-Timing` · `/docs` + `/llms*.txt` · `Referrer-Policy` · favicon กุญแจ SVG
+- ✅ **v1.0.1** (tag แล้ว · **ยังไม่ push** — push แล้ว `/about` จึงจะขึ้น 1.0.1): ปุ่ม "ขอ Key" · Catalogue โหลดครั้งเดียว กรองในเบราว์เซอร์ + cache Vault · `Server-Timing` · `/docs` + `/llms*.txt` · `Referrer-Policy` · favicon กุญแจ SVG
 - 🔴 TypeSafe ปิดรับสมัคร → Jev ย้ายไป V1.1
 
 ## กฎเหล็ก
@@ -21,7 +21,7 @@ Key ไม่ออกไปหา Ranker/บริการภายนอก �
 `getDb()`/`withDb()` ต่อ request · ห้าม service_role · RLS ทุกตาราง · drizzle-kit generate+migrate เท่านั้น
 
 ## งานถัดไป
-1. ถามผู้ใช้: ดู Server-Timing บน prod แล้วยังช้าไหม · จะ tag งาน `Unreleased` เป็นเวอร์ชันอะไร (ระวังชนชื่อ "V1.1" ของ Jev)
+1. งานที่พักไว้: ช่อง "ลิงก์หน้าสมัคร" ต่อ Entry (ต้อง migration) · `database.types.ts`
 2. V1.1: Jev + Tag อัตโนมัติ + ประวัติ Entry (เมื่อ TypeSafe เปิด)
 
 ## กับดักที่เคยเจอ

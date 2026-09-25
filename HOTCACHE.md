@@ -12,7 +12,7 @@
 - ✅ v0.1–v0.5 (tag): Catalogue · ล็อกอิน+TOTP · Vault+audit (Reveal = TOTP ทุกครั้ง) · CLI `vault pull` (device flow, token 30 วัน) · `thai-dict` + `/demo`
 - ✅ GitHub public: `VoramethP/api-vault` · ✅ Vercel prod: https://api-vault-two.vercel.app (`sin1`, ล็อกอินจริงผ่าน)
 - ✅ **v1.0.0** (tag) เพิ่ม/แก้/ลบ Entry เอง (`manual` เท่านั้น) · เทสกัน thai-dict ถอยหลัง ≥ 14/20 (ADR-0007)
-- ✅ **v1.0.1** (tag แล้ว · **ยังไม่ push** — push แล้ว `/about` จึงจะขึ้น 1.0.1): ปุ่ม "ขอ Key" · Catalogue โหลดครั้งเดียว กรองในเบราว์เซอร์ + cache Vault · `Server-Timing` · `/docs` + `/llms*.txt` · `Referrer-Policy` · favicon กุญแจ SVG
+- ✅ **v1.0.1** (tag, prod แล้ว): ปุ่ม "ขอ Key" · Catalogue โหลดครั้งเดียว กรองในเบราว์เซอร์ + cache Vault · `Server-Timing` · `/docs` + `/llms*.txt` · `Referrer-Policy` · favicon กุญแจ SVG
 - 🔴 TypeSafe ปิดรับสมัคร → Jev ย้ายไป V1.1
 
 ## กฎเหล็ก

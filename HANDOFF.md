@@ -8,16 +8,15 @@
 - ผู้ใช้เลือก **v1.0.1** คงชื่อแผน "V1.1" ของ Jev ไว้ → bump `package.json`/lock · CHANGELOG `[1.0.1]` · tag `v1.0.1`
 
 ## สถานะ ณ ตอนส่ง
-- commit + tag `v1.0.1` แล้ว · **ยังไม่ push** (push main = deploy prod · ต้อง `git push --follow-tags` หรือ push tag แยก)
+- push แล้ว · prod `/about` ขึ้น v1.0.1 (ตรวจ 12:20)
 - `npm run check` ผ่าน
 
 ## ค้างอยู่ตรงไหน
-- รอผู้ใช้สั่ง push · หลัง deploy เช็ก `/about` ต้องขึ้น 1.0.1
+- ไม่มีงานค้าง
 
 ## ทำต่อยังไง
-1. `git push origin main --follow-tags` เมื่อผู้ใช้สั่ง → เช็ก https://api-vault-two.vercel.app/about
-2. งานที่พักไว้: ช่อง "ลิงก์หน้าสมัคร" ต่อ Entry (ต้อง migration) · `database.types.ts`
-3. V1.1 (Jev) รอ TypeSafe เปิดรับสมัคร
+1. งานที่พักไว้: ช่อง "ลิงก์หน้าสมัคร" ต่อ Entry (ต้อง migration) · `database.types.ts`
+2. V1.1 (Jev) รอ TypeSafe เปิดรับสมัคร
 
 ## สิ่งที่ตกลงกันไว้แต่ยังไม่ได้เขียนลงไฟล์ไหน
 - feature ที่มาก่อน Jev ใช้ v1.0.x ต่อไป (ไม่ยึด semver เคร่ง) — "V1.1" สงวนให้ Jev

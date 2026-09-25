@@ -404,7 +404,7 @@ spec เดิมผูก v1.0.0 กับ Jev (≥ 15/20 + Tag อัตโน
 - prod: favicon SVG ขึ้นแล้ว (ไฟล์ตรง local ทุกไบต์, `<link rel="icon">` อยู่ใน head) · ผู้ใช้ดู `Server-Timing` แล้ว **เร็วพอ** — ปิดประเด็นเปิด connection DB ต่อ request ไม่แตะ ADR-0005
 - ชื่อเวอร์ชัน: ผู้ใช้เลือก **v1.0.1** คงชื่อแผน "V1.1" ของ Jev ไว้ (ยอมให้ patch มี Added — ไม่ยึด semver เคร่ง เพื่อไม่ต้องแก้ 25 จุดใน 10 ไฟล์)
   · ครั้งหน้าถ้ามี feature อีกก่อน Jev ก็ใช้ v1.0.x ต่อ
-- bump `package.json`/`package-lock.json` · CHANGELOG `[Unreleased]` → `[1.0.1]` · tag `v1.0.1` · ยังไม่ push (รอผู้ใช้สั่ง — push = deploy)
+- bump `package.json`/`package-lock.json` · CHANGELOG `[Unreleased]` → `[1.0.1]` · tag `v1.0.1` · push แล้ว prod `/about` ขึ้น 1.0.1
 
 ## งานถัดไป
 

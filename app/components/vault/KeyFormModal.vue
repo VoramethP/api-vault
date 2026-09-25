@@ -4,7 +4,8 @@ import type { SearchResponse } from '~~/shared/entry'
 
 const open = defineModel<boolean>('open', { required: true })
 /** ไม่มี = เพิ่ม Key ใหม่ · มี = แก้ชื่อ/หมุนค่า */
-const props = defineProps<{ editing?: KeyListItem | null, presetEntry?: { id: number, name: string } | null }>()
+/** guide = มาจากปุ่ม "ขอ Key" — แสดงขั้นตอนไปสมัครที่เว็บเจ้าของ API (api-vault ออก Key เองไม่ได้) */
+const props = defineProps<{ editing?: KeyListItem | null, presetEntry?: { id: number, name: string } | null, guide?: { url: string } | null }>()
 const emit = defineEmits<{ saved: [] }>()
 
 type EntryItem = { label: string, id: number, description?: string }
@@ -78,6 +79,17 @@ async function save() {
     :description="editing ? 'เว้นช่องค่าว่างไว้ถ้าแค่เปลี่ยนชื่อ · ใส่ค่าใหม่ = หมุน Key' : 'ค่าถูกเข้ารหัสที่ server ก่อนลงฐานข้อมูล'"
   >
     <template #body>
+      <div v-if="guide && !editing" class="mb-5 rounded-md border border-default p-4 text-sm">
+        <p class="font-medium mb-2">Key ออกโดยเจ้าของ API — สมัครในแท็บที่เพิ่งเปิด แล้วกลับมาวางที่นี่</p>
+        <ol class="list-decimal ps-5 space-y-1 text-muted">
+          <li>สมัคร / เข้าสู่ระบบที่เว็บ {{ presetEntry?.name }}</li>
+          <li>หาหน้า API keys (มักอยู่ใน Dashboard, Account หรือ Developer) แล้วสร้าง Key</li>
+          <li>คัดลอก Key มาวางในช่อง "ค่า Key" ข้างล่าง — ไม่ต้องพักไว้ในโน้ตหรือแชต</li>
+        </ol>
+        <UButton :to="guide.url" target="_blank" rel="noopener" size="xs" variant="link" trailing-icon="i-lucide-external-link" class="mt-2 px-0">
+          แท็บไม่เปิด? เปิดเว็บ {{ presetEntry?.name }}
+        </UButton>
+      </div>
       <form id="key-form" class="flex flex-col gap-4" @submit.prevent="save">
         <UFormField v-if="!editing" label="Entry" required>
           <USelectMenu

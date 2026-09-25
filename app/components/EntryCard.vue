@@ -6,6 +6,22 @@ const emit = defineEmits<{ deleted: [] }>()
 const e = computed(() => props.hit.entry)
 
 const toast = useToast()
+
+// "ขอ Key": เปิดเว็บเจ้าของ API ให้ไปสมัคร พร้อมเปิดฟอร์มเพิ่ม Key ค้างไว้ — กลับมาวางได้ทันที
+// window.open ต้องอยู่ใน handler ของคลิกโดยตรง ไม่งั้นเบราว์เซอร์บล็อก popup
+const keyFormOpen = ref(false)
+function requestKey() {
+  window.open(e.value.url, '_blank', 'noopener')
+  keyFormOpen.value = true
+}
+function keySaved() {
+  toast.add({
+    title: `เก็บ Key ของ ${e.value.name} แล้ว`,
+    description: 'ผูกกับโปรเจกต์ที่ Vault › โปรเจกต์ เพื่อดึงลง .env ด้วย vault pull',
+    color: 'success',
+    actions: [{ label: 'ไปผูกโปรเจกต์', to: '/vault/projects' }],
+  })
+}
 const deleteOpen = ref(false)
 const deleting = ref(false)
 async function confirmDelete() {
@@ -38,8 +54,9 @@ const AUTH_LABEL: Record<SearchHit['entry']['auth'], string> = {
   <UCard>
     <div class="flex items-start justify-between gap-4">
       <div class="min-w-0">
-        <ULink :to="e.url" target="_blank" rel="noopener" class="font-medium text-highlighted hover:underline">
+        <ULink :to="e.url" target="_blank" rel="noopener" class="font-medium text-highlighted hover:underline inline-flex items-center gap-1">
           {{ e.name }}
+          <UIcon name="i-lucide-external-link" class="size-3.5 text-dimmed" />
         </ULink>
         <p class="text-sm text-muted mt-1">{{ e.description }}</p>
       </div>
@@ -60,13 +77,12 @@ const AUTH_LABEL: Record<SearchHit['entry']['auth'], string> = {
       <div class="ms-auto flex gap-1">
         <UButton
           v-if="e.auth !== 'none'"
-          :to="{ path: '/vault', query: { entry: e.id, name: e.name } }"
           icon="i-lucide-key-round"
           size="xs"
-          variant="ghost"
-          color="neutral"
+          variant="soft"
+          @click="requestKey"
         >
-          เพิ่ม Key
+          ขอ Key
         </UButton>
         <template v-if="e.source === 'manual'">
           <UButton :to="`/entries/${e.id}`" icon="i-lucide-pencil" size="xs" variant="ghost" color="neutral" :aria-label="`แก้ ${e.name}`" />
@@ -74,6 +90,13 @@ const AUTH_LABEL: Record<SearchHit['entry']['auth'], string> = {
         </template>
       </div>
     </div>
+    <VaultKeyFormModal
+      v-if="e.auth !== 'none'"
+      v-model:open="keyFormOpen"
+      :preset-entry="{ id: e.id, name: e.name }"
+      :guide="{ url: e.url }"
+      @saved="keySaved"
+    />
     <VaultConfirmModal
       v-if="e.source === 'manual'"
       v-model:open="deleteOpen"

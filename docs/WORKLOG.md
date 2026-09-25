@@ -387,6 +387,18 @@ spec เดิมผูก v1.0.0 กับ Jev (≥ 15/20 + Tag อัตโน
   (v1.1.0 จะชน "V1.1" ของ Jev)
 - ตัดสินในเซสชัน: ไม่ซ่อน URL · กฎ URL ไปเป็น skill `url-safety` ใน brain · api-vault เข้า `repos.json` ของ brain
 
+## [2026-09-25] Favicon รูปกุญแจ (เซสชัน 6)
+
+- `public/favicon.svg` กุญแจสีขาว (lucide `key-round`, ISC — ชุดเดียวกับไอคอนบน nav) บนพื้น green-500 มุมมน
+  · สีเลือกตามค่าเริ่มของ Nuxt UI (`primary` = green) เพราะโปรเจกต์ไม่ได้ override ธีมใน `app.config.ts`
+- `nuxt.config.ts` › `app.head.link`: SVG เป็นหลัก · คง `favicon.ico` เดิมเป็น `shortcut icon` สำรอง
+  (`rel: 'alternate icon'` ไม่อยู่ใน type ของ unhead → typecheck ล้ม ใช้ `shortcut icon` แทน)
+- ตรวจแล้วบน dev :3100 · commit `b098572` · push แล้ว (= deploy prod)
+
+## [2026-09-25] Handoff เซสชัน 6
+
+- เซสชันสั้น งานเดียวคือ favicon · ไม่มีงานค้าง · งานถัดไปเหมือนเซสชัน 5 (Server-Timing บน prod, ชื่อเวอร์ชันของ `Unreleased`)
+
 ## งานถัดไป
 
 ดู `HOTCACHE.md` › งานถัดไป

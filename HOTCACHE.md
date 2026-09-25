@@ -12,7 +12,7 @@
 - ✅ v0.1–v0.5 (tag): Catalogue · ล็อกอิน+TOTP · Vault+audit (Reveal = TOTP ทุกครั้ง) · CLI `vault pull` (device flow, token 30 วัน) · `thai-dict` + `/demo`
 - ✅ GitHub public: `VoramethP/api-vault` · ✅ Vercel prod: https://api-vault-two.vercel.app (`sin1`, ล็อกอินจริงผ่าน)
 - ✅ **v1.0.0** (tag) เพิ่ม/แก้/ลบ Entry เอง (`manual` เท่านั้น) · เทสกัน thai-dict ถอยหลัง ≥ 14/20 (ADR-0007)
-- ✅ หลัง v1.0.0 (ขึ้น prod แล้ว, ยังไม่ tag — CHANGELOG `Unreleased`): ปุ่ม "ขอ Key" · Catalogue โหลดครั้งเดียว กรองในเบราว์เซอร์ + cache Vault · `Server-Timing` · `/docs` + `/llms*.txt` · `Referrer-Policy`
+- ✅ หลัง v1.0.0 (ขึ้น prod แล้ว, ยังไม่ tag — CHANGELOG `Unreleased`): ปุ่ม "ขอ Key" · Catalogue โหลดครั้งเดียว กรองในเบราว์เซอร์ + cache Vault · `Server-Timing` · `/docs` + `/llms*.txt` · `Referrer-Policy` · favicon กุญแจ SVG
 - 🔴 TypeSafe ปิดรับสมัคร → Jev ย้ายไป V1.1
 
 ## กฎเหล็ก
@@ -41,6 +41,7 @@ Key ไม่ออกไปหา Ranker/บริการภายนอก �
 - `useSupabaseUser()` ของ `@nuxtjs/supabase` v2 คืน **JWT claims** ไม่ใช่ User · middleware ของโมดูลเช็กแค่มี session ไม่ดู aal
 - `Server-Timing` ไม่มีใน response error (401) — มีเฉพาะที่ล็อกอินแล้ว
 - `useFetch` key เดียวกันหลายที่: `dedupe` ค่าเริ่ม `'cancel'` ยกเลิกกันเอง → ใช้ `'defer'` (useCatalogue)
+- `app.head.link` rel ต้องอยู่ใน type ของ unhead (`alternate icon` ไม่ผ่าน → ใช้ `shortcut icon`)
 - `UPinInput type="number"` ให้ `number[]` — ใช้แบบไม่ใส่ type จะได้ `string[]`
 - Postgres ในเครื่อง (ทดสอบ): initdb/pg_ctl ต้อง `LC_ALL=C` · path ใน scratchpad ยาวเกิน socket → `-k ''` ใช้ TCP
   · ต้องสร้าง role `anon`/`authenticated` + default grants เองให้เหมือน Supabase

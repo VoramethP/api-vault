@@ -6,6 +6,15 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@nuxt/ui', '@nuxtjs/supabase'],
   css: ['~/assets/css/main.css'],
+  app: {
+    head: {
+      link: [
+        // SVG คมทุกขนาด · favicon.ico เดิมคงไว้เป็นตัวสำรองให้เบราว์เซอร์ที่ไม่รองรับ SVG
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'shortcut icon', href: '/favicon.ico' },
+      ],
+    },
+  },
   supabase: {
     // middleware ของโมดูลเช็กแค่ว่ามี session · เรื่อง TOTP อยู่ที่ app/middleware/mfa.global.ts
     // /login กับ /confirm ถูกยกเว้นให้อัตโนมัติ · รายการนี้ต้องตรงกับ PUBLIC_PATHS ใน shared/auth-flow.ts

@@ -381,6 +381,12 @@ spec เดิมผูก v1.0.0 กับ Jev (≥ 15/20 + Tag อัตโน
 - `routeRules['/**'].headers['referrer-policy'] = 'strict-origin-when-cross-origin'` (skill `url-safety` ข้อ 4 — ตั้งเองไม่พึ่งค่าเริ่มของเบราว์เซอร์)
   · merge กับ `/api/**` แล้ว `cache-control` ยังอยู่ · `/api/*` ได้ `no-referrer` (เข้มกว่า มาจาก middleware อื่น) · เทสใน `api-guard.test.ts`
 
+## [2026-09-25] Handoff เซสชัน 5
+
+- ทุกงานของเซสชันขึ้น prod แล้ว (runbook, ขอ Key, ความเร็ว, docs/llms, Referrer-Policy) · ยังไม่ bump เวอร์ชัน — รอผู้ใช้เลือกชื่อ
+  (v1.1.0 จะชน "V1.1" ของ Jev)
+- ตัดสินในเซสชัน: ไม่ซ่อน URL · กฎ URL ไปเป็น skill `url-safety` ใน brain · api-vault เข้า `repos.json` ของ brain
+
 ## งานถัดไป
 
 ดู `HOTCACHE.md` › งานถัดไป

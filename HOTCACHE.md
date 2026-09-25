@@ -1,7 +1,7 @@
 # 🔥 HOTCACHE
 
 > อ่านไฟล์นี้หลัง `HANDOFF.md` · **ห้ามเกิน 500 คำ** (`wc -w`)
-> Updated: **2026-09-24**
+> Updated: **2026-09-25**
 
 ## โปรเจกต์นี้คืออะไร
 คลัง API ส่วนตัว: Catalogue (1,871 Entry จาก `public-apis` + ที่เพิ่มเอง) ค้นผ่าน Ranker + Vault เก็บ Key
@@ -9,12 +9,10 @@
 สเปก: `docs/spec.md` · ภาพ: `docs/design/api-vault.drawio`
 
 ## ตอนนี้อยู่ตรงไหน
-- ✅ v0.1.0 Catalogue 1,871 Entry · v0.2.0 ล็อกอิน + บังคับ TOTP (401/403/200)
-- ✅ **v0.3.0** (tag) Vault + audit: `/vault` · Reveal = TOTP ใหม่ทุกครั้ง · Project/env_var · audit append-only
-- ✅ **v0.4.0** (tag) CLI `vault pull` (device flow: อนุมัติบนเว็บด้วย TOTP ทุกครั้ง) · token 30 วัน · `npm i -g ./cli`
-- ✅ **v0.5.0–v0.5.1** (tag) ค้นไทยด้วยพจนานุกรม (`thai-dict` ค่าเริ่ม, ฟรี) + `/demo` · Claude ranker เก็บไว้ไม่เปิด
+- ✅ v0.1–v0.5 (tag): Catalogue · ล็อกอิน+TOTP · Vault+audit (Reveal = TOTP ทุกครั้ง) · CLI `vault pull` (device flow, token 30 วัน) · `thai-dict` + `/demo`
 - ✅ GitHub public: `VoramethP/api-vault` · ✅ Vercel prod: https://api-vault-two.vercel.app (`sin1`, ล็อกอินจริงผ่าน)
 - ✅ **v1.0.0** (tag) เพิ่ม/แก้/ลบ Entry เอง (`manual` เท่านั้น) · เทสกัน thai-dict ถอยหลัง ≥ 14/20 (ADR-0007)
+- ✅ หลัง v1.0.0 (ขึ้น prod แล้ว, ยังไม่ tag — CHANGELOG `Unreleased`): ปุ่ม "ขอ Key" · Catalogue โหลดครั้งเดียว กรองในเบราว์เซอร์ + cache Vault · `Server-Timing` · `/docs` + `/llms*.txt` · `Referrer-Policy`
 - 🔴 TypeSafe ปิดรับสมัคร → Jev ย้ายไป V1.1
 
 ## กฎเหล็ก
@@ -23,7 +21,7 @@ Key ไม่ออกไปหา Ranker/บริการภายนอก �
 `getDb()`/`withDb()` ต่อ request · ห้าม service_role · RLS ทุกตาราง · drizzle-kit generate+migrate เท่านั้น
 
 ## งานถัดไป
-1. V1 ครบแล้ว (prod = v1.0.0) — ถามผู้ใช้ว่าจะทำอะไรต่อ
+1. ถามผู้ใช้: ดู Server-Timing บน prod แล้วยังช้าไหม · จะ tag งาน `Unreleased` เป็นเวอร์ชันอะไร (ระวังชนชื่อ "V1.1" ของ Jev)
 2. V1.1: Jev + Tag อัตโนมัติ + ประวัติ Entry (เมื่อ TypeSafe เปิด)
 
 ## กับดักที่เคยเจอ
@@ -39,12 +37,11 @@ Key ไม่ออกไปหา Ranker/บริการภายนอก �
 - ตาราง Vault: RLS **ไม่มี policy** + REVOKE (ห้ามเพิ่ม policy `true` แบบ entries — aal1 จะอ่านได้) · audit_log แก้/ลบไม่ได้แม้ postgres
 - `/api/cli/*` ใช้ `requireCliToken` แทน `requireOwner` (เทสบังคับทั้งสองทาง) · TOTP ใช้ซ้ำกันด้วย `totp_uses`
 - **ซ่อน input ด้วย `rl._writeToOutput`: ห้ามส่ง `s` ต่อ** — readline วาดบรรทัดใหม่เป็น prompt+ข้อความ (token เคยหลุดบนจอ v0.4.0)
-- ทำ TOTP หาย → ลบ factor ใน dashboard › Users แล้ว enroll ใหม่
 - `OWNER_EMAIL` ว่าง = `/api/*` ตอบ 500 (ตั้งใจให้ล้มดัง ๆ) · แก้ `.env` แล้วต้อง restart dev
 - `useSupabaseUser()` ของ `@nuxtjs/supabase` v2 คืน **JWT claims** ไม่ใช่ User · middleware ของโมดูลเช็กแค่มี session ไม่ดู aal
+- `Server-Timing` ไม่มีใน response error (401) — มีเฉพาะที่ล็อกอินแล้ว
 - `useFetch` key เดียวกันหลายที่: `dedupe` ค่าเริ่ม `'cancel'` ยกเลิกกันเอง → ใช้ `'defer'` (useCatalogue)
 - `UPinInput type="number"` ให้ `number[]` — ใช้แบบไม่ใส่ type จะได้ `string[]`
-- keyword ranker: API ที่ชื่อมีคำค้นชนะ API ที่ตรงแค่หมวด ("weather" → Open-Meteo ไม่ติด top-5) — ข้อจำกัดที่รู้แล้ว
 - Postgres ในเครื่อง (ทดสอบ): initdb/pg_ctl ต้อง `LC_ALL=C` · path ใน scratchpad ยาวเกิน socket → `-k ''` ใช้ TCP
   · ต้องสร้าง role `anon`/`authenticated` + default grants เองให้เหมือน Supabase
 

@@ -364,6 +364,18 @@ spec เดิมผูก v1.0.0 กับ Jev (≥ 15/20 + Tag อัตโน
 - ตรวจบน dev: โหลดหน้าแรก `/api/entries` ครั้งเดียว · กดตัวกรองไม่มี request · ค้น "weather" 1 request, เอาตัวกรองออกไม่ยิงซ้ำ · console สะอาด
 - `npm run check` 92 เทส (+ `test/catalogue-filter.test.ts`) · build + scan-build ผ่าน
 
+## [2026-09-25] หน้า Docs + llms.txt
+
+ผู้ใช้ขอ docs บน prod + ดาวน์โหลดเป็นไฟล์สำหรับ LLM + runbook อยู่ในนั้น + ไอคอนบน nav
+- `/docs` render `docs/RUNBOOK.md` (`?raw` + `marked`, เพิ่มเป็น dependency ตรง — มีอยู่แล้วแบบ transitive) · CSS เฉพาะ element ที่ runbook ใช้
+  ด้วย token ของ Nuxt UI (ไม่มี typography plugin) · **สาธารณะ + prerender** — เนื้อหาเดียวกับใน repo public · เพิ่มใน `PUBLIC_PATHS` + `exclude`
+- `/llms.txt` (สารบัญตาม llmstxt.org) · `/llms-full.txt` (บริบทนำ + runbook ทั้งไฟล์) เป็น server route ใน `server/routes/` อ่าน runbook
+  ผ่าน `nitro.serverAssets` (`assets:docs`) · prerender เป็นไฟล์ static · บริบทนำบอก LLM ว่าห้ามขอค่า Key/token ในแชต
+- ไอคอน `i-lucide-book-open` บน nav เห็นทุกคน (เหมือนปุ่มเวอร์ชัน)
+- แผนภาพกล่อง ASCII ใน runbook เพี้ยนเพราะอักษรไทยกว้างไม่เท่ากัน → เปลี่ยนเป็นตาราง
+- `test/docs.test.ts`: รูปแบบ llms.txt · llms-full มีทุกหัวข้อของ runbook · runbook ไม่มีค่าที่หน้าตาเหมือนความลับ
+- `npm run check` 95 เทส · build + prerender (`.output/public/llms*.txt`, `docs`) + scan-build ผ่าน
+
 ## งานถัดไป
 
 ดู `HOTCACHE.md` › งานถัดไป

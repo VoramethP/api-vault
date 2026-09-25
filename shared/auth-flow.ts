@@ -1,8 +1,8 @@
 // auth-js มีชนิด AuthenticatorAssuranceLevels กว้างกว่านี้ — รับเป็น string แล้วเทียบค่าเอา
 export type Aal = string | null
 
-// หน้าที่เข้าได้โดยไม่ล็อกอิน (ADR-0004: เดโมและ /about เป็นสาธารณะ)
-export const PUBLIC_PATHS = ['/login', '/confirm', '/about', '/demo', '/demo/*']
+// หน้าที่เข้าได้โดยไม่ล็อกอิน (ADR-0004: เดโมและ /about เป็นสาธารณะ · /docs = runbook ซึ่งอยู่ใน repo public อยู่แล้ว)
+export const PUBLIC_PATHS = ['/login', '/confirm', '/about', '/docs', '/demo', '/demo/*']
 
 export function isPublic(path: string): boolean {
   return PUBLIC_PATHS.some(p => p.endsWith('/*') ? path.startsWith(p.slice(0, -1)) : path === p)

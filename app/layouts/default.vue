@@ -23,6 +23,7 @@ async function signOut() {
           </template>
         </div>
         <div class="flex items-center gap-2">
+          <UButton to="/docs" variant="ghost" color="neutral" size="sm" icon="i-lucide-book-open" aria-label="เอกสาร" title="เอกสาร" />
           <UButton to="/about" variant="ghost" color="neutral" size="sm">v{{ version }}</UButton>
           <UColorModeButton />
           <UButton v-if="user" variant="ghost" color="neutral" size="sm" icon="i-lucide-log-out" aria-label="ออกจากระบบ" @click="signOut" />

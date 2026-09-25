@@ -111,6 +111,8 @@ type RankResult =
 | `GET /api/search?q=` | Ranker จัดอันดับ**ทั้งคลัง** (ไม่ตัด limit) → คืนแค่ `entryId` + score + `kind` |
 | `/` | ช่องค้น + filter (หมวด, auth, HTTPS, CORS) + ผลลัพธ์ทีละ 30 · filter/หมวด/ไล่ดูทั้งคลังทำในเบราว์เซอร์ ไม่ยิง server · ยิงเฉพาะตอนมีคำค้น (cache ต่อคำค้น) · แสดง "ไม่เจอที่ตรง" เมื่อ `no_match` |
 | `/about` | เวอร์ชันปัจจุบัน + `CHANGELOG.md` + เครดิต public-apis (prerender) |
+| `/docs` | `docs/RUNBOOK.md` เป็นหน้าเว็บ (prerender, สาธารณะ — repo public อยู่แล้ว) + ปุ่มดาวน์โหลดสำหรับ LLM |
+| `/llms.txt` · `/llms-full.txt` | มาตรฐาน llmstxt.org: สารบัญ · runbook ทั้งไฟล์ + บริบทนำ (`shared/docs.ts`, prerender เป็นไฟล์ static) |
 
 query string validate ด้วย Zod ที่ `shared/` · handler `return` ค่าเสมอ
 

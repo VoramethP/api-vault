@@ -12,8 +12,12 @@ export default defineNuxtConfig({
     redirectOptions: {
       login: '/login',
       callback: '/confirm',
-      exclude: ['/about', '/demo', '/demo/*'],
+      exclude: ['/about', '/docs', '/demo', '/demo/*'],
     },
+  },
+  // docs/RUNBOOK.md ติดไปกับ server bundle — llms-full.txt อ่านจากตรงนี้ (dir นับจาก server/)
+  nitro: {
+    serverAssets: [{ baseName: 'docs', dir: '../docs' }],
   },
   runtimeConfig: {
     public: { appVersion: pkg.version },
@@ -22,6 +26,9 @@ export default defineNuxtConfig({
   routeRules: {
     '/about': { prerender: true },
     '/demo': { prerender: true },
+    '/docs': { prerender: true },
+    '/llms.txt': { prerender: true },
+    '/llms-full.txt': { prerender: true },
     // คำตอบที่ขึ้นกับ session ห้ามให้ CDN แคช — ผู้ใช้ A อาจได้ของผู้ใช้ B
     '/api/**': { headers: { 'cache-control': 'private, no-store' } },
   },

@@ -15,6 +15,7 @@
 | หา | เปิด |
 |---|---|
 | สเปก V1 (ตาราง, route, Ranker contract, เกณฑ์ผ่านของแต่ละเวอร์ชัน) | [`docs/spec.md`](docs/spec.md) |
+| วิธีใช้งานจริงของเจ้าของ (เข้าเว็บ → Vault → `vault pull` → ใช้ในโค้ด) | [`docs/RUNBOOK.md`](docs/RUNBOOK.md) |
 | ภาพดีไซน์ทั้งระบบ (10 หน้า) | [`docs/design/api-vault.drawio`](docs/design/api-vault.drawio) |
 | คำนี้ในโปรเจกต์แปลว่าอะไร (Entry, Key, Vault, Ranker, Reveal, Demo…) | [`CONTEXT.md`](CONTEXT.md) |
 | ประวัติว่าทำอะไรไปบ้าง ทำไมถึงตัดสินใจแบบนั้น | [`docs/WORKLOG.md`](docs/WORKLOG.md) |

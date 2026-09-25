@@ -329,6 +329,12 @@ spec เดิมผูก v1.0.0 กับ Jev (≥ 15/20 + Tag อัตโน
 - deploy: push main → Vercel build ~60 วิ → prod `/about` = v1.0.0 · `POST /api/entries` ไม่ล็อกอิน = 401
   · tag `v1.0.0` สร้างแบบ lightweight → `--follow-tags` ไม่ส่ง ต้อง `git push origin v1.0.0` แยก
 
+## [2026-09-25] docs/RUNBOOK.md
+
+ผู้ใช้ขอ runbook สำหรับตอนลืมว่าต้องเริ่มยังไง: ล็อกอิน+TOTP → ค้น/เพิ่ม Entry → เอา Key จากเว็บเจ้าของ → Vault → โปรเจกต์+ตัวแปร
+→ `vault login`/`vault pull` → ใช้ในโค้ด + ตารางแก้ข้อความ error ของ CLI + เรื่องความปลอดภัย · ลิงก์จาก README และ CLAUDE.md
+· ถ้าหน้าจอหรือข้อความ CLI เปลี่ยน ต้องแก้ runbook ด้วย
+
 ## งานถัดไป
 
 ดู `HOTCACHE.md` › งานถัดไป

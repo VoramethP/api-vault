@@ -30,6 +30,13 @@ describe('server/api', () => {
   })
 })
 
+describe('security headers', () => {
+  // ไม่พึ่งค่าเริ่มของเบราว์เซอร์ — ลบบรรทัดนี้ทิ้งเมื่อไหร่ เทสนี้พัง
+  it('nuxt.config sets Referrer-Policy for every route', () => {
+    expect(readFileSync('nuxt.config.ts', 'utf8')).toMatch(/'\/\*\*':\s*\{\s*headers:\s*\{\s*'referrer-policy':\s*'strict-origin-when-cross-origin'/)
+  })
+})
+
 describe('server/api/cli', () => {
   // CLI ไม่มี session ของ Supabase จึงใช้ token — แต่ต้องใช้กับ /api/cli/* เท่านั้น ห้ามรั่วไป route ของเว็บ
   it('only /api/cli/* uses requireCliToken, and those never use requireOwner', () => {

@@ -24,6 +24,8 @@ export default defineNuxtConfig({
   },
   // หน้าที่อ่าน session ห้าม isr/swr/prerender เด็ดขาด · prerender เฉพาะหน้าสาธารณะที่ไม่มีข้อมูลส่วนตัว
   routeRules: {
+    // ตั้งเองไม่พึ่งค่าเริ่มของเบราว์เซอร์ — ลิงก์ออกไปเว็บเจ้าของ API ส่งแค่ชื่อโดเมน ไม่ส่ง path/query ของเรา (skill url-safety ข้อ 4)
+    '/**': { headers: { 'referrer-policy': 'strict-origin-when-cross-origin' } },
     '/about': { prerender: true },
     '/demo': { prerender: true },
     '/docs': { prerender: true },

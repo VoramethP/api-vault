@@ -376,6 +376,11 @@ spec เดิมผูก v1.0.0 กับ Jev (≥ 15/20 + Tag อัตโน
 - `test/docs.test.ts`: รูปแบบ llms.txt · llms-full มีทุกหัวข้อของ runbook · runbook ไม่มีค่าที่หน้าตาเหมือนความลับ
 - `npm run check` 95 เทส · build + prerender (`.output/public/llms*.txt`, `docs`) + scan-build ผ่าน
 
+## [2026-09-25] Referrer-Policy
+
+- `routeRules['/**'].headers['referrer-policy'] = 'strict-origin-when-cross-origin'` (skill `url-safety` ข้อ 4 — ตั้งเองไม่พึ่งค่าเริ่มของเบราว์เซอร์)
+  · merge กับ `/api/**` แล้ว `cache-control` ยังอยู่ · `/api/*` ได้ `no-referrer` (เข้มกว่า มาจาก middleware อื่น) · เทสใน `api-guard.test.ts`
+
 ## งานถัดไป
 
 ดู `HOTCACHE.md` › งานถัดไป

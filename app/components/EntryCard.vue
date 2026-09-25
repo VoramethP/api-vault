@@ -90,8 +90,9 @@ const AUTH_LABEL: Record<SearchHit['entry']['auth'], string> = {
         </template>
       </div>
     </div>
+    <!-- สร้างเฉพาะตอนเปิด — การ์ดหลายสิบใบไม่ต้องพกฟอร์มคนละชุด -->
     <VaultKeyFormModal
-      v-if="e.auth !== 'none'"
+      v-if="keyFormOpen"
       v-model:open="keyFormOpen"
       :preset-entry="{ id: e.id, name: e.name }"
       :guide="{ url: e.url }"

@@ -5,6 +5,8 @@ const user = useSupabaseUser()
 
 async function signOut() {
   await supabase.auth.signOut()
+  // cache ของ Catalogue/Vault อยู่ในหน่วยความจำของแท็บ — ออกแล้วต้องไม่เหลือให้คนต่อไปเห็น
+  clearNuxtData()
   await navigateTo('/login')
 }
 </script>

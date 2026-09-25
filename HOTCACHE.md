@@ -42,8 +42,8 @@ Key ไม่ออกไปหา Ranker/บริการภายนอก �
 - ทำ TOTP หาย → ลบ factor ใน dashboard › Users แล้ว enroll ใหม่
 - `OWNER_EMAIL` ว่าง = `/api/*` ตอบ 500 (ตั้งใจให้ล้มดัง ๆ) · แก้ `.env` แล้วต้อง restart dev
 - `useSupabaseUser()` ของ `@nuxtjs/supabase` v2 คืน **JWT claims** ไม่ใช่ User · middleware ของโมดูลเช็กแค่มี session ไม่ดู aal
+- `useFetch` key เดียวกันหลายที่: `dedupe` ค่าเริ่ม `'cancel'` ยกเลิกกันเอง → ใช้ `'defer'` (useCatalogue)
 - `UPinInput type="number"` ให้ `number[]` — ใช้แบบไม่ใส่ type จะได้ `string[]`
-- ข้อมูลต้นทางสกปรก: `\apiKey\` (\a กลายเป็น BEL → "piKey"), `` `Yes` `` — importer จัดการแล้ว
 - keyword ranker: API ที่ชื่อมีคำค้นชนะ API ที่ตรงแค่หมวด ("weather" → Open-Meteo ไม่ติด top-5) — ข้อจำกัดที่รู้แล้ว
 - Postgres ในเครื่อง (ทดสอบ): initdb/pg_ctl ต้อง `LC_ALL=C` · path ใน scratchpad ยาวเกิน socket → `-k ''` ใช้ TCP
   · ต้องสร้าง role `anon`/`authenticated` + default grants เองให้เหมือน Supabase

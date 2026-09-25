@@ -107,12 +107,16 @@ type RankResult =
 
 | route | ทำอะไร |
 |---|---|
-| `GET /api/search?q=&category=&auth=&https=&cors=&limit=` | กรองด้วย filter ใน SQL → ส่งให้ Ranker → คืน Entry + score + `kind` |
-| `GET /api/categories` | รายชื่อหมวด + จำนวน |
-| `/` | ช่องค้น + filter (หมวด, auth, HTTPS, CORS) + ผลลัพธ์ · แสดง "ไม่เจอที่ตรง" เมื่อ `no_match` |
+| `GET /api/entries` | ทั้ง Catalogue (ข้อมูลสาธารณะ ~90 KB gzip) — เบราว์เซอร์โหลดครั้งเดียวต่อแท็บ แล้วใช้ร่วมกันทุกหน้า |
+| `GET /api/search?q=` | Ranker จัดอันดับ**ทั้งคลัง** (ไม่ตัด limit) → คืนแค่ `entryId` + score + `kind` |
+| `/` | ช่องค้น + filter (หมวด, auth, HTTPS, CORS) + ผลลัพธ์ทีละ 30 · filter/หมวด/ไล่ดูทั้งคลังทำในเบราว์เซอร์ ไม่ยิง server · ยิงเฉพาะตอนมีคำค้น (cache ต่อคำค้น) · แสดง "ไม่เจอที่ตรง" เมื่อ `no_match` |
 | `/about` | เวอร์ชันปัจจุบัน + `CHANGELOG.md` + เครดิต public-apis (prerender) |
 
 query string validate ด้วย Zod ที่ `shared/` · handler `return` ค่าเสมอ
+
+**Cache ฝั่งเบราว์เซอร์ (2026-09-25):** Catalogue + ผลค้น + รายการ Key/โปรเจกต์ของ Vault อยู่ในหน่วยความจำของแท็บเท่านั้น (ไม่ลง localStorage)
+· Vault เป็น stale-while-revalidate (แสดงของเดิมทันที โหลดใหม่ข้างหลัง) · ออกจากระบบ = `clearNuxtData()` · ทุก `/api/*` ส่ง header
+`Server-Timing` (`auth` = เวลาถาม Auth server, `total`) ไว้ดูใน DevTools
 
 ### 4.5 เพิ่ม Entry เอง (v1.0.0 · ADR-0007)
 

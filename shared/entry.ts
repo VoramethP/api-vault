@@ -35,26 +35,63 @@ export const manualEntryUpdate = manualEntryInput.partial()
 export const entryIdParam = z.object({ id: z.coerce.number().int().positive() })
 
 // query string มาเป็น string เสมอ — แปลงที่ boundary ตรงนี้ที่เดียว
+// ตัวกรองซ้าย (หมวด/auth/HTTPS/CORS) ทำในเบราว์เซอร์กับ Catalogue ที่โหลดไว้แล้ว — server รับแค่คำค้น
 export const searchQuery = z.object({
-  q: z.string().trim().max(200).optional().default(''),
-  category: z.string().trim().min(1).optional(),
-  auth: z.enum(AUTH).optional(),
-  https: z.enum(['true', 'false']).transform(v => v === 'true').optional(),
-  cors: z.enum(CORS).optional(),
-  limit: z.coerce.number().int().min(1).max(50).default(20),
+  q: z.string().trim().min(1).max(200),
 })
 export type SearchQuery = z.infer<typeof searchQuery>
 
+/** Entry ฉบับที่ส่งให้เบราว์เซอร์ — ข้อมูลสาธารณะล้วน ไม่มี tags / เวลา */
+export interface CatalogueEntry { id: number, name: string, url: string, description: string, categories: string[], auth: Auth, https: boolean, cors: Cors, source: typeof SOURCE[number] }
+
 export interface SearchHit {
-  entry: { id: number, name: string, url: string, description: string, categories: string[], auth: Auth, https: boolean, cors: Cors, source: typeof SOURCE[number] }
+  entry: CatalogueEntry
+  /** null = ไม่ได้ผ่าน Ranker (ไล่ดูทั้งคลัง) */
   score: number | null
 }
 
+/** ผลของ Ranker เป็น id + คะแนนเท่านั้น — ข้อมูล Entry อยู่ใน Catalogue ฝั่งเบราว์เซอร์แล้ว ไม่ส่งซ้ำ */
 export interface SearchResponse {
-  /** browse = ไม่มีคำค้น แสดงตามตัวอักษร ไม่ผ่าน Ranker */
-  kind: 'match' | 'no_match' | 'browse'
-  ranker: string | null
-  confidence: number | null
+  kind: 'match' | 'no_match'
+  ranker: string
+  confidence: number
   candidates: number
-  hits: SearchHit[]
+  hits: { entryId: number, score: number }[]
+}
+
+export interface CatalogueFilters {
+  category?: string
+  auth?: Auth
+  https?: boolean
+  cors?: Cors
+}
+
+export function matchesFilters(e: CatalogueEntry, f: CatalogueFilters): boolean {
+  return (!f.category || e.categories.includes(f.category))
+    && (!f.auth || e.auth === f.auth)
+    && (f.https === undefined || e.https === f.https)
+    && (!f.cors || e.cors === f.cors)
+}
+
+/**
+ * ไม่มีคำค้น = ทั้งคลังตามตัวอักษร · มีคำค้น = ลำดับของ Ranker แล้วกรองทีหลัง
+ * Ranker จัดอันดับทั้งคลัง (ไม่ตัด limit) การกรองทีหลังจึงได้ชุดเดียวกับกรองก่อน
+ * id ที่ไม่อยู่ใน Catalogue แล้ว (เพิ่งลบ) ถูกข้ามไป
+ */
+export function visibleHits(catalogue: CatalogueEntry[], search: SearchResponse | null, f: CatalogueFilters): SearchHit[] {
+  if (!search) return catalogue.filter(e => matchesFilters(e, f)).map(entry => ({ entry, score: null }))
+  const byId = new Map(catalogue.map(e => [e.id, e]))
+  const out: SearchHit[] = []
+  for (const h of search.hits) {
+    const entry = byId.get(h.entryId)
+    if (entry && matchesFilters(entry, f)) out.push({ entry, score: h.score })
+  }
+  return out
+}
+
+/** หมวดทั้งหมด + จำนวน เรียงตามชื่อ — คำนวณจาก Catalogue ในเบราว์เซอร์ */
+export function categoryCounts(catalogue: CatalogueEntry[]): { name: string, count: number }[] {
+  const counts = new Map<string, number>()
+  for (const e of catalogue) for (const c of e.categories) counts.set(c, (counts.get(c) ?? 0) + 1)
+  return [...counts].map(([name, count]) => ({ name, count })).sort((a, b) => a.name.localeCompare(b.name))
 }

@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { AUTH, CORS, type SearchResponse } from '~~/shared/entry'
+import { AUTH, CORS, categoryCounts, visibleHits, type CatalogueFilters, type SearchResponse } from '~~/shared/entry'
 
 const route = useRoute()
 const router = useRouter()
 
 // สถานะการค้นอยู่ใน URL — แชร์ลิงก์/กด back ได้ และไม่มี state ระดับ module
 const q = ref(String(route.query.q ?? ''))
+const query = computed(() => String(route.query.q ?? '').trim())
 const filters = computed(() => ({
   category: route.query.category as string | undefined,
   auth: route.query.auth as string | undefined,
@@ -18,15 +19,35 @@ function setQuery(patch: Record<string, string | undefined>) {
   router.replace({ query: next })
 }
 
-const { data: categories } = await useFetch('/api/categories', { default: () => [] })
-const { data, status, error, refresh } = await useFetch<SearchResponse>('/api/search', {
-  query: computed(() => ({ q: route.query.q, ...filters.value, limit: 30 })),
-})
+// Catalogue โหลดครั้งเดียว — ตัวกรองซ้ายกรองในเบราว์เซอร์ ไม่ยิง server
+const { data: catalogue, status: catalogueStatus, error: catalogueError } = useCatalogue()
+// ยิง server เฉพาะตอนมีคำค้น (Ranker อยู่ฝั่ง server — ADR-0003) · key ตามคำค้น = กลับไปคำเดิมไม่ต้องยิงซ้ำ
+const { data: search, status: searchStatus, error: searchError } = useAsyncData(
+  () => `search:${query.value}`,
+  () => query.value ? $fetch<SearchResponse>('/api/search', { query: { q: query.value } }) : Promise.resolve(null),
+  { server: false, lazy: true, getCachedData: (key, nuxtApp, ctx) => ctx.cause === 'refresh:manual' ? undefined : nuxtApp.payload.data[key] },
+)
+
+const activeFilters = computed<CatalogueFilters>(() => ({
+  category: filters.value.category,
+  auth: filters.value.auth as CatalogueFilters['auth'],
+  https: filters.value.https === undefined ? undefined : filters.value.https === 'true',
+  cors: filters.value.cors as CatalogueFilters['cors'],
+}))
+const hits = computed(() => visibleHits(catalogue.value, query.value ? (search.value ?? null) : null, activeFilters.value))
+
+// แสดงทีละ 30 — การ์ด 1,871 ใบพร้อมกันทำให้หน้าหน่วง
+const PAGE = 30
+const shown = ref(PAGE)
+watch([query, filters], () => { shown.value = PAGE })
+
+const error = computed(() => catalogueError.value ?? searchError.value)
+const loading = computed(() => (catalogueStatus.value !== 'success' && !catalogue.value.length) || (!!query.value && searchStatus.value !== 'success' && !search.value))
 
 const ANY = '__any'
 const categoryItems = computed(() => [
   { label: 'ทุกหมวด', value: ANY },
-  ...categories.value.map(c => ({ label: `${c.name} (${c.count})`, value: c.name })),
+  ...categoryCounts(catalogue.value).map(c => ({ label: `${c.name} (${c.count})`, value: c.name })),
 ])
 const authItems = [
   { label: 'ทุกแบบ', value: ANY },
@@ -77,29 +98,33 @@ const cors = bind('cors')
         </UButton>
       </form>
 
-      <UAlert v-if="error" color="error" variant="subtle" title="ค้นไม่สำเร็จ" :description="error.statusMessage || error.message" />
+      <UAlert v-if="error" color="error" variant="subtle" title="โหลดไม่สำเร็จ" :description="error.statusMessage || error.message" />
 
-      <template v-else-if="status === 'pending' && !data">
+      <template v-else-if="loading">
         <USkeleton v-for="i in 5" :key="i" class="h-24 w-full" />
       </template>
 
-      <template v-else-if="data">
+      <template v-else>
         <UAlert
-          v-if="data.kind === 'no_match'"
+          v-if="query && search?.kind === 'no_match'"
           color="neutral"
           variant="subtle"
           icon="i-lucide-search-x"
           title="ไม่เจอ API ที่ตรง"
-          :description="`ค้นใน ${data.candidates.toLocaleString()} รายการแล้วไม่มีคำไหนตรงเลย · ลองใช้คำอื่น หรือพิมพ์เป็นคำอังกฤษ (คำไทยค้นได้เฉพาะคำที่อยู่ในพจนานุกรม)`"
+          :description="`ค้นใน ${search.candidates.toLocaleString()} รายการแล้วไม่มีคำไหนตรงเลย · ลองใช้คำอื่น หรือพิมพ์เป็นคำอังกฤษ (คำไทยค้นได้เฉพาะคำที่อยู่ในพจนานุกรม)`"
         />
         <p v-else class="text-sm text-muted">
-          <template v-if="data.kind === 'browse'">ทั้งหมด {{ data.candidates.toLocaleString() }} รายการ · แสดง {{ data.hits.length }} รายการแรก</template>
-          <template v-else>
-            {{ data.hits.length }} ผลจาก {{ data.candidates.toLocaleString() }} รายการ
-            · ความมั่นใจ {{ Math.round((data.confidence ?? 0) * 100) }} % · Ranker: {{ data.ranker }}
+          <template v-if="!query">ทั้งหมด {{ hits.length.toLocaleString() }} รายการ</template>
+          <template v-else-if="search">
+            {{ hits.length.toLocaleString() }} ผลจาก {{ search.candidates.toLocaleString() }} รายการ
+            · ความมั่นใจ {{ Math.round(search.confidence * 100) }} % · Ranker: {{ search.ranker }}
           </template>
         </p>
-        <EntryCard v-for="hit in data.hits" :key="hit.entry.id" :hit="hit" @deleted="refresh()" />
+        <EntryCard v-for="hit in hits.slice(0, shown)" :key="hit.entry.id" :hit="hit" @deleted="refreshCatalogue()" />
+        <UButton v-if="hits.length > shown" color="neutral" variant="outline" block @click="shown += PAGE">
+          แสดงเพิ่ม ({{ (hits.length - shown).toLocaleString() }} รายการ)
+        </UButton>
+        <p v-else-if="query && search?.kind === 'match' && !hits.length" class="text-sm text-muted">ไม่มีผลที่ตรงกับตัวกรอง — ลองเอาตัวกรองออก</p>
       </template>
     </section>
   </UContainer>

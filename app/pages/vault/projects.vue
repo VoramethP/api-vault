@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { KeyListItem, ProjectListItem } from '~~/shared/vault'
+import type { ProjectListItem } from '~~/shared/vault'
 
 const toast = useToast()
-const { data: projects, refresh } = await useFetch<ProjectListItem[]>('/api/projects', { default: () => [] })
-const { data: keys } = await useFetch<KeyListItem[]>('/api/keys', { default: () => [] })
+const { data: projects, refresh } = await useVaultProjects()
+const { data: keys } = await useVaultKeys()
 
 const newName = ref('')
 const creating = ref(false)

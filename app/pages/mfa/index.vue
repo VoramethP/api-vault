@@ -26,6 +26,7 @@ async function verify() {
 
 async function signOut() {
   await supabase.auth.signOut()
+  clearNuxtData()
   await navigateTo('/login')
 }
 </script>

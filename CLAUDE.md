@@ -113,7 +113,7 @@ node --env-file=.env spike/run.mjs   # spike Jev (ต้องมี TYPESAFE_AP
 
 ```
 app/            client — pages/ (index ค้นหา, about, login, mfa/, confirm), middleware/mfa.global.ts, components/, layouts/
-server/api/     search.get.ts · categories.get.ts
+server/api/     search.get.ts · entries/ (Catalogue + CRUD) · keys/ projects/ cli/ (Vault) — `server/plugins/server-timing.ts` ใส่ header เวลา
 server/ranker/  Ranker interface + keyword ranker (ADR-0003)
 server/utils/   db.ts (getDb / withDb) · auth.ts (requireOwner — บรรทัดแรกของทุก handler) — Nitro auto-import
 server/db/      schema.ts (Drizzle) + migrations/ (generate เท่านั้น)

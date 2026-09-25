@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { KeyListItem } from '~~/shared/vault'
-import type { SearchResponse } from '~~/shared/entry'
 
 const open = defineModel<boolean>('open', { required: true })
 /** ไม่มี = เพิ่ม Key ใหม่ · มี = แก้ชื่อ/หมุนค่า */
@@ -18,18 +17,16 @@ const saving = ref(false)
 
 const searchTerm = ref('')
 const entryItems = ref<EntryItem[]>([])
-const searching = ref(false)
-let timer: ReturnType<typeof setTimeout> | undefined
-watch(searchTerm, (q) => {
-  clearTimeout(timer)
-  timer = setTimeout(async () => {
-    searching.value = true
-    try {
-      const res = await $fetch<SearchResponse>('/api/search', { query: { q, limit: 20 } })
-      entryItems.value = res.hits.map(h => ({ label: h.entry.name, id: h.entry.id, description: h.entry.description }))
-    }
-    finally { searching.value = false }
-  }, 250)
+// เลือก Entry ตามชื่อจาก Catalogue ที่โหลดไว้แล้ว — พิมพ์แล้วขึ้นทันที ไม่ต้องยิง server ทีละตัวอักษร
+const { data: catalogue, status: catalogueStatus } = useCatalogue()
+const searching = computed(() => catalogueStatus.value === 'pending' && !catalogue.value.length)
+watch([searchTerm, catalogue], ([q]) => {
+  const term = q.trim().toLowerCase()
+  if (!term) return
+  const found = catalogue.value.filter(e => e.name.toLowerCase().includes(term))
+  // ชื่อที่ขึ้นต้นด้วยคำที่พิมพ์มาก่อน
+  found.sort((a, b) => Number(!a.name.toLowerCase().startsWith(term)) - Number(!b.name.toLowerCase().startsWith(term)))
+  entryItems.value = found.slice(0, 20).map(e => ({ label: e.name, id: e.id, description: e.description }))
 })
 
 // เปิดใหม่ทุกครั้งเริ่มจากฟอร์มสะอาด — ค่า Key ที่พิมพ์ค้างไว้ไม่ควรโผล่กลับมา

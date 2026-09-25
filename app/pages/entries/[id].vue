@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import type { ManualEntryInput, SearchHit } from '~~/shared/entry'
+import type { CatalogueEntry, ManualEntryInput } from '~~/shared/entry'
 
 const route = useRoute()
 const toast = useToast()
-const { data: entry, error } = await useFetch<SearchHit['entry']>(`/api/entries/${route.params.id}`)
+const { data: entry, error } = await useFetch<CatalogueEntry>(`/api/entries/${route.params.id}`)
 
 async function saved(e: ManualEntryInput) {
   toast.add({ title: `บันทึก ${e.name} แล้ว`, color: 'success' })
+  await refreshCatalogue()
   await navigateTo({ path: '/', query: { q: e.name } })
 }
 </script>

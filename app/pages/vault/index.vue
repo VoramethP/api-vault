@@ -4,7 +4,7 @@ import type { KeyListItem } from '~~/shared/vault'
 const route = useRoute()
 const router = useRouter()
 const toast = useToast()
-const { data: keys, status, error, refresh } = await useFetch<KeyListItem[]>('/api/keys', { default: () => [] })
+const { data: keys, status, error, refresh } = await useVaultKeys()
 
 const formOpen = ref(false)
 const editing = ref<KeyListItem | null>(null)

@@ -345,6 +345,25 @@ spec เดิมผูก v1.0.0 กับ Jev (≥ 15/20 + Tag อัตโน
 - ตรวจบน dev: ปุ่มเปิด popup ไป URL ของ Entry (pane บล็อกเพราะไม่ใช่คลิกของผู้ใช้) · modal ขึ้นพร้อมขั้นตอน ชื่อตั้งเป็นชื่อ API · ไม่ได้บันทึก Key จริง
   (จะทิ้ง audit ถาวร — เส้นทางบันทึกเป็นของเดิม) · runbook ข้อ 3–4 แก้ตาม
 
+## [2026-09-25] ทำให้เร็วขึ้น: Catalogue ในเบราว์เซอร์ + cache Vault + Server-Timing
+
+ผู้ใช้เห็น response 500–700 ms (ภาพจาก **dev ในเครื่อง** — Initiator `index.mjs?v=` ของ Vite) · วัดด้วย log ชั่วคราว (`/api/keys` ~480 ms):
+`getUser` 60–70 · `getClaims` 1–2 (JWT เป็น **ES256** ตรวจในเครื่อง — ที่เดาว่ายิงซ้ำสองรอบผิด) · **เปิด connection DB 190–290** · 2 query ~80
+· production ไม่ล็อกอิน (401 ก่อนถึง DB) 0.2–0.5 วิ, ครั้งแรก 1.4 วิ (cold start)
+- ไม่แตะ connection ต่อ request (กฎเหล็กข้อ 6 / ADR-0005) — ผู้ใช้เสนอให้ "โหลดครั้งเดียวแล้ว filter ในเบราว์เซอร์ + cache แท็บ" แทน
+- `GET /api/entries` ทั้งคลัง (440 KB → ~90 KB gzip) · `useCatalogue()` key `catalogue`, `server: false` (ไม่ให้ HTML พก 440 KB), `lazy`
+- `/api/search` รับแค่ `q` · Ranker จัดอันดับทั้งคลัง (`limit = rows.length`) คืน `{entryId, score}` · กรองทีหลังใน `visibleHits()`
+  ได้ชุดเดียวกับกรองก่อน · `useAsyncData` key `search:<q>` = คำเดิมไม่ยิงซ้ำ · `refreshCatalogue()` ล้าง `search:*` ด้วย
+- ลบ `/api/categories` (คำนวณจาก Catalogue ด้วย `categoryCounts()`) · ฟอร์มเลือก Entry ใน `KeyFormModal` กรองชื่อจาก Catalogue แทนยิง search
+- Vault: `useVaultKeys()` / `useVaultProjects()` stale-while-revalidate (`getCachedData` เฉพาะ `initial` + `refreshNuxtData` หลัง mount
+  ถ้ามีของเก่าและไม่ใช่ตอน hydrate) · signOut → `clearNuxtData()` · สลับแท็บ Vault ขึ้นใน 60–120 ms (เดิมรอ ~450)
+- `keys`/`projects` list: 2 query เป็น `Promise.all` (pipelining บน connection เดียว)
+- `Server-Timing`: `requireOwner` ใส่ `auth` · `server/plugins/server-timing.ts` ใส่ `total` ที่ `beforeResponse` สำหรับ `/api/*`
+- **กับดักที่เจอ:** การ์ด 30 ใบต่างมี `KeyFormModal` → `useCatalogue()` 30 ครั้ง key เดียวกัน · `dedupe` ค่าเริ่ม `'cancel'` → ยกเลิกกันเองเป็นชุด
+  แก้: `dedupe: 'defer'` + mount modal เฉพาะตอนเปิด (`v-if`)
+- ตรวจบน dev: โหลดหน้าแรก `/api/entries` ครั้งเดียว · กดตัวกรองไม่มี request · ค้น "weather" 1 request, เอาตัวกรองออกไม่ยิงซ้ำ · console สะอาด
+- `npm run check` 92 เทส (+ `test/catalogue-filter.test.ts`) · build + scan-build ผ่าน
+
 ## งานถัดไป
 
 ดู `HOTCACHE.md` › งานถัดไป

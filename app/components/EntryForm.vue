@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui'
-import { AUTH, CORS, manualEntryInput, type ManualEntryInput } from '~~/shared/entry'
+import { AUTH, CORS, categoryCounts, manualEntryInput, type ManualEntryInput } from '~~/shared/entry'
 
 const props = defineProps<{ entry?: ManualEntryInput & { id: number } }>()
 const emit = defineEmits<{ saved: [ManualEntryInput] }>()
@@ -10,10 +10,10 @@ const state = reactive<Partial<ManualEntryInput>>(props.entry
   : { categories: [], auth: 'none', https: true, cors: 'unknown' })
 
 // หมวดเดิมของ Catalogue ก่อน — หมวดใหม่พิมพ์เพิ่มได้ แต่หมวดสะกดต่างกันนิดเดียวจะกรองแยกกัน
-const { data: categories } = await useFetch('/api/categories', { default: () => [] })
+const { data: catalogue } = useCatalogue()
 const categoryItems = ref<string[]>([])
 watchEffect(() => {
-  categoryItems.value = [...new Set([...categories.value.map(c => c.name), ...(state.categories ?? [])])]
+  categoryItems.value = [...new Set([...categoryCounts(catalogue.value).map(c => c.name), ...(state.categories ?? [])])]
 })
 function addCategory(c: string) {
   const name = c.trim()

@@ -41,7 +41,7 @@ Key ไม่ออกไปหา Ranker/บริการภายนอก �
 - `useSupabaseUser()` ของ `@nuxtjs/supabase` v2 คืน **JWT claims** ไม่ใช่ User · middleware ของโมดูลเช็กแค่มี session ไม่ดู aal
 - `Server-Timing` ไม่มีใน response error (401) — มีเฉพาะที่ล็อกอินแล้ว
 - `useFetch` key เดียวกันหลายที่: `dedupe` ค่าเริ่ม `'cancel'` ยกเลิกกันเอง → ใช้ `'defer'` (useCatalogue)
-- `app.head.link` rel ต้องอยู่ใน type ของ unhead (`alternate icon` ไม่ผ่าน → ใช้ `shortcut icon`)
+- favicon: Chrome เลือก `favicon.ico` แม้มี SVG → .ico ต้องเป็นรูปเดียวกัน (ทำจาก SVG ผ่าน canvas ในเบราว์เซอร์ ไม่มี ImageMagick)
 - `UPinInput type="number"` ให้ `number[]` — ใช้แบบไม่ใส่ type จะได้ `string[]`
 - Postgres ในเครื่อง (ทดสอบ): initdb/pg_ctl ต้อง `LC_ALL=C` · path ใน scratchpad ยาวเกิน socket → `-k ''` ใช้ TCP
   · ต้องสร้าง role `anon`/`authenticated` + default grants เองให้เหมือน Supabase

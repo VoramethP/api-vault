@@ -9,7 +9,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       link: [
-        // SVG คมทุกขนาด · favicon.ico เดิมคงไว้เป็นตัวสำรองให้เบราว์เซอร์ที่ไม่รองรับ SVG
+        // SVG คมทุกขนาด · favicon.ico เป็นรูปเดียวกัน (16/32/48) — Chrome เลือก .ico ถ้าไม่ตรงกันจะเห็นรูปเก่า
         { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
         { rel: 'shortcut icon', href: '/favicon.ico' },
       ],

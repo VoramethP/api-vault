@@ -406,6 +406,12 @@ spec เดิมผูก v1.0.0 กับ Jev (≥ 15/20 + Tag อัตโน
   · ครั้งหน้าถ้ามี feature อีกก่อน Jev ก็ใช้ v1.0.x ต่อ
 - bump `package.json`/`package-lock.json` · CHANGELOG `[Unreleased]` → `[1.0.1]` · tag `v1.0.1` · push แล้ว prod `/about` ขึ้น 1.0.1
 
+## [2026-09-25] favicon.ico เป็นกุญแจด้วย
+
+- prod ขึ้น v1.0.1 แล้วแต่แท็บยังเป็นโลโก้ Nuxt แม้ hard refresh — ไม่ใช่ cache: Chrome เลือก `favicon.ico` (link ตัวหลัง ไม่มี `sizes`) ข้าม SVG
+- สร้าง `favicon.ico` ใหม่ 16/32/48 (PNG ฝังใน ICO) จาก SVG ตัวเดียวกัน: เปิด `/favicon.svg` ในเบราว์เซอร์ในแอป → `OffscreenCanvas` → base64 → pack ICO ด้วย Node
+  (เครื่องไม่มี ImageMagick/rsvg) · ถ้าแก้ SVG ต้องทำ .ico ใหม่ด้วยวิธีเดิม
+
 ## งานถัดไป
 
 ดู `HOTCACHE.md` › งานถัดไป
